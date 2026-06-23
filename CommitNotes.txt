@@ -1,3 +1,8 @@
 [ 2026-06-23 - ssjpooh ]
+[new] React/browser용 TypeScript API 클라이언트 프로젝트 초기 구성 추가
+[new] API 클라이언트 소스, 서비스 모듈, 모델 export 추가
+[new] foxcom_api 변환 스크립트와 빌드 설정 추가
+
+[ 2026-06-23 - ssjpooh ]
 [new] AGENTS.md에 커밋 작성 규칙 추가
 [new] CommitNotes.txt에 커밋 기록 추가

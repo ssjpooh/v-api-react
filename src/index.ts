@@ -1,0 +1,67 @@
+export * from "./apiClient";
+export * from "./resultUtils";
+export * from "./models";
+export * from "./services";
+
+import { ApiClient } from "./apiClient";
+import {
+  CommonService,
+  ContractService,
+  GroupService,
+  MailService,
+  NoticeService,
+  OptionService,
+  RoomService,
+  SectorService,
+  ServerService,
+  SiteService,
+  StatisticsService,
+  UserService,
+} from "./services";
+
+export class FoxcomApi {
+  private static instanceValue?: FoxcomApi;
+
+  static init({ baseUrl }: { baseUrl: string }): FoxcomApi {
+    FoxcomApi.instanceValue = new FoxcomApi(baseUrl);
+    return FoxcomApi.instanceValue;
+  }
+
+  static get instance(): FoxcomApi {
+    if (!FoxcomApi.instanceValue) {
+      throw new Error("FoxcomApi is not initialized. Call FoxcomApi.init({ baseUrl }) first.");
+    }
+    return FoxcomApi.instanceValue;
+  }
+
+  readonly apiClient: ApiClient;
+  readonly commonService: CommonService;
+  readonly userService: UserService;
+  readonly roomService: RoomService;
+  readonly siteService: SiteService;
+  readonly optionService: OptionService;
+  readonly noticeService: NoticeService;
+  readonly serverService: ServerService;
+  readonly sectorService: SectorService;
+  readonly contractService: ContractService;
+  readonly statisticsService: StatisticsService;
+  readonly mailService: MailService;
+  readonly groupService: GroupService;
+
+  private constructor(baseUrl: string) {
+    ApiClient.initialize(baseUrl);
+    this.apiClient = new ApiClient();
+    this.commonService = new CommonService(this.apiClient);
+    this.userService = new UserService(this.apiClient);
+    this.roomService = new RoomService(this.apiClient);
+    this.siteService = new SiteService(this.apiClient);
+    this.optionService = new OptionService(this.apiClient);
+    this.noticeService = new NoticeService(this.apiClient);
+    this.serverService = new ServerService(this.apiClient);
+    this.sectorService = new SectorService(this.apiClient);
+    this.contractService = new ContractService(this.apiClient);
+    this.statisticsService = new StatisticsService(this.apiClient);
+    this.mailService = new MailService(this.apiClient);
+    this.groupService = new GroupService(this.apiClient);
+  }
+}

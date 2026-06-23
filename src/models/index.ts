@@ -1,0 +1,2599 @@
+export type AnyRecord = Record<string, any>;
+
+function asRecord(value: unknown): AnyRecord {
+  return value && typeof value === "object" ? (value as AnyRecord) : {};
+}
+
+function asString(value: unknown, fallback = ""): string {
+  return value == null ? fallback : String(value);
+}
+
+function asNumber(value: unknown, fallback = 0): number {
+  return typeof value === "number" && Number.isFinite(value) ? value : Number(value ?? fallback) || fallback;
+}
+
+function asBoolean(value: unknown, fallback = false): boolean {
+  return typeof value === "boolean" ? value : fallback;
+}
+
+function asStringArray(value: unknown, fallback: string[] = []): string[] {
+  return Array.isArray(value) ? value.map((item) => asString(item)) : fallback;
+}
+
+
+export class ConcurrentInfo {
+  rooms: number = 0;
+  attendees: number = 0;
+
+  constructor(init: Partial<ConcurrentInfo> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): ConcurrentInfo {
+    const json = asRecord(jsonInput);
+    const value = new ConcurrentInfo();
+    value.rooms = asNumber(json["Rooms"], value.rooms);
+    value.attendees = asNumber(json["Attendees"], value.attendees);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): ConcurrentInfo[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => ConcurrentInfo.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class ClientTokenData {
+  groupID: string = "";
+  siteIndex: string = "";
+  tokenID: string = "";
+  token: string = "";
+  serverIndex: string = "";
+  ipAddr: string = "";
+  expiryDate: string = "";
+  cDate: string = "";
+  mDate: string = "";
+
+  constructor(init: Partial<ClientTokenData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): ClientTokenData {
+    const json = asRecord(jsonInput);
+    const value = new ClientTokenData();
+    value.groupID = asString(json["GroupID"], value.groupID);
+    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
+    value.tokenID = asString(json["TokenID"], value.tokenID);
+    value.token = asString(json["Token"], value.token);
+    value.serverIndex = asString(json["ServerIndex"], value.serverIndex);
+    value.ipAddr = asString(json["IPAddr"], value.ipAddr);
+    value.expiryDate = asString(json["ExpiryDate"], value.expiryDate);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): ClientTokenData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => ClientTokenData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class LoginResult {
+  tokenID: string = "";
+  accessToken: string = "";
+  expiryDate: number = 0;
+  tokenType: string = "";
+  isSiteManager: boolean = false;
+  isSiteHolder: boolean = false;
+  isSystemHolder: boolean = false;
+  isSystemManager: boolean = false;
+  supportFileFormats: string[] = [];
+  siteID: string = "";
+  domainURL: string = "";
+
+  constructor(init: Partial<LoginResult> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): LoginResult {
+    const json = asRecord(jsonInput);
+    const value = new LoginResult();
+    value.tokenID = asString(json["token_id"] ?? json["TokenID"], value.tokenID);
+    value.accessToken = asString(json["access_token"] ?? json["AccessToken"], value.accessToken);
+    value.expiryDate = asNumber(json["expire_date"] ?? json["ExpiryDate"], value.expiryDate);
+    value.tokenType = asString(json["token_type"] ?? json["TokenType"], value.tokenType);
+    value.isSiteManager = asBoolean(json["is_siteManager"] ?? json["is_site_manager"] ?? json["IsSiteManager"], value.isSiteManager);
+    value.isSiteHolder = asBoolean(json["is_siteHolder"] ?? json["is_site_holder"] ?? json["IsSiteHolder"], value.isSiteHolder);
+    value.isSystemHolder = asBoolean(json["is_systemHolder"] ?? json["is_system_holder"] ?? json["IsSystemHolder"], value.isSystemHolder);
+    value.isSystemManager = asBoolean(json["is_systemManager"] ?? json["is_system_manager"] ?? json["IsSystemManager"], value.isSystemManager);
+    value.supportFileFormats = asStringArray(json["support_file_formats"] ?? json["SupportFileFormats"], value.supportFileFormats);
+    value.siteID = asString(json["site_id"] ?? json["SiteID"], value.siteID);
+    value.domainURL = asString(json["domain_url"] ?? json["DomainURL"], value.domainURL);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): LoginResult[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => LoginResult.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class ContractData {
+  groupID: string = "";
+  siteIndex: string = "";
+  contractNo: number = 0;
+  hosts: number = 0;
+  limitRooms: number = 0;
+  limitAttendees: number = 0;
+  limitAccounts: number = 0;
+  state: string = "";
+  duration: number = 0;
+  contractor: string = "";
+  contractInfo: string = "";
+  currency: string = "";
+  paymentAmount: number = 0;
+  isDisplay: boolean = false;
+  startDate: string = "";
+  endDate: string = "";
+  pausedDate: string = "";
+  resumeDate: string = "";
+  cDate: string = "";
+  mDate: string = "";
+  newHosts: number = 0;
+  newLimitRooms: number = 0;
+  newLimitAttendees: number = 0;
+  newLimitAccounts: number = 0;
+  newState: string = "";
+  newDuration: number = 0;
+  newContractor: string = "";
+  newContractInfo: string = "";
+  newCurrency: string = "";
+  newPaymentAmount: number = 0;
+  newIsDisplay: boolean = false;
+  newStartDate: string = "";
+  newEndDate: string = "";
+  newPausedDate: string = "";
+  newResumeDate: string = "";
+  index: string = "";
+  lDate: string = "";
+  changeNotes: string = "";
+  userID: string = "";
+  userName: string = "";
+  userIndex: string = "";
+  limitMaxAttendees: number = 0;
+  addedRooms: number = 0;
+  addedAttendees: number = 0;
+  addedMaxAttendees: number = 0;
+  addedAccounts: number = 0;
+  newAddedRooms: number = 0;
+  newAddedAttendees: number = 0;
+  newAddedMaxAttendees: number = 0;
+  newAddedAccounts: number = 0;
+
+  constructor(init: Partial<ContractData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): ContractData {
+    const json = asRecord(jsonInput);
+    const value = new ContractData();
+    value.groupID = asString(json["GroupID"], value.groupID);
+    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
+    value.contractNo = asNumber(json["ContractNo"], value.contractNo);
+    value.hosts = asNumber(json["Hosts"], value.hosts);
+    value.limitRooms = asNumber(json["LimitRooms"], value.limitRooms);
+    value.limitAttendees = asNumber(json["LimitAttendees"], value.limitAttendees);
+    value.limitAccounts = asNumber(json["LimitAccounts"], value.limitAccounts);
+    value.state = asString(json["State"], value.state);
+    value.duration = asNumber(json["Duration"], value.duration);
+    value.contractor = asString(json["Contractor"], value.contractor);
+    value.contractInfo = asString(json["ContractInfo"], value.contractInfo);
+    value.currency = asString(json["Currency"], value.currency);
+    value.paymentAmount = asNumber(json["PaymentAmount"], value.paymentAmount);
+    value.isDisplay = asBoolean(json["IsDisplay"], value.isDisplay);
+    value.startDate = asString(json["StartDate"], value.startDate);
+    value.endDate = asString(json["EndDate"], value.endDate);
+    value.pausedDate = asString(json["PausedDate"], value.pausedDate);
+    value.resumeDate = asString(json["ResumeDate"], value.resumeDate);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    value.newHosts = asNumber(json["NewHosts"], value.newHosts);
+    value.newLimitRooms = asNumber(json["NewLimitRooms"], value.newLimitRooms);
+    value.newLimitAttendees = asNumber(json["NewLimitAttendees"], value.newLimitAttendees);
+    value.newLimitAccounts = asNumber(json["NewLimitAccounts"], value.newLimitAccounts);
+    value.newState = asString(json["NewState"], value.newState);
+    value.newDuration = asNumber(json["NewDuration"], value.newDuration);
+    value.newContractor = asString(json["NewContractor"], value.newContractor);
+    value.newContractInfo = asString(json["NewContractInfo"], value.newContractInfo);
+    value.newCurrency = asString(json["NewCurrency"], value.newCurrency);
+    value.newPaymentAmount = asNumber(json["NewPaymentAmount"], value.newPaymentAmount);
+    value.newIsDisplay = asBoolean(json["NewIsDisplay"], value.newIsDisplay);
+    value.newStartDate = asString(json["NewStartDate"], value.newStartDate);
+    value.newEndDate = asString(json["NewEndDate"], value.newEndDate);
+    value.newPausedDate = asString(json["NewPausedDate"], value.newPausedDate);
+    value.newResumeDate = asString(json["NewResumeDate"], value.newResumeDate);
+    value.index = asString(json["Index"], value.index);
+    value.lDate = asString(json["LDate"], value.lDate);
+    value.changeNotes = asString(json["ChangeNotes"], value.changeNotes);
+    value.userID = asString(json["UserID"], value.userID);
+    value.userName = asString(json["UserName"], value.userName);
+    value.userIndex = asString(json["UserIdx"], value.userIndex);
+    value.limitMaxAttendees = asNumber(json["LimitMaxAttendees"], value.limitMaxAttendees);
+    value.addedRooms = asNumber(json["AddedRooms"], value.addedRooms);
+    value.addedAttendees = asNumber(json["AddedAttendees"], value.addedAttendees);
+    value.addedMaxAttendees = asNumber(json["AddedMaxAttendees"], value.addedMaxAttendees);
+    value.addedAccounts = asNumber(json["AddedAccounts"], value.addedAccounts);
+    value.newAddedRooms = asNumber(json["NewAddedRooms"], value.newAddedRooms);
+    value.newAddedAttendees = asNumber(json["NewAddedAttendees"], value.newAddedAttendees);
+    value.newAddedMaxAttendees = asNumber(json["NewAddedMaxAttendees"], value.newAddedMaxAttendees);
+    value.newAddedAccounts = asNumber(json["NewAddedAccounts"], value.newAddedAccounts);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): ContractData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => ContractData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class ContractListData {
+  contractList: ContractData[] = [];
+
+  constructor(init: Partial<ContractListData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): ContractListData {
+    const json = asRecord(jsonInput);
+    const value = new ContractListData();
+    value.contractList = ContractData.fromJsonList(json["ContractList"]);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): ContractListData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => ContractListData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class ContractLogData {
+  groupID: string = "";
+  siteIndex: string = "";
+  contractNo: string = "";
+  hosts: number = 0;
+  limitRooms: number = 0;
+  limitAttendees: number = 0;
+  limitMaxAttendees: number = 0;
+  limitAccounts: number = 0;
+  addedRooms: number = 0;
+  addedAttendees: number = 0;
+  addedMaxAttendees: number = 0;
+  addedAccounts: number = 0;
+  state: number = 0;
+  duration: number = 0;
+  startDate: string = "";
+  endDate: string = "";
+  pausedDate: string = "";
+  resumeDate: string = "";
+  contractor: string = "";
+  contractInfo: string = "";
+  currency: string = "";
+  paymentAmount: number = 0;
+  isDisplay: boolean = false;
+  newHosts: number = 0;
+  newLimitRooms: number = 0;
+  newLimitAttendees: number = 0;
+  newLimitMaxAttendees: number = 0;
+  newLimitAccounts: number = 0;
+  newAddedRooms: number = 0;
+  newAddedAttendees: number = 0;
+  newAddedMaxAttendees: number = 0;
+  newAddedAccounts: number = 0;
+  newState: number = 0;
+  newDuration: number = 0;
+  newStartDate: string = "";
+  newEndDate: string = "";
+  newPausedDate: string = "";
+  newResumeDate: string = "";
+  newContractor: string = "";
+  newContractInfo: string = "";
+  newCurrency: string = "";
+  newPaymentAmount: number = 0;
+  newIsDisplay: boolean = false;
+  index: string = "";
+  userID: string = "";
+  userIndex: string = "";
+  userName: string = "";
+  lDate: string = "";
+  cDate: string = "";
+  mDate: string = "";
+
+  constructor(init: Partial<ContractLogData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): ContractLogData {
+    const json = asRecord(jsonInput);
+    const value = new ContractLogData();
+    value.groupID = asString(json["GroupID"], value.groupID);
+    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
+    value.contractNo = asString(json["ContractNo"], value.contractNo);
+    value.hosts = asNumber(json["Hosts"], value.hosts);
+    value.limitRooms = asNumber(json["LimitRooms"], value.limitRooms);
+    value.limitAttendees = asNumber(json["LimitAttendees"], value.limitAttendees);
+    value.limitMaxAttendees = asNumber(json["LimitMaxAttendees"], value.limitMaxAttendees);
+    value.limitAccounts = asNumber(json["LimitAccounts"], value.limitAccounts);
+    value.addedRooms = asNumber(json["AddedRooms"], value.addedRooms);
+    value.addedAttendees = asNumber(json["AddedAttendees"], value.addedAttendees);
+    value.addedMaxAttendees = asNumber(json["AddedMaxAttendees"], value.addedMaxAttendees);
+    value.addedAccounts = asNumber(json["AddedAccounts"], value.addedAccounts);
+    value.state = asNumber(json["State"], value.state);
+    value.duration = asNumber(json["Duration"], value.duration);
+    value.startDate = asString(json["StartDate"], value.startDate);
+    value.endDate = asString(json["EndDate"], value.endDate);
+    value.pausedDate = asString(json["PausedDate"], value.pausedDate);
+    value.resumeDate = asString(json["ResumeDate"], value.resumeDate);
+    value.contractor = asString(json["Contractor"], value.contractor);
+    value.contractInfo = asString(json["ContractInfo"], value.contractInfo);
+    value.currency = asString(json["Currency"], value.currency);
+    value.paymentAmount = asNumber(json["PaymentAmount"], value.paymentAmount);
+    value.isDisplay = asBoolean(json["IsDisplay"], value.isDisplay);
+    value.newHosts = asNumber(json["NewHosts"], value.newHosts);
+    value.newLimitRooms = asNumber(json["NewLimitRooms"], value.newLimitRooms);
+    value.newLimitAttendees = asNumber(json["NewLimitAttendees"], value.newLimitAttendees);
+    value.newLimitMaxAttendees = asNumber(json["NewLimitMaxAttendees"], value.newLimitMaxAttendees);
+    value.newLimitAccounts = asNumber(json["NewLimitAccounts"], value.newLimitAccounts);
+    value.newAddedRooms = asNumber(json["NewAddedRooms"], value.newAddedRooms);
+    value.newAddedAttendees = asNumber(json["NewAddedAttendees"], value.newAddedAttendees);
+    value.newAddedMaxAttendees = asNumber(json["NewAddedMaxAttendees"], value.newAddedMaxAttendees);
+    value.newAddedAccounts = asNumber(json["NewAddedAccounts"], value.newAddedAccounts);
+    value.newState = asNumber(json["NewState"], value.newState);
+    value.newDuration = asNumber(json["NewDuration"], value.newDuration);
+    value.newStartDate = asString(json["NewStartDate"], value.newStartDate);
+    value.newEndDate = asString(json["NewEndDate"], value.newEndDate);
+    value.newPausedDate = asString(json["NewPausedDate"], value.newPausedDate);
+    value.newResumeDate = asString(json["NewResumeDate"], value.newResumeDate);
+    value.newContractor = asString(json["NewContractor"], value.newContractor);
+    value.newContractInfo = asString(json["NewContractInfo"], value.newContractInfo);
+    value.newCurrency = asString(json["NewCurrency"], value.newCurrency);
+    value.newPaymentAmount = asNumber(json["NewPaymentAmount"], value.newPaymentAmount);
+    value.newIsDisplay = asBoolean(json["NewIsDisplay"], value.newIsDisplay);
+    value.index = asString(json["Index"], value.index);
+    value.userID = asString(json["UserID"], value.userID);
+    value.userIndex = asString(json["UserIndex"], value.userIndex);
+    value.userName = asString(json["UserName"], value.userName);
+    value.lDate = asString(json["LDate"], value.lDate);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): ContractLogData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => ContractLogData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class GroupData {
+  groupID: string = "";
+  name: string = "";
+  rooms: number = 0;
+  attendees: number = 0;
+  notes: string = "";
+  cDate: string = "";
+  mDate: string = "";
+  mapNameByLang: Record<string, any> = {};
+
+  constructor(init: Partial<GroupData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): GroupData {
+    const json = asRecord(jsonInput);
+    const value = new GroupData();
+    value.groupID = asString(json["GroupID"], value.groupID);
+    value.name = asString(json["Name"], value.name);
+    value.rooms = asNumber(json["Rooms"], value.rooms);
+    value.attendees = asNumber(json["Attendees"], value.attendees);
+    value.notes = asString(json["Notes"], value.notes);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    value.mapNameByLang = json["MapNameByLang"] ?? value.mapNameByLang;
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): GroupData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => GroupData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class NoteData {
+  groupID: string = "";
+  siteIndex: string = "";
+  userID: string = "";
+  roomCode: string = "";
+  distType: number = 0;
+  targetGroup: number = 0;
+  targetIDs: string = "";
+  noteID: string = "";
+  orgNoteID: string = "";
+  srcNoteID: string = "";
+  title: string = "";
+  firstPageNo: number = 0;
+  pageNum: number = 0;
+  pageIDs: string = "";
+  pagesInfo: string = "";
+  annotationInfo: string = "";
+  fileSize: number = 0;
+  fileHash: string = "";
+  cDate: string = "";
+  mDate: string = "";
+
+  constructor(init: Partial<NoteData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): NoteData {
+    const json = asRecord(jsonInput);
+    const value = new NoteData();
+    value.groupID = asString(json["GroupID"], value.groupID);
+    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
+    value.userID = asString(json["UserID"], value.userID);
+    value.roomCode = asString(json["RoomCode"], value.roomCode);
+    value.distType = asNumber(json["DistType"], value.distType);
+    value.targetGroup = asNumber(json["TargetGroup"], value.targetGroup);
+    value.targetIDs = asString(json["TargetIDs"], value.targetIDs);
+    value.noteID = asString(json["NoteID"], value.noteID);
+    value.orgNoteID = asString(json["OrgNoteID"], value.orgNoteID);
+    value.srcNoteID = asString(json["SrcNoteID"], value.srcNoteID);
+    value.title = asString(json["Title"], value.title);
+    value.firstPageNo = asNumber(json["FirstPageNo"], value.firstPageNo);
+    value.pageNum = asNumber(json["PageNum"], value.pageNum);
+    value.pageIDs = asString(json["PageIDs"], value.pageIDs);
+    value.pagesInfo = asString(json["PagesInfo"], value.pagesInfo);
+    value.annotationInfo = asString(json["AnnotationInfo"], value.annotationInfo);
+    value.fileSize = asNumber(json["FileSize"], value.fileSize);
+    value.fileHash = asString(json["FileHash"], value.fileHash);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): NoteData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => NoteData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class AttachNoteInfo {
+  title: string = "";
+  noteID: string = "";
+  userID: string = "";
+  pageInfo: Record<string, any> = {};
+
+  constructor(init: Partial<AttachNoteInfo> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): AttachNoteInfo {
+    const json = asRecord(jsonInput);
+    const value = new AttachNoteInfo();
+    value.title = asString(json["Title"], value.title);
+    value.noteID = asString(json["NoteID"], value.noteID);
+    value.userID = asString(json["UserID"], value.userID);
+    value.pageInfo = json["PageInfo"] ?? value.pageInfo;
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): AttachNoteInfo[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => AttachNoteInfo.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class AddFile {
+  attachFile: string[] = [];
+
+  constructor(init: Partial<AddFile> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): AddFile {
+    const json = asRecord(jsonInput);
+    const value = new AddFile();
+    value.attachFile = Array.isArray(json["AttachFile"]) ? json["AttachFile"] : value.attachFile;
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): AddFile[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => AddFile.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class RemoveFile {
+  removeFile: string[] = [];
+
+  constructor(init: Partial<RemoveFile> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): RemoveFile {
+    const json = asRecord(jsonInput);
+    const value = new RemoveFile();
+    value.removeFile = Array.isArray(json["RemoveFile"]) ? json["RemoveFile"] : value.removeFile;
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): RemoveFile[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => RemoveFile.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class NoticeData {
+  groupID: string = "";
+  siteIndex: string = "";
+  userID: string = "";
+  userIndex: string = "";
+  userName: string = "";
+  category: number = 0;
+  title: string = "";
+  noticeIndex: string = "";
+  startDate: string = "";
+  endDate: string = "";
+  target: string = "";
+  contents: any = undefined;
+  mDate: string = "";
+  cDate: string = "";
+  isPinned: boolean = false;
+  isBanner: boolean = false;
+  isStopped: boolean = false;
+  fileList: Record<string, string>[] = [];
+  viewNum: number = 0;
+  existFile: boolean = false;
+
+  constructor(init: Partial<NoticeData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): NoticeData {
+    const json = asRecord(jsonInput);
+    const value = new NoticeData();
+    value.groupID = asString(json["GroupID"], value.groupID);
+    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
+    value.userID = asString(json["UserID"], value.userID);
+    value.userIndex = asString(json["UserIndex"], value.userIndex);
+    value.userName = asString(json["UserName"], value.userName);
+    value.category = asNumber(json["Category"], value.category);
+    value.title = asString(json["Title"], value.title);
+    value.noticeIndex = asString(json["NoticeIndex"], value.noticeIndex);
+    value.startDate = asString(json["StartDate"], value.startDate);
+    value.endDate = asString(json["EndDate"], value.endDate);
+    value.target = asString(json["Targets"], value.target);
+    value.contents = json["Contents"] ?? value.contents;
+    value.mDate = asString(json["MDate"], value.mDate);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.isPinned = asBoolean(json["IsPinned"], value.isPinned);
+    value.isBanner = asBoolean(json["IsBanner"], value.isBanner);
+    value.isStopped = asBoolean(json["IsStopped"], value.isStopped);
+    value.fileList = Array.isArray(json["FileList"]) ? json["FileList"] : value.fileList;
+    value.viewNum = asNumber(json["ViewNum"], value.viewNum);
+    value.existFile = asBoolean(json["ExistFile"], value.existFile);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): NoticeData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => NoticeData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class NoticeList {
+  noticeList: NoticeData[] = [];
+  pagesData: PagesData = new PagesData();
+
+  constructor(init: Partial<NoticeList> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): NoticeList {
+    const json = asRecord(jsonInput);
+    const value = new NoticeList();
+    value.noticeList = NoticeData.fromJsonList(json["NoticeList"]);
+    value.pagesData = PagesData.fromJson(json["PageInfo"] ?? {});
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): NoticeList[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => NoticeList.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class NoticeFileData {
+  noticeIndex: string = "";
+  fileIndex: string = "";
+  fileKey: string = "";
+  fileUrl: string = "";
+  fileName: string = "";
+  files: FileData[] = [];
+  fileSize: number = 0;
+
+  constructor(init: Partial<NoticeFileData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): NoticeFileData {
+    const json = asRecord(jsonInput);
+    const value = new NoticeFileData();
+    value.noticeIndex = asString(json["NoticeIndex"], value.noticeIndex);
+    value.fileIndex = asString(json["FileIndex"], value.fileIndex);
+    value.fileKey = asString(json["FileKey"], value.fileKey);
+    value.fileUrl = asString(json["FileURL"], value.fileUrl);
+    value.fileName = asString(json["FileName"], value.fileName);
+    value.files = FileData.fromJsonList(json["Files"]);
+    value.fileSize = asNumber(json["FileSize"], value.fileSize);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): NoticeFileData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => NoticeFileData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class FileData {
+  fileName: string = "";
+  fileBytes: BlobPart = new Blob([]);
+  contentType: string = "";
+  fileSize: number = 0;
+
+  constructor(init: Partial<FileData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): FileData {
+    const json = asRecord(jsonInput);
+    const value = new FileData();
+    value.fileName = asString(json["FileName"], value.fileName);
+    value.fileBytes = json["FileBytes"] instanceof Blob ? json["FileBytes"] : value.fileBytes;
+    value.contentType = asString(json["ContentType"], value.contentType);
+    value.fileSize = asNumber(json["FileSize"], value.fileSize);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): FileData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => FileData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class CommonOption {
+  name: string = "";
+  item: string = "";
+  scope: number = 0;
+  valueType: number = 0;
+  value: string = "";
+  defaultValue: string = "";
+  dispName: string = "";
+  itemOrder: number = 0;
+  bytesValue: BlobPart = new Blob([]);
+  notes: string = "";
+  cDate: string = "";
+  mDate: string = "";
+  mapDispNameByLang: any = undefined;
+  mapValueByLang: any = undefined;
+
+  constructor(init: Partial<CommonOption> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): CommonOption {
+    const json = asRecord(jsonInput);
+    const value = new CommonOption();
+    value.name = asString(json["Name"], value.name);
+    value.item = asString(json["Item"], value.item);
+    value.scope = asNumber(json["Scope"], value.scope);
+    value.valueType = asNumber(json["ValueType"], value.valueType);
+    value.value = asString(json["Value"], value.value);
+    value.defaultValue = asString(json["DefaultValue"], value.defaultValue);
+    value.dispName = asString(json["DispName"], value.dispName);
+    value.itemOrder = asNumber(json["ItemOrder"], value.itemOrder);
+    value.bytesValue = json["bytesValue"] instanceof Blob ? json["bytesValue"] : value.bytesValue;
+    value.notes = asString(json["Notes"], value.notes);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    value.mapDispNameByLang = json["mapDispNameByLang"] ?? value.mapDispNameByLang;
+    value.mapValueByLang = json["mapValueByLang"] ?? value.mapValueByLang;
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): CommonOption[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => CommonOption.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class OptionInfo {
+  commonOption: CommonOption = new CommonOption();
+  classOption: number = 0;
+  sectors: string = "";
+  groupID: string = "";
+  policy: string = "";
+  siteIndex: string = "";
+  roomCode: string = "";
+  inherit: string = "";
+  selected: string = "";
+
+  constructor(init: Partial<OptionInfo> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): OptionInfo {
+    const json = asRecord(jsonInput);
+    const value = new OptionInfo();
+    value.commonOption = CommonOption.fromJson(json["CommonOption"] ?? {});
+    value.classOption = asNumber(json["Class"], value.classOption);
+    value.sectors = asString(json["Sectors"], value.sectors);
+    value.groupID = asString(json["GroupID"], value.groupID);
+    value.policy = asString(json["Policy"], value.policy);
+    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
+    value.roomCode = asString(json["RoomCode"], value.roomCode);
+    value.inherit = asString(json["Inherit"], value.inherit);
+    value.selected = asString(json["Selected"], value.selected);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): OptionInfo[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => OptionInfo.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class DB {
+  version: string = "";
+  keepingPeriod: any = undefined;
+
+  constructor(init: Partial<DB> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): DB {
+    const json = asRecord(jsonInput);
+    const value = new DB();
+    value.version = asString(json["Version"], value.version);
+    value.keepingPeriod = json["KeepingPeriod"] ?? value.keepingPeriod;
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): DB[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => DB.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class Room {
+  stat: any = undefined;
+  option: any = undefined;
+
+  constructor(init: Partial<Room> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): Room {
+    const json = asRecord(jsonInput);
+    const value = new Room();
+    value.stat = json["Stat"] ?? value.stat;
+    value.option = json["Option"] ?? value.option;
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): Room[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => Room.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class User {
+  types: OptionItems = new OptionItems();
+  state: OptionItems = new OptionItems();
+  passwordComplexity: OptionItems = new OptionItems();
+
+  constructor(init: Partial<User> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): User {
+    const json = asRecord(jsonInput);
+    const value = new User();
+    value.types = OptionItems.fromJson(json["Types"] ?? {});
+    value.state = OptionItems.fromJson(json["State"] ?? {});
+    value.passwordComplexity = OptionItems.fromJson(json["PasswordComplexity"] ?? {});
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): User[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => User.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class MailConfig {
+  type: string = "";
+  sender: string = "";
+  senderName: string = "";
+
+  constructor(init: Partial<MailConfig> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): MailConfig {
+    const json = asRecord(jsonInput);
+    const value = new MailConfig();
+    value.type = asString(json["Type"], value.type);
+    value.sender = asString(json["Sender"], value.sender);
+    value.senderName = asString(json["SenderName"], value.senderName);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): MailConfig[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => MailConfig.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class SendMail {
+  contents: OptionItems = new OptionItems();
+  title: OptionItems = new OptionItems();
+  config: MailConfig = new MailConfig();
+
+  constructor(init: Partial<SendMail> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): SendMail {
+    const json = asRecord(jsonInput);
+    const value = new SendMail();
+    value.contents = OptionItems.fromJson(json["Contents"] ?? {});
+    value.title = OptionItems.fromJson(json["Title"] ?? {});
+    value.config = MailConfig.fromJson(json["Config"] ?? {});
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): SendMail[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => SendMail.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class OptionItems {
+  main: OptionInfo = new OptionInfo();
+  array: OptionInfo[] = [];
+  map: Record<string, any> = {};
+
+  constructor(init: Partial<OptionItems> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): OptionItems {
+    const json = asRecord(jsonInput);
+    const value = new OptionItems();
+    value.main = OptionInfo.fromJson(json["Main"] ?? {});
+    value.array = OptionInfo.fromJsonList(json["Array"]);
+    value.map = json["Map"] ?? value.map;
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): OptionItems[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => OptionItems.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class BaseOptionEnvData {
+  mapBaseOption: Record<string, any> = {};
+
+  constructor(init: Partial<BaseOptionEnvData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): BaseOptionEnvData {
+    const json = asRecord(jsonInput);
+    const value = new BaseOptionEnvData();
+    value.mapBaseOption = json["data"] ?? value.mapBaseOption;
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): BaseOptionEnvData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => BaseOptionEnvData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class GroupOptionEnvData {
+  mapGroupOption: Record<string, any> = {};
+
+  constructor(init: Partial<GroupOptionEnvData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): GroupOptionEnvData {
+    const json = asRecord(jsonInput);
+    const value = new GroupOptionEnvData();
+    value.mapGroupOption = json["data"] ?? value.mapGroupOption;
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): GroupOptionEnvData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => GroupOptionEnvData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class PolicyOptionEnvData {
+  mapPolicyOption: Record<string, any> = {};
+
+  constructor(init: Partial<PolicyOptionEnvData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): PolicyOptionEnvData {
+    const json = asRecord(jsonInput);
+    const value = new PolicyOptionEnvData();
+    value.mapPolicyOption = json["data"] ?? value.mapPolicyOption;
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): PolicyOptionEnvData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => PolicyOptionEnvData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class SiteOptionInfoMap {
+  optionInfo: Record<string, any> = {};
+
+  constructor(init: Partial<SiteOptionInfoMap> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): SiteOptionInfoMap {
+    const json = asRecord(jsonInput);
+    const value = new SiteOptionInfoMap();
+    value.optionInfo = json["OptionInfo"] ?? value.optionInfo;
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): SiteOptionInfoMap[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => SiteOptionInfoMap.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class BlockListData {
+  globals: OptionInfo = new OptionInfo();
+  customs: OptionInfo = new OptionInfo();
+  exceptions: OptionInfo = new OptionInfo();
+  maskText: OptionInfo = new OptionInfo();
+  scope: Scope = new Scope();
+
+  constructor(init: Partial<BlockListData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): BlockListData {
+    const json = asRecord(jsonInput);
+    const value = new BlockListData();
+    value.globals = OptionInfo.fromJson(json["Globals"] ?? {});
+    value.customs = OptionInfo.fromJson(json["Customs"] ?? {});
+    value.exceptions = OptionInfo.fromJson(json["Exceptions"] ?? {});
+    value.maskText = OptionInfo.fromJson(json["MaskText"] ?? {});
+    value.scope = Scope.fromJson(json["Scope"] ?? {});
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): BlockListData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => BlockListData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class Scope {
+  chat: OptionInfo = new OptionInfo();
+  nickname: OptionInfo = new OptionInfo();
+  titleAgenda: OptionInfo = new OptionInfo();
+  fileName: OptionInfo = new OptionInfo();
+
+  constructor(init: Partial<Scope> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): Scope {
+    const json = asRecord(jsonInput);
+    const value = new Scope();
+    value.chat = OptionInfo.fromJson(json["Chat"] ?? {});
+    value.nickname = OptionInfo.fromJson(json["Nickname"] ?? {});
+    value.titleAgenda = OptionInfo.fromJson(json["TitleAgenda"] ?? {});
+    value.fileName = OptionInfo.fromJson(json["FileName"] ?? {});
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): Scope[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => Scope.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class PageLists {
+  PageList: any = undefined;
+
+  constructor(init: Partial<PageLists> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): PageLists {
+    const json = asRecord(jsonInput);
+    const value = new PageLists();
+    value.PageList = json["PageList"] ?? value.PageList;
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): PageLists[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => PageLists.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class PageData {
+  groupID: string = "";
+  siteIndex: string = "";
+  userID: string = "";
+  roomCode: string = "";
+  pageID: string = "";
+  orgNoteID: string = "";
+  srcPageID: string = "";
+  type: number = 0;
+  title: string = "";
+  width: number = 0;
+  height: number = 0;
+  imageFormat: string = "";
+  thumbData: BlobPart = new Blob([]);
+  imageData: BlobPart = new Blob([]);
+  imageHash: string = "";
+  cDate: string = "";
+  mDate: string = "";
+
+  constructor(init: Partial<PageData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): PageData {
+    const json = asRecord(jsonInput);
+    const value = new PageData();
+    value.groupID = asString(json["GroupID"], value.groupID);
+    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
+    value.userID = asString(json["UserID"], value.userID);
+    value.roomCode = asString(json["RoomCode"], value.roomCode);
+    value.pageID = asString(json["PageID"], value.pageID);
+    value.orgNoteID = asString(json["OrgNoteID"], value.orgNoteID);
+    value.srcPageID = asString(json["SrcPageID"], value.srcPageID);
+    value.type = asNumber(json["Type"], value.type);
+    value.title = asString(json["Title"], value.title);
+    value.width = asNumber(json["Width"], value.width);
+    value.height = asNumber(json["Height"], value.height);
+    value.imageFormat = asString(json["ImageFormat"], value.imageFormat);
+    value.thumbData = json["ThumbData"] instanceof Blob ? json["ThumbData"] : value.thumbData;
+    value.imageData = json["ImageData"] instanceof Blob ? json["ImageData"] : value.imageData;
+    value.imageHash = asString(json["ImageHash"], value.imageHash);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): PageData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => PageData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class PagesData {
+  currentPageNo: number = 0;
+  totalPageNo: number = 0;
+  totalRowCount: number = 0;
+  pagePerRow: number = 0;
+
+  constructor(init: Partial<PagesData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): PagesData {
+    const json = asRecord(jsonInput);
+    const value = new PagesData();
+    value.currentPageNo = asNumber(json["currentPageNo"], value.currentPageNo);
+    value.totalPageNo = asNumber(json["totalPageNo"], value.totalPageNo);
+    value.totalRowCount = asNumber(json["totalRowCount"], value.totalRowCount);
+    value.pagePerRow = asNumber(json["pagePerRow"], value.pagePerRow);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): PagesData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => PagesData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class PagesLists {
+  PagesList: any = undefined;
+
+  constructor(init: Partial<PagesLists> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): PagesLists {
+    const json = asRecord(jsonInput);
+    const value = new PagesLists();
+    value.PagesList = json["PageList"] ?? value.PagesList;
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): PagesLists[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => PagesLists.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class ProvisionServerData {
+  provisionServerIndex: string = "";
+  sector: string = "";
+  serverIndex: string = "";
+  serverTypes: string = "";
+  privateIPAddrs: string = "";
+  publicIPAddr: string = "";
+  publicDomain: string = "";
+  version: string = "";
+  state: number = 0;
+  failedReason: string = "";
+  cDate: string = "";
+  mDate: string = "";
+
+  constructor(init: Partial<ProvisionServerData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): ProvisionServerData {
+    const json = asRecord(jsonInput);
+    const value = new ProvisionServerData();
+    value.provisionServerIndex = asString(json["ProvisionServerIndex"], value.provisionServerIndex);
+    value.sector = asString(json["Sector"], value.sector);
+    value.serverIndex = asString(json["ServerIndex"], value.serverIndex);
+    value.serverTypes = asString(json["ServerTypes"], value.serverTypes);
+    value.privateIPAddrs = asString(json["PrivateIPAddrs"], value.privateIPAddrs);
+    value.publicIPAddr = asString(json["PublicIPAddr"], value.publicIPAddr);
+    value.publicDomain = asString(json["PublicDomain"], value.publicDomain);
+    value.version = asString(json["Version"], value.version);
+    value.state = asNumber(json["State"], value.state);
+    value.failedReason = asString(json["FailedReason"], value.failedReason);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): ProvisionServerData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => ProvisionServerData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class RoomData {
+  groupId: string = "";
+  siteIndex: string = "";
+  userIndex: string = "";
+  userId: string = "";
+  roomId: string = "";
+  roomCode: string = "";
+  policy: string = "";
+  title: string = "";
+  timeZone: string = "";
+  startedDate: string = "";
+  finishedDate: string = "";
+  isLocked: boolean = false;
+  isPublic: boolean = false;
+  maxUsers: number = 0;
+  plannedDate: string = "";
+  roomDuration: number = 0;
+  isRefsDone: number = 0;
+  isDeleted: boolean = false;
+  serverSector: string = "";
+  serverIndex: string = "";
+  password: string = "";
+  agenda: string = "";
+  admissionDate: string = "";
+  endDate: string = "";
+  noteIds: string[] = [];
+  pageIds: string[] = [];
+  cDate: string = "";
+  mDate: string = "";
+  creator: string = "";
+  attendeesCount: number = 0;
+  profileImageURL: string = "";
+  joinedAttendees: RoomAttendeeData[] = [];
+  isManager: boolean = false;
+  isSubManager: boolean = false;
+  offset: number = 0;
+  sharedNoteInfo: any = undefined;
+  distNoteInfo: any = undefined;
+  personalNoteInfo: any = undefined;
+  webUploadNoteInfo: any[] = [];
+  pageInfo: any = undefined;
+  pageList: any = undefined;
+  reactionList: any = undefined;
+  pageInfoList: any[] = [];
+  instanceIndex: string = "";
+  optionsInfo: string = "";
+
+  constructor(init: Partial<RoomData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): RoomData {
+    const json = asRecord(jsonInput);
+    const value = new RoomData();
+    value.groupId = asString(json["GroupID"], value.groupId);
+    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
+    value.userIndex = asString(json["UserIndex"], value.userIndex);
+    value.userId = asString(json["UserID"], value.userId);
+    value.roomId = asString(json["RoomID"], value.roomId);
+    value.roomCode = asString(json["RoomCode"], value.roomCode);
+    value.policy = asString(json["Policy"], value.policy);
+    value.title = asString(json["Title"], value.title);
+    value.timeZone = asString(json["TimeZone"], value.timeZone);
+    value.startedDate = asString(json["StartedDate"], value.startedDate);
+    value.finishedDate = asString(json["FinishedDate"], value.finishedDate);
+    value.isLocked = asBoolean(json["IsLocked"], value.isLocked);
+    value.isPublic = asBoolean(json["IsPublic"], value.isPublic);
+    value.maxUsers = asNumber(json["MaxUsers"], value.maxUsers);
+    value.plannedDate = asString(json["PlannedDate"], value.plannedDate);
+    value.roomDuration = asNumber(json["RoomDuration"], value.roomDuration);
+    value.isRefsDone = asNumber(json["IsRefsDone"], value.isRefsDone);
+    value.isDeleted = asBoolean(json["IsDeleted"], value.isDeleted);
+    value.serverSector = asString(json["ServerSector"], value.serverSector);
+    value.serverIndex = asString(json["ServerIndex"], value.serverIndex);
+    value.password = asString(json["Password"], value.password);
+    value.agenda = asString(json["Agenda"], value.agenda);
+    value.admissionDate = asString(json["AdmissionDate"], value.admissionDate);
+    value.endDate = asString(json["EndDate"], value.endDate);
+    value.noteIds = Array.isArray(json["NoteIds"]) ? json["NoteIds"] : value.noteIds;
+    value.pageIds = Array.isArray(json["PageIds"]) ? json["PageIds"] : value.pageIds;
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    value.creator = asString(json["Creator"], value.creator);
+    value.attendeesCount = asNumber(json["AttendeesCount"], value.attendeesCount);
+    value.profileImageURL = asString(json["ProfileImageURL"], value.profileImageURL);
+    value.joinedAttendees = RoomAttendeeData.fromJsonList(json["JoinedAttendees"]);
+    value.isManager = asBoolean(json["IsManager"], value.isManager);
+    value.isSubManager = asBoolean(json["IsSubManager"], value.isSubManager);
+    value.offset = asNumber(json["Offset"], value.offset);
+    value.sharedNoteInfo = json["SharedNoteList"] ?? value.sharedNoteInfo;
+    value.distNoteInfo = json["DistNoteList"] ?? value.distNoteInfo;
+    value.personalNoteInfo = json["PersonalNoteList"] ?? value.personalNoteInfo;
+    value.webUploadNoteInfo = Array.isArray(json["WebUploadNoteList"]) ? json["WebUploadNoteList"] : value.webUploadNoteInfo;
+    value.pageInfo = json["PageInfo"] ?? value.pageInfo;
+    value.pageList = json["PageList"] ?? value.pageList;
+    value.reactionList = json["ReactionList"] ?? value.reactionList;
+    value.pageInfoList = Array.isArray(json["PageInfoList"]) ? json["PageInfoList"] : value.pageInfoList;
+    value.instanceIndex = asString(json["InstanceIndex"], value.instanceIndex);
+    value.optionsInfo = asString(json["OptionsInfo"], value.optionsInfo);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): RoomData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => RoomData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class RoomPolicyData {
+  selectedPolicy: string = "";
+  roomPoliciesList: OptionInfo[] = [];
+
+  constructor(init: Partial<RoomPolicyData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): RoomPolicyData {
+    const json = asRecord(jsonInput);
+    const value = new RoomPolicyData();
+    value.selectedPolicy = asString(json["SelectedPolicy"], value.selectedPolicy);
+    value.roomPoliciesList = OptionInfo.fromJsonList(json["RoomPoliciesList"]);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): RoomPolicyData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => RoomPolicyData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class CreateRoomData {
+  roomData: RoomData = new RoomData();
+  cDate: string = "";
+  mDate: string = "";
+  joinRoomURL: string = "";
+  roomOption: OptionInfo[] = [];
+  attendees: RoomAttendees[] = [];
+
+  constructor(init: Partial<CreateRoomData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): CreateRoomData {
+    const json = asRecord(jsonInput);
+    const value = new CreateRoomData();
+    value.roomData = RoomData.fromJson(json["RoomData"] ?? {});
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    value.joinRoomURL = asString(json["JoinRoomURL"], value.joinRoomURL);
+    value.roomOption = OptionInfo.fromJsonList(json["RoomOption"]);
+    value.attendees = RoomAttendees.fromJsonList(json["Attendees"]);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): CreateRoomData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => CreateRoomData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class HistoryRoomData {
+  roomDataList: RoomData[] = [];
+  pagesData: PagesData = new PagesData();
+
+  constructor(init: Partial<HistoryRoomData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): HistoryRoomData {
+    const json = asRecord(jsonInput);
+    const value = new HistoryRoomData();
+    value.roomDataList = RoomData.fromJsonList(json["RoomLogInfo"]);
+    value.pagesData = PagesData.fromJson(json["PageInfo"] ?? {});
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): HistoryRoomData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => HistoryRoomData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class ScheduleRoomData {
+  roomDataList: RoomData[] = [];
+  pagesData: PagesData = new PagesData();
+  onlyInvited: boolean = false;
+  onlyPermanent: boolean = false;
+
+  constructor(init: Partial<ScheduleRoomData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): ScheduleRoomData {
+    const json = asRecord(jsonInput);
+    const value = new ScheduleRoomData();
+    value.roomDataList = RoomData.fromJsonList(json["RoomInfo"]);
+    value.pagesData = PagesData.fromJson(json["PageInfo"] ?? {});
+    value.onlyInvited = asBoolean(json["OnlyInvited"], value.onlyInvited);
+    value.onlyPermanent = asBoolean(json["OnlyPermanent"], value.onlyPermanent);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): ScheduleRoomData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => ScheduleRoomData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class RoomAttendeeData {
+  groupID: string = "";
+  siteIndex: string = "";
+  roomCode: string = "";
+  attdID: string = "";
+  isManager: boolean = false;
+  isSubManager: boolean = false;
+  userType: string = "";
+  userClientOS: string = "";
+  userClientType: string = "";
+  userClientDetail: string = "";
+  email: string = "";
+  name: string = "";
+  rights: string = "";
+  exitedReason: number = 0;
+  attendedDuration: number = 0;
+  userIndex: string = "";
+  userID: string = "";
+  inviterID: string = "";
+  nickName: string = "";
+  serverSector: string = "";
+  serverIndex: string = "";
+  attendedDate: string = "";
+  exitedDate: string = "";
+  iPAddr: string = "";
+  cDate: string = "";
+  mDate: string = "";
+  noteIds: string[] = [];
+  pageIds: string[] = [];
+  notesInfo: string = "";
+  annotationsInfo: string = "";
+  noteList: any = undefined;
+  pageInfo: any = undefined;
+  pageList: any = undefined;
+  pageInfoList: any[] = [];
+  state: string = "";
+
+  constructor(init: Partial<RoomAttendeeData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): RoomAttendeeData {
+    const json = asRecord(jsonInput);
+    const value = new RoomAttendeeData();
+    value.groupID = asString(json["GroupID"], value.groupID);
+    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
+    value.roomCode = asString(json["RoomCode"], value.roomCode);
+    value.attdID = asString(json["AttdID"], value.attdID);
+    value.isManager = asBoolean(json["IsManager"], value.isManager);
+    value.isSubManager = asBoolean(json["IsSubManager"], value.isSubManager);
+    value.userType = asString(json["UserType"], value.userType);
+    value.userClientOS = asString(json["UserClientOS"], value.userClientOS);
+    value.userClientType = asString(json["UserClientType"], value.userClientType);
+    value.userClientDetail = asString(json["UserClientDetail"], value.userClientDetail);
+    value.email = asString(json["Email"], value.email);
+    value.name = asString(json["Name"], value.name);
+    value.rights = asString(json["Rights"], value.rights);
+    value.exitedReason = asNumber(json["ExitedReason"], value.exitedReason);
+    value.attendedDuration = asNumber(json["AttendedDuration"], value.attendedDuration);
+    value.userIndex = asString(json["UserIndex"], value.userIndex);
+    value.userID = asString(json["UserID"], value.userID);
+    value.inviterID = asString(json["InviterID"], value.inviterID);
+    value.nickName = asString(json["NickName"], value.nickName);
+    value.serverSector = asString(json["ServerSector"], value.serverSector);
+    value.serverIndex = asString(json["ServerIndex"], value.serverIndex);
+    value.attendedDate = asString(json["AttendedDate"], value.attendedDate);
+    value.exitedDate = asString(json["ExitedDate"], value.exitedDate);
+    value.iPAddr = asString(json["IPAddr"], value.iPAddr);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    value.noteIds = Array.isArray(json["NoteIds"]) ? json["NoteIds"] : value.noteIds;
+    value.pageIds = Array.isArray(json["PageIds"]) ? json["PageIds"] : value.pageIds;
+    value.notesInfo = asString(json["NotesInfo"], value.notesInfo);
+    value.annotationsInfo = asString(json["AnnotationsInfo"], value.annotationsInfo);
+    value.noteList = json["NoteList"] ?? value.noteList;
+    value.pageInfo = json["PageInfo"] ?? value.pageInfo;
+    value.pageList = json["pageList"] ?? value.pageList;
+    value.pageInfoList = Array.isArray(json["pageInfoList"]) ? json["pageInfoList"] : value.pageInfoList;
+    value.state = asString(json["State"], value.state);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): RoomAttendeeData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => RoomAttendeeData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class RoomAttendees {
+  userID: string = "";
+  name: string = "";
+  email: string = "";
+  attendeeURL: string = "";
+  userType: string = "";
+  userIndex: string = "";
+  state: string = "";
+  isManager: boolean = false;
+
+  constructor(init: Partial<RoomAttendees> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): RoomAttendees {
+    const json = asRecord(jsonInput);
+    const value = new RoomAttendees();
+    value.userID = asString(json["UserID"], value.userID);
+    value.name = asString(json["Name"], value.name);
+    value.email = asString(json["Email"], value.email);
+    value.attendeeURL = asString(json["AttendeeUrl"], value.attendeeURL);
+    value.userType = asString(json["UserType"], value.userType);
+    value.userIndex = asString(json["UserIndex"], value.userIndex);
+    value.state = asString(json["State"], value.state);
+    value.isManager = asBoolean(json["IsManager"], value.isManager);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): RoomAttendees[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => RoomAttendees.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class RoomAttendeeLogData {
+  groupID: string = "";
+  siteIndex: string = "";
+  userIndex: string = "";
+  userID: string = "";
+  roomCode: string = "";
+  attdID: string = "";
+  inviterID: string = "";
+  isManager: boolean = false;
+  isSubManager: boolean = false;
+  userType: number = 0;
+  clientVersion: string = "";
+  clientOS: string = "";
+  clientType: number = 0;
+  clientDetail: string = "";
+  email: string = "";
+  name: string = "";
+  nickName: string = "";
+  rights: string = "";
+  noteIDs: string = "";
+  pageIDs: string = "";
+  notesInfo: string = "";
+  annotationsInfo: string = "";
+  invitedDate: string = "";
+  attendedDate: string = "";
+  attendedDuration: number = 0;
+  exitedDate: string = "";
+  exitedReason: number = 0;
+  ipAddr: string = "";
+  byIPAddr: string = "";
+  cDate: string = "";
+  mDate: string = "";
+  index: string = "";
+  serverSector: string = "";
+  serverIndex: string = "";
+  instanceIndex: string = "";
+  lDate: string = "";
+
+  constructor(init: Partial<RoomAttendeeLogData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): RoomAttendeeLogData {
+    const json = asRecord(jsonInput);
+    const value = new RoomAttendeeLogData();
+    value.groupID = asString(json["GroupID"], value.groupID);
+    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
+    value.userIndex = asString(json["UserIndex"], value.userIndex);
+    value.userID = asString(json["UserID"], value.userID);
+    value.roomCode = asString(json["RoomCode"], value.roomCode);
+    value.attdID = asString(json["AttdID"], value.attdID);
+    value.inviterID = asString(json["InviterID"], value.inviterID);
+    value.isManager = asBoolean(json["IsManager"], value.isManager);
+    value.isSubManager = asBoolean(json["IsSubManager"], value.isSubManager);
+    value.userType = asNumber(json["UserType"], value.userType);
+    value.clientVersion = asString(json["ClientVersion"], value.clientVersion);
+    value.clientOS = asString(json["ClientOS"], value.clientOS);
+    value.clientType = asNumber(json["ClientType"], value.clientType);
+    value.clientDetail = asString(json["ClientDetail"], value.clientDetail);
+    value.email = asString(json["Email"], value.email);
+    value.name = asString(json["Name"], value.name);
+    value.nickName = asString(json["NickName"], value.nickName);
+    value.rights = asString(json["Rights"], value.rights);
+    value.noteIDs = asString(json["NoteIDs"], value.noteIDs);
+    value.pageIDs = asString(json["PageIDs"], value.pageIDs);
+    value.notesInfo = asString(json["NotesInfo"], value.notesInfo);
+    value.annotationsInfo = asString(json["AnnotationsInfo"], value.annotationsInfo);
+    value.invitedDate = asString(json["InvitedDate"], value.invitedDate);
+    value.attendedDate = asString(json["AttendedDate"], value.attendedDate);
+    value.attendedDuration = asNumber(json["AttendedDuration"], value.attendedDuration);
+    value.exitedDate = asString(json["ExitedDate"], value.exitedDate);
+    value.exitedReason = asNumber(json["ExitedReason"], value.exitedReason);
+    value.ipAddr = asString(json["IPAddr"], value.ipAddr);
+    value.byIPAddr = asString(json["ByIPAddr"], value.byIPAddr);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    value.index = asString(json["Index"], value.index);
+    value.serverSector = asString(json["ServerSector"], value.serverSector);
+    value.serverIndex = asString(json["ServerIndex"], value.serverIndex);
+    value.instanceIndex = asString(json["InstanceIndex"], value.instanceIndex);
+    value.lDate = asString(json["LDate"], value.lDate);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): RoomAttendeeLogData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => RoomAttendeeLogData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class RoomChatData {
+  groupID: string = "";
+  siteIndex: string = "";
+  roomCode: string = "";
+  index: string = "";
+  filePath: string = "";
+  fileSize: number = 0;
+  serverIndex: string = "";
+  instanceIndex: string = "";
+  cDate: string = "";
+
+  constructor(init: Partial<RoomChatData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): RoomChatData {
+    const json = asRecord(jsonInput);
+    const value = new RoomChatData();
+    value.groupID = asString(json["GroupID"], value.groupID);
+    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
+    value.roomCode = asString(json["RoomCode"], value.roomCode);
+    value.index = asString(json["Index"], value.index);
+    value.filePath = asString(json["FilePath"], value.filePath);
+    value.fileSize = asNumber(json["FileSize"], value.fileSize);
+    value.serverIndex = asString(json["ServerIndex"], value.serverIndex);
+    value.instanceIndex = asString(json["InstanceIndex"], value.instanceIndex);
+    value.cDate = asString(json["CDate"], value.cDate);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): RoomChatData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => RoomChatData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class RoomFileData {
+  groupID: string = "";
+  siteIndex: string = "";
+  userIndex: string = "";
+  userID: string = "";
+  attdID: string = "";
+  roomCode: string = "";
+  roomGroup: string = "";
+  fileIndex: string = "";
+  fileKind: string = "";
+  fileName: string = "";
+  filePath: string = "";
+  fileSize: number = 0;
+  title: string = "";
+  pages: number = 0;
+  cDate: string = "";
+  mDate: string = "";
+
+  constructor(init: Partial<RoomFileData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): RoomFileData {
+    const json = asRecord(jsonInput);
+    const value = new RoomFileData();
+    value.groupID = asString(json["GroupID"], value.groupID);
+    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
+    value.userIndex = asString(json["UserIndex"], value.userIndex);
+    value.userID = asString(json["UserID"], value.userID);
+    value.attdID = asString(json["AttdID"], value.attdID);
+    value.roomCode = asString(json["RoomCode"], value.roomCode);
+    value.roomGroup = asString(json["RoomGroup"], value.roomGroup);
+    value.fileIndex = asString(json["FileIndex"], value.fileIndex);
+    value.fileKind = asString(json["FileKind"], value.fileKind);
+    value.fileName = asString(json["FileName"], value.fileName);
+    value.filePath = asString(json["FilePath"], value.filePath);
+    value.fileSize = asNumber(json["FileSize"], value.fileSize);
+    value.title = asString(json["Title"], value.title);
+    value.pages = asNumber(json["Pages"], value.pages);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): RoomFileData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => RoomFileData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class RoomLogData {
+  groupID: string = "";
+  siteIndex: string = "";
+  userIndex: string = "";
+  userID: string = "";
+  userEmail: string = "";
+  userName: string = "";
+  userType: number = 0;
+  roomID: string = "";
+  roomCode: string = "";
+  policy: string = "";
+  serverSector: string = "";
+  serverIndex: string = "";
+  password: string = "";
+  title: string = "";
+  agenda: string = "";
+  timeZone: string = "";
+  isLocked: boolean = false;
+  isPublic: boolean = false;
+  maxUsers: number = 0;
+  admissionDate: string = "";
+  plannedDate: string = "";
+  endDate: string = "";
+  roomDuration: number = 0;
+  noteIDs: string = "";
+  pageIDs: string = "";
+  distNotesInfo: string = "";
+  sharedNotesInfo: string = "";
+  reactionsInfo: string = "";
+  cDate: string = "";
+  mDate: string = "";
+  index: string = "";
+  instanceIndex: string = "";
+  startedDate: string = "";
+  finishedDate: string = "";
+  isAbnormal: boolean = false;
+  hostJoinedDate: string = "";
+  hostExitedDate: string = "";
+  hostAttendedDuration: number = 0;
+  optionsInfo: string = "";
+  lDate: string = "";
+
+  constructor(init: Partial<RoomLogData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): RoomLogData {
+    const json = asRecord(jsonInput);
+    const value = new RoomLogData();
+    value.groupID = asString(json["GroupID"], value.groupID);
+    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
+    value.userIndex = asString(json["UserIndex"], value.userIndex);
+    value.userID = asString(json["UserID"], value.userID);
+    value.userEmail = asString(json["UserEmail"], value.userEmail);
+    value.userName = asString(json["UserName"], value.userName);
+    value.userType = asNumber(json["UserType"], value.userType);
+    value.roomID = asString(json["RoomID"], value.roomID);
+    value.roomCode = asString(json["RoomCode"], value.roomCode);
+    value.policy = asString(json["Policy"], value.policy);
+    value.serverSector = asString(json["ServerSector"], value.serverSector);
+    value.serverIndex = asString(json["ServerIndex"], value.serverIndex);
+    value.password = asString(json["Password"], value.password);
+    value.title = asString(json["Title"], value.title);
+    value.agenda = asString(json["Agenda"], value.agenda);
+    value.timeZone = asString(json["TimeZone"], value.timeZone);
+    value.isLocked = asBoolean(json["IsLocked"], value.isLocked);
+    value.isPublic = asBoolean(json["IsPublic"], value.isPublic);
+    value.maxUsers = asNumber(json["MaxUsers"], value.maxUsers);
+    value.admissionDate = asString(json["AdmissionDate"], value.admissionDate);
+    value.plannedDate = asString(json["PlannedDate"], value.plannedDate);
+    value.endDate = asString(json["EndDate"], value.endDate);
+    value.roomDuration = asNumber(json["RoomDuration"], value.roomDuration);
+    value.noteIDs = asString(json["NoteIDs"], value.noteIDs);
+    value.pageIDs = asString(json["PageIDs"], value.pageIDs);
+    value.distNotesInfo = asString(json["DistNotesInfo"], value.distNotesInfo);
+    value.sharedNotesInfo = asString(json["SharedNotesInfo"], value.sharedNotesInfo);
+    value.reactionsInfo = asString(json["ReactionsInfo"], value.reactionsInfo);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    value.index = asString(json["Index"], value.index);
+    value.instanceIndex = asString(json["InstanceIndex"], value.instanceIndex);
+    value.startedDate = asString(json["StartedDate"], value.startedDate);
+    value.finishedDate = asString(json["FinishedDate"], value.finishedDate);
+    value.isAbnormal = asBoolean(json["IsAbnormal"], value.isAbnormal);
+    value.hostJoinedDate = asString(json["HostJoinedDate"], value.hostJoinedDate);
+    value.hostExitedDate = asString(json["HostExitedDate"], value.hostExitedDate);
+    value.hostAttendedDuration = asNumber(json["HostAttendedDuration"], value.hostAttendedDuration);
+    value.optionsInfo = asString(json["OptionsInfo"], value.optionsInfo);
+    value.lDate = asString(json["LDate"], value.lDate);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): RoomLogData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => RoomLogData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class SectorData {
+  sectorName: string = "";
+  masterAddr: string = "";
+  slaveAddr: string = "";
+  webServerURL: string = "";
+  apiServerURL: string = "";
+  rooms: number = 0;
+  attendees: number = 0;
+  notes: string = "";
+  cDate: string = "";
+  mDate: string = "";
+
+  constructor(init: Partial<SectorData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): SectorData {
+    const json = asRecord(jsonInput);
+    const value = new SectorData();
+    value.sectorName = asString(json["SectorName"], value.sectorName);
+    value.masterAddr = asString(json["MasterAddr"], value.masterAddr);
+    value.slaveAddr = asString(json["SlaveAddr"], value.slaveAddr);
+    value.webServerURL = asString(json["WebServerURL"], value.webServerURL);
+    value.apiServerURL = asString(json["APIServerURL"], value.apiServerURL);
+    value.rooms = asNumber(json["Rooms"], value.rooms);
+    value.attendees = asNumber(json["Attendees"], value.attendees);
+    value.notes = asString(json["Notes"], value.notes);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): SectorData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => SectorData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class SentMailData {
+  requestID: string = "";
+  count: number = 0;
+  contents: string = "";
+  cDate: string = "";
+
+  constructor(init: Partial<SentMailData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): SentMailData {
+    const json = asRecord(jsonInput);
+    const value = new SentMailData();
+    value.requestID = asString(json["RequestID"], value.requestID);
+    value.count = asNumber(json["Count"], value.count);
+    value.contents = asString(json["Contents"], value.contents);
+    value.cDate = asString(json["CDate"], value.cDate);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): SentMailData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => SentMailData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class ServerData {
+  sector: string = "";
+  serverIndex: string = "";
+  serverTypes: string = "";
+  name: string = "";
+  isActive: boolean = false;
+  isAllowed: boolean = false;
+  privateIPAddrs: string = "";
+  publicIPAddr: string = "";
+  publicSubDomain: string = "";
+  publicDomains: string = "";
+  mainPort: number = 0;
+  version: string = "";
+  startedDate: string = "";
+  stoppedDate: string = "";
+  gor: number = 0;
+  gorTotal: number = 0;
+  cpu: number = 0;
+  cpuTotal: number = 0;
+  mem: number = 0;
+  memFree: number = 0;
+  memTotal: number = 0;
+  hddFree: number = 0;
+  hddTotal: number = 0;
+  ses: number = 0;
+  rtp: number = 0;
+  rtpTotal: number = 0;
+  vid: number = 0;
+  vidTotal: number = 0;
+  maxQueryTime: number = 0;
+  maxInvokeTime: number = 0;
+  maxHandlerTime: number = 0;
+  masterConnTimes: number = 0;
+  masterRetryTimes: number = 0;
+  dumps: number = 0;
+  rooms: number = 0;
+  attendees: number = 0;
+  notes: string = "";
+  cDate: string = "";
+  mDate: string = "";
+
+  constructor(init: Partial<ServerData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): ServerData {
+    const json = asRecord(jsonInput);
+    const value = new ServerData();
+    value.sector = asString(json["Sector"], value.sector);
+    value.serverIndex = asString(json["ServerIndex"], value.serverIndex);
+    value.serverTypes = asString(json["ServerTypes"], value.serverTypes);
+    value.name = asString(json["Name"], value.name);
+    value.isActive = asBoolean(json["IsActive"], value.isActive);
+    value.isAllowed = asBoolean(json["IsAllowed"], value.isAllowed);
+    value.privateIPAddrs = asString(json["PrivateIPAddrs"], value.privateIPAddrs);
+    value.publicIPAddr = asString(json["PublicIPAddr"], value.publicIPAddr);
+    value.publicSubDomain = asString(json["PublicSubDomain"], value.publicSubDomain);
+    value.publicDomains = asString(json["PublicDomains"], value.publicDomains);
+    value.mainPort = asNumber(json["MainPort"], value.mainPort);
+    value.version = asString(json["Version"], value.version);
+    value.startedDate = asString(json["StartedDate"], value.startedDate);
+    value.stoppedDate = asString(json["StoppedDate"], value.stoppedDate);
+    value.gor = asNumber(json["GOR"], value.gor);
+    value.gorTotal = asNumber(json["GORTotal"], value.gorTotal);
+    value.cpu = asNumber(json["CPU"], value.cpu);
+    value.cpuTotal = asNumber(json["CPUTotal"], value.cpuTotal);
+    value.mem = asNumber(json["Mem"], value.mem);
+    value.memFree = asNumber(json["MemFree"], value.memFree);
+    value.memTotal = asNumber(json["MemTotal"], value.memTotal);
+    value.hddFree = asNumber(json["HDDFree"], value.hddFree);
+    value.hddTotal = asNumber(json["HDDTotal"], value.hddTotal);
+    value.ses = asNumber(json["SES"], value.ses);
+    value.rtp = asNumber(json["RTP"], value.rtp);
+    value.rtpTotal = asNumber(json["RTPTotal"], value.rtpTotal);
+    value.vid = asNumber(json["VID"], value.vid);
+    value.vidTotal = asNumber(json["VIDTotal"], value.vidTotal);
+    value.maxQueryTime = asNumber(json["MaxQueryTime"], value.maxQueryTime);
+    value.maxInvokeTime = asNumber(json["MaxInvokeTime"], value.maxInvokeTime);
+    value.maxHandlerTime = asNumber(json["MaxHandlerTime"], value.maxHandlerTime);
+    value.masterConnTimes = asNumber(json["MasterConnTimes"], value.masterConnTimes);
+    value.masterRetryTimes = asNumber(json["MasterRetryTimes"], value.masterRetryTimes);
+    value.dumps = asNumber(json["Dumps"], value.dumps);
+    value.rooms = asNumber(json["Rooms"], value.rooms);
+    value.attendees = asNumber(json["Attendees"], value.attendees);
+    value.notes = asString(json["Notes"], value.notes);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): ServerData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => ServerData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class ServerDomainData {
+  sector: string = "";
+  domainName: string = "";
+  provisionServerIndex: string = "";
+  targetServerIndex: string = "";
+  targetPublicIPAddr: string = "";
+  targetPrivateIPAddrs: string = "";
+  finishedDate: string = "";
+  failedReason: string = "";
+  cDate: string = "";
+  mDate: string = "";
+
+  constructor(init: Partial<ServerDomainData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): ServerDomainData {
+    const json = asRecord(jsonInput);
+    const value = new ServerDomainData();
+    value.sector = asString(json["Sector"], value.sector);
+    value.domainName = asString(json["DomainName"], value.domainName);
+    value.provisionServerIndex = asString(json["ProvisionServerIndex"], value.provisionServerIndex);
+    value.targetServerIndex = asString(json["TargetServerIndex"], value.targetServerIndex);
+    value.targetPublicIPAddr = asString(json["TargetPublicIPAddr"], value.targetPublicIPAddr);
+    value.targetPrivateIPAddrs = asString(json["TargetPrivateIPAddrs"], value.targetPrivateIPAddrs);
+    value.finishedDate = asString(json["FinishedDate"], value.finishedDate);
+    value.failedReason = asString(json["FailedReason"], value.failedReason);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): ServerDomainData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => ServerDomainData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class ServerLogData {
+  sector: string = "";
+  serverIndex: string = "";
+  serverTypes: string = "";
+  name: string = "";
+  isActive: boolean = false;
+  isAllowed: boolean = false;
+  privateIPAddrs: string = "";
+  publicIPAddr: string = "";
+  publicSubDomain: string = "";
+  publicDomains: string = "";
+  mainPort: number = 0;
+  version: string = "";
+  startedDate: string = "";
+  stoppedDate: string = "";
+  gor: number = 0;
+  gorTotal: number = 0;
+  cpu: number = 0;
+  cpuTotal: number = 0;
+  mem: number = 0;
+  memFree: number = 0;
+  memTotal: number = 0;
+  hddFree: number = 0;
+  hddTotal: number = 0;
+  ses: number = 0;
+  rtp: number = 0;
+  rtpTotal: number = 0;
+  vid: number = 0;
+  vidTotal: number = 0;
+  maxQueryTime: number = 0;
+  maxInvokeTime: number = 0;
+  maxHandler_time: number = 0;
+  masterConnTimes: number = 0;
+  masterRetryTimes: number = 0;
+  dumps: number = 0;
+  rooms: number = 0;
+  attendees: number = 0;
+  notes: string = "";
+  cDate: string = "";
+  mDate: string = "";
+  index: string = "";
+  instanceIndex: string = "";
+  licenseInfo: string = "";
+  lDate: string = "";
+
+  constructor(init: Partial<ServerLogData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): ServerLogData {
+    const json = asRecord(jsonInput);
+    const value = new ServerLogData();
+    value.sector = asString(json["Sector"], value.sector);
+    value.serverIndex = asString(json["ServerIndex"], value.serverIndex);
+    value.serverTypes = asString(json["ServerTypes"], value.serverTypes);
+    value.name = asString(json["Name"], value.name);
+    value.isActive = asBoolean(json["IsActive"], value.isActive);
+    value.isAllowed = asBoolean(json["IsAllowed"], value.isAllowed);
+    value.privateIPAddrs = asString(json["PrivateIPAddrs"], value.privateIPAddrs);
+    value.publicIPAddr = asString(json["PublicIPAddr"], value.publicIPAddr);
+    value.publicSubDomain = asString(json["PublicSubDomain"], value.publicSubDomain);
+    value.publicDomains = asString(json["PublicDomains"], value.publicDomains);
+    value.mainPort = asNumber(json["MainPort"], value.mainPort);
+    value.version = asString(json["Version"], value.version);
+    value.startedDate = asString(json["StartedDate"], value.startedDate);
+    value.stoppedDate = asString(json["StoppedDate"], value.stoppedDate);
+    value.gor = asNumber(json["GOR"], value.gor);
+    value.gorTotal = asNumber(json["GORTotal"], value.gorTotal);
+    value.cpu = asNumber(json["CPU"], value.cpu);
+    value.cpuTotal = asNumber(json["CPUTotal"], value.cpuTotal);
+    value.mem = asNumber(json["Mem"], value.mem);
+    value.memFree = asNumber(json["MemFree"], value.memFree);
+    value.memTotal = asNumber(json["MemTotal"], value.memTotal);
+    value.hddFree = asNumber(json["HDDFree"], value.hddFree);
+    value.hddTotal = asNumber(json["HDDTotal"], value.hddTotal);
+    value.ses = asNumber(json["SES"], value.ses);
+    value.rtp = asNumber(json["RTP"], value.rtp);
+    value.rtpTotal = asNumber(json["RTPTotal"], value.rtpTotal);
+    value.vid = asNumber(json["VID"], value.vid);
+    value.vidTotal = asNumber(json["VIDTotal"], value.vidTotal);
+    value.maxQueryTime = asNumber(json["MaxQueryTime"], value.maxQueryTime);
+    value.maxInvokeTime = asNumber(json["MaxInvokeTime"], value.maxInvokeTime);
+    value.maxHandler_time = asNumber(json["MaxHandlerTime"], value.maxHandler_time);
+    value.masterConnTimes = asNumber(json["MasterConnTimes"], value.masterConnTimes);
+    value.masterRetryTimes = asNumber(json["MasterRetryTimes"], value.masterRetryTimes);
+    value.dumps = asNumber(json["Dumps"], value.dumps);
+    value.rooms = asNumber(json["Rooms"], value.rooms);
+    value.attendees = asNumber(json["Attendees"], value.attendees);
+    value.notes = asString(json["Notes"], value.notes);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    value.index = asString(json["Index"], value.index);
+    value.instanceIndex = asString(json["InstanceIndex"], value.instanceIndex);
+    value.licenseInfo = asString(json["LicenseInfo"], value.licenseInfo);
+    value.lDate = asString(json["LDate"], value.lDate);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): ServerLogData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => ServerLogData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class SitesList {
+  siteInfo: SiteData[] = [];
+  pagesData: PagesData = new PagesData();
+
+  constructor(init: Partial<SitesList> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): SitesList {
+    const json = asRecord(jsonInput);
+    const value = new SitesList();
+    value.siteInfo = SiteData.fromJsonList(json["SiteInfo"]);
+    value.pagesData = PagesData.fromJson(json["PageInfo"] ?? {});
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): SitesList[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => SitesList.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class SiteData {
+  sector: string = "";
+  siteIndex: string = "";
+  siteID: string = "";
+  siteSecret: string = "";
+  useBranding: boolean = false;
+  name: string = "";
+  rooms: number = 0;
+  attendees: number = 0;
+  limitRooms: number = 0;
+  limitAttendees: number = 0;
+  limitAccounts: number = 0;
+  groupID: string = "";
+  cDate: string = "";
+  mDate: string = "";
+  groupName: string = "";
+  siteAdmin: UserData = new UserData();
+  billingManagerName: string = "";
+  billingManagerEmail: string = "";
+  billingManagerPhone: string = "";
+  isActive: boolean = false;
+  lastLoginDate: string = "";
+  accountCount: number = 0;
+  pricingModel: string = "";
+  limitMaxAttendees: number = 0;
+
+  constructor(init: Partial<SiteData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): SiteData {
+    const json = asRecord(jsonInput);
+    const value = new SiteData();
+    value.sector = asString(json["Sector"], value.sector);
+    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
+    value.siteID = asString(json["SiteID"], value.siteID);
+    value.siteSecret = asString(json["SiteSecret"], value.siteSecret);
+    value.useBranding = asBoolean(json["UseBranding"], value.useBranding);
+    value.name = asString(json["Name"], value.name);
+    value.rooms = asNumber(json["Rooms"], value.rooms);
+    value.attendees = asNumber(json["Attendees"], value.attendees);
+    value.limitRooms = asNumber(json["LimitRooms"], value.limitRooms);
+    value.limitAttendees = asNumber(json["LimitAttendees"], value.limitAttendees);
+    value.limitAccounts = asNumber(json["LimitAccounts"], value.limitAccounts);
+    value.groupID = asString(json["GroupID"], value.groupID);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MDate"], value.mDate);
+    value.groupName = asString(json["GroupName"], value.groupName);
+    value.siteAdmin = UserData.fromJson(json["SiteAdmin"] ?? {});
+    value.billingManagerName = asString(json["BillingManagerName"], value.billingManagerName);
+    value.billingManagerEmail = asString(json["BillingManagerEmail"], value.billingManagerEmail);
+    value.billingManagerPhone = asString(json["BillingManagerPhone"], value.billingManagerPhone);
+    value.isActive = asBoolean(json["IsActive"], value.isActive);
+    value.lastLoginDate = asString(json["LastLoginDate"], value.lastLoginDate);
+    value.accountCount = asNumber(json["AccountCount"], value.accountCount);
+    value.pricingModel = asString(json["PricingModel"], value.pricingModel);
+    value.limitMaxAttendees = asNumber(json["LimitMaxAttendees"], value.limitMaxAttendees);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): SiteData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => SiteData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class SiteCount {
+  rooms: number = 0;
+  users: number = 0;
+
+  constructor(init: Partial<SiteCount> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): SiteCount {
+    const json = asRecord(jsonInput);
+    const value = new SiteCount();
+    value.rooms = asNumber(json["Rooms"], value.rooms);
+    value.users = asNumber(json["Users"], value.users);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): SiteCount[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => SiteCount.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class SiteAvailableData {
+  userCount: number = 0;
+  limitAccounts: number = 0;
+  isAvailableCreateUser: boolean = false;
+
+  constructor(init: Partial<SiteAvailableData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): SiteAvailableData {
+    const json = asRecord(jsonInput);
+    const value = new SiteAvailableData();
+    value.userCount = asNumber(json["UserCount"], value.userCount);
+    value.limitAccounts = asNumber(json["LimitAccounts"], value.limitAccounts);
+    value.isAvailableCreateUser = asBoolean(json["IsAvailableCreateUser"], value.isAvailableCreateUser);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): SiteAvailableData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => SiteAvailableData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class TimeZoneData {
+  code: number = 0;
+  countryCode: string = "";
+  timeZone: string = "";
+  comments: string = "";
+  utcOffset: number = 0;
+  utcDstOffset: number = 0;
+  useDST: number = 0;
+  notes: string = "";
+
+  constructor(init: Partial<TimeZoneData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): TimeZoneData {
+    const json = asRecord(jsonInput);
+    const value = new TimeZoneData();
+    value.code = asNumber(json["Code"], value.code);
+    value.countryCode = asString(json["CountryCode"], value.countryCode);
+    value.timeZone = asString(json["TimeZone"], value.timeZone);
+    value.comments = asString(json["Comments"], value.comments);
+    value.utcOffset = asNumber(json["UTCOffset"], value.utcOffset);
+    value.utcDstOffset = asNumber(json["UTCDSTOffset"], value.utcDstOffset);
+    value.useDST = asNumber(json["UseDST"], value.useDST);
+    value.notes = asString(json["Notes"], value.notes);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): TimeZoneData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => TimeZoneData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class UserListData {
+  userList: UserData[] = [];
+  pagesData: PagesData = new PagesData();
+
+  constructor(init: Partial<UserListData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): UserListData {
+    const json = asRecord(jsonInput);
+    const value = new UserListData();
+    value.userList = UserData.fromJsonList(json["UserList"]);
+    value.pagesData = PagesData.fromJson(json["PageInfo"] ?? {});
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): UserListData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => UserListData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
+export class UserData {
+  groupID: string = "";
+  siteIndex: string = "";
+  userIndex: string = "";
+  userID: string = "";
+  password: string = "";
+  isPasswordApplied: boolean = false;
+  email: string = "";
+  name: string = "";
+  nickName: string = "";
+  isSNS: boolean = false;
+  userType: string = "";
+  state: string = "";
+  monitoringColumn: string = "";
+  loginServerIndex: string = "";
+  lastLoginDate: string = "";
+  lastLogoutDate: string = "";
+  lastIPAddress: string = "";
+  profileImageKey: string = "";
+  info: string = "";
+  cDate: string = "";
+  mDate: string = "";
+  profileImageURL: string = "";
+  disableLogin: boolean = false;
+  isSiteManager: boolean = false;
+  isSiteHolder: boolean = false;
+  isSystemManager: boolean = false;
+  isSystemHolder: boolean = false;
+  isManager: boolean = false;
+  row: number = 0;
+  isEmptyId: boolean = false;
+  isEmptyName: boolean = false;
+  isEmailTypeError: boolean = false;
+  isEmptyEmail: boolean = false;
+  isDuplicateId: boolean = false;
+  isValid: boolean = false;
+
+  constructor(init: Partial<UserData> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): UserData {
+    const json = asRecord(jsonInput);
+    const value = new UserData();
+    value.groupID = asString(json["GroupID"], value.groupID);
+    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
+    value.userIndex = asString(json["UserIndex"], value.userIndex);
+    value.userID = asString(json["UserID"], value.userID);
+    value.password = asString(json["Password"], value.password);
+    value.isPasswordApplied = asBoolean(json["IsPasswordApplied"], value.isPasswordApplied);
+    value.email = asString(json["Email"], value.email);
+    value.name = asString(json["Name"], value.name);
+    value.nickName = asString(json["NickName"], value.nickName);
+    value.isSNS = asBoolean(json["IsSNS"], value.isSNS);
+    value.userType = asString(json["UserType"], value.userType);
+    value.state = asString(json["State"], value.state);
+    value.monitoringColumn = asString(json["MonitoringColumn"], value.monitoringColumn);
+    value.loginServerIndex = asString(json["LoginServerIndex"], value.loginServerIndex);
+    value.lastLoginDate = asString(json["LastLoginDate"], value.lastLoginDate);
+    value.lastLogoutDate = asString(json["lastLogoutDate"], value.lastLogoutDate);
+    value.lastIPAddress = asString(json["lastIPAddress"], value.lastIPAddress);
+    value.profileImageKey = asString(json["profileImageKey"], value.profileImageKey);
+    value.info = asString(json["Info"], value.info);
+    value.cDate = asString(json["CDate"], value.cDate);
+    value.mDate = asString(json["MData"], value.mDate);
+    value.profileImageURL = asString(json["ProfileImageURL"], value.profileImageURL);
+    value.disableLogin = asBoolean(json["DisableLogin"], value.disableLogin);
+    value.isSiteManager = asBoolean(json["IsSiteManager"], value.isSiteManager);
+    value.isSiteHolder = asBoolean(json["IsSiteHolder"], value.isSiteHolder);
+    value.isSystemManager = asBoolean(json["IsSystemManager"], value.isSystemManager);
+    value.isSystemHolder = asBoolean(json["IsSystemHolder"], value.isSystemHolder);
+    value.isManager = asBoolean(json["IsManager"], value.isManager);
+    value.row = asNumber(json["Row"], value.row);
+    value.isEmptyId = asBoolean(json["IsEmptyId"], value.isEmptyId);
+    value.isEmptyName = asBoolean(json["IsEmptyName"], value.isEmptyName);
+    value.isEmailTypeError = asBoolean(json["IsEmailTypeError"], value.isEmailTypeError);
+    value.isEmptyEmail = asBoolean(json["IsEmptyEmail"], value.isEmptyEmail);
+    value.isDuplicateId = asBoolean(json["IsDuplicateId"], value.isDuplicateId);
+    value.isValid = asBoolean(json["IsValid"], value.isValid);
+    return value;
+  }
+
+  static fromJsonList(jsonList: unknown): UserData[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => UserData.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
