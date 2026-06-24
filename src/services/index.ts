@@ -1,5 +1,6 @@
 export { CommonService } from "./commonService";
 export { ContractService } from "./contractService";
+export { DashboardService } from "./dashboardService";
 export { GroupService } from "./groupService";
 export { MailService } from "./mailService";
 export { NoticeService } from "./noticeService";

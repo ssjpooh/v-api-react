@@ -1,4 +1,4 @@
-import { ApiClient, type FoxApiResult, buildPath } from "../apiClient";
+import { ApiClient, type FoxApiResult, type RequestOptions, buildPath } from "../apiClient";
 import { handleResult } from "../resultUtils";
 import { AddFile, AttachNoteInfo, BaseOptionEnvData, BlockListData, ClientTokenData, CommonOption, ConcurrentInfo, ContractData, ContractListData, ContractLogData, CreateRoomData, DB, FileData, GroupData, GroupOptionEnvData, HistoryRoomData, LoginResult, MailConfig, NoteData, NoticeData, NoticeFileData, NoticeList, OptionInfo, OptionItems, PageData, PageLists, PagesData, PagesLists, PolicyOptionEnvData, ProvisionServerData, RemoveFile, Room, RoomAttendeeData, RoomAttendeeLogData, RoomAttendees, RoomChatData, RoomData, RoomFileData, RoomLogData, RoomPolicyData, ScheduleRoomData, Scope, SectorData, SendMail, SentMailData, ServerData, ServerDomainData, ServerLogData, SiteAvailableData, SiteCount, SiteData, SiteOptionInfoMap, SitesList, TimeZoneData, User, UserData, UserListData } from "../models";
 
@@ -6,16 +6,16 @@ import { AddFile, AttachNoteInfo, BaseOptionEnvData, BlockListData, ClientTokenD
 export class CommonService {
   constructor(private readonly apiClient: ApiClient) {}
 
-  async login(params: { token: string; body?: string; cancelId?: string }): Promise<FoxApiResult<LoginResult>> {
+  async login(params: { token: string; body?: RequestOptions["body"]; cancelId?: string }): Promise<FoxApiResult<LoginResult>> {
     const { token, body, cancelId } = params;
     const result = await this.apiClient.post("/v1/login", { header: {Authorization: `Bearer ${token}`, From: "login"}, body: body, cancelId: cancelId });
         return handleResult(result, (json) => LoginResult.fromJson(json));
   }
 
-  async logout(params: { userID: string; cancelId?: string }): Promise<FoxApiResult> {
-    const { userID, cancelId } = params;
-    let jsonBody = JSON.stringify({'UserID': userID});
-        const result = await this.apiClient.post("/v1/logout", { header: {From: "logout"}, body: jsonBody, cancelId: cancelId });
+  async logout(params: { token?: string; body?: RequestOptions["body"]; userID?: string; siteIndex?: string; cancelId?: string }): Promise<FoxApiResult> {
+    const { token, body, userID, siteIndex, cancelId } = params;
+    const jsonBody = body ?? { UserID: userID ?? "", Token: token ?? "", SiteIndex: siteIndex ?? "" };
+        const result = await this.apiClient.post("/v1/logout", { header: {Authorization: token ? `Bearer ${token}` : "", From: "logout"}, body: jsonBody, cancelId: cancelId });
         return handleResult(result);
   }
 
@@ -56,7 +56,7 @@ export class CommonService {
 
   async healthCheck(params: { cancelId?: string }): Promise<FoxApiResult> {
     const { cancelId } = params;
-    const result = await this.apiClient.get("/v1/healthCheck", { cancelId: cancelId });
+    const result = await this.apiClient.get("/v1/healtz", { cancelId: cancelId });
         return handleResult(result);
   }
 

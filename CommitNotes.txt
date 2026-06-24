@@ -1,3 +1,10 @@
+[ 2026-06-24 - ssjpooh ]
+[new] DashboardService 추가 및 FoxcomApi 서비스 export 연결
+[new] 그룹, 섹터, 서버 도메인, 통계 관련 API 메서드 추가
+[new] 응답 모델의 PascalCase 필드 호환 타입과 alias 추가
+[fix] 서비스 요청 body 타입을 RequestOptions body 타입으로 확장
+[fix] 일부 API 경로, 쿼리 생성, 헤더 From 값, 모델 파싱 보강
+
 [ 2026-06-23 - ssjpooh ]
 [new] React/browser용 TypeScript API 클라이언트 프로젝트 초기 구성 추가
 [new] API 클라이언트 소스, 서비스 모듈, 모델 export 추가

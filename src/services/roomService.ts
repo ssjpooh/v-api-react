@@ -1,4 +1,4 @@
-import { ApiClient, type FoxApiResult, buildPath, toMultipartValue } from "../apiClient";
+import { ApiClient, type FoxApiResult, type RequestOptions, buildPath, toMultipartValue } from "../apiClient";
 import { handleResult } from "../resultUtils";
 import { AddFile, AttachNoteInfo, BaseOptionEnvData, BlockListData, ClientTokenData, CommonOption, ConcurrentInfo, ContractData, ContractListData, ContractLogData, CreateRoomData, DB, FileData, GroupData, GroupOptionEnvData, HistoryRoomData, MailConfig, NoteData, NoticeData, NoticeFileData, NoticeList, OptionInfo, OptionItems, PageData, PageLists, PagesData, PagesLists, PolicyOptionEnvData, ProvisionServerData, RemoveFile, Room, RoomAttendeeData, RoomAttendeeLogData, RoomAttendees, RoomChatData, RoomData, RoomFileData, RoomLogData, RoomPolicyData, ScheduleRoomData, Scope, SectorData, SendMail, SentMailData, ServerData, ServerDomainData, ServerLogData, SiteAvailableData, SiteCount, SiteData, SiteOptionInfoMap, SitesList, TimeZoneData, User, UserData, UserListData } from "../models";
 
@@ -31,17 +31,17 @@ export class RoomService {
     return this.apiClient.get(`/v1/room/admin/get/finishedList?siteIndex=${siteIndex ?? ''}&pagePerRow=${pagePerRow ?? 10}&pageNo=${pageNo ?? 0}&keyword=${keyword ?? ''}&startDate=${startDate ?? ''}&endDate=${endDate ?? ''}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
   }
 
-  async postRoom(params: { userID: string; token: string; site: string; body?: string; cancelId?: string }): Promise<FoxApiResult> {
+  async postRoom(params: { userID: string; token: string; site: string; body?: RequestOptions["body"]; cancelId?: string }): Promise<FoxApiResult> {
     const { userID, token, site, body, cancelId } = params;
     return this.apiClient.post(`/v1/room/${userID}?site=${site}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
   }
 
-  async postRoomByAdmin(params: { siteIndex: string; adminID: string; token: string; body: string; cancelId?: string }): Promise<FoxApiResult> {
+  async postRoomByAdmin(params: { siteIndex: string; adminID: string; token: string; body: RequestOptions["body"]; cancelId?: string }): Promise<FoxApiResult> {
     const { siteIndex, adminID, token, body, cancelId } = params;
     return this.apiClient.post(`/v1/room/post/byAdmin/${siteIndex}/${adminID}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
   }
 
-  async modifyRoom(params: { userID: string; roomCode: string; token: string; body?: string; cancelId?: string }): Promise<FoxApiResult> {
+  async modifyRoom(params: { userID: string; roomCode: string; token: string; body?: RequestOptions["body"]; cancelId?: string }): Promise<FoxApiResult> {
     const { userID, roomCode, token, body, cancelId } = params;
     return this.apiClient.patch(`/v1/room/${userID}/${roomCode}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
   }
@@ -121,12 +121,12 @@ export class RoomService {
     return this.apiClient.multipartPost(`/v1/file/attachFile/${userID}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, body: {"file": new File([bytes], name)}, cancelId: cancelId });
   }
 
-  async addFiles(params: { body: string; token: string; userID: string; roomCode: string; cancelId?: string }): Promise<FoxApiResult> {
+  async addFiles(params: { body: RequestOptions["body"]; token: string; userID: string; roomCode: string; cancelId?: string }): Promise<FoxApiResult> {
     const { body, token, userID, roomCode, cancelId } = params;
     return this.apiClient.post(`/v1/file/addFile/${userID}/${roomCode}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
   }
 
-  async removeFiles(params: { body: string; userID: string; roomCode: string; token: string; cancelId?: string }): Promise<FoxApiResult> {
+  async removeFiles(params: { body: RequestOptions["body"]; userID: string; roomCode: string; token: string; cancelId?: string }): Promise<FoxApiResult> {
     const { body, userID, roomCode, token, cancelId } = params;
     return this.apiClient.delete(`/v1/file/removeFile/${userID}/${roomCode}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
   }

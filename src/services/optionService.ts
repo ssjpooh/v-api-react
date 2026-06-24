@@ -1,4 +1,4 @@
-import { ApiClient, type FoxApiResult, buildPath } from "../apiClient";
+import { ApiClient, type FoxApiResult, type RequestOptions, buildPath } from "../apiClient";
 import { handleResult } from "../resultUtils";
 import { AddFile, AttachNoteInfo, BaseOptionEnvData, BlockListData, ClientTokenData, CommonOption, ConcurrentInfo, ContractData, ContractListData, ContractLogData, CreateRoomData, DB, FileData, GroupData, GroupOptionEnvData, HistoryRoomData, MailConfig, NoteData, NoticeData, NoticeFileData, NoticeList, OptionInfo, OptionItems, PageData, PageLists, PagesData, PagesLists, PolicyOptionEnvData, ProvisionServerData, RemoveFile, Room, RoomAttendeeData, RoomAttendeeLogData, RoomAttendees, RoomChatData, RoomData, RoomFileData, RoomLogData, RoomPolicyData, ScheduleRoomData, Scope, SectorData, SendMail, SentMailData, ServerData, ServerDomainData, ServerLogData, SiteAvailableData, SiteCount, SiteData, SiteOptionInfoMap, SitesList, TimeZoneData, User, UserData, UserListData } from "../models";
 
@@ -35,12 +35,12 @@ export class OptionService {
     return this.apiClient.get(`/v1/baseOptionItemByName/${optionName}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
   }
 
-  async addBaseOption(params: { token: string; body: string; cancelId?: string }): Promise<FoxApiResult> {
+  async addBaseOption(params: { token: string; body: RequestOptions["body"]; cancelId?: string }): Promise<FoxApiResult> {
     const { token, body, cancelId } = params;
     return this.apiClient.post("/v1/addBaseOption", { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
   }
 
-  async modifyBaseOption(params: { token: string; body: string; cancelId?: string }): Promise<FoxApiResult> {
+  async modifyBaseOption(params: { token: string; body: RequestOptions["body"]; cancelId?: string }): Promise<FoxApiResult> {
     const { token, body, cancelId } = params;
     return this.apiClient.patch("/v1/modifyBaseOption", { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
   }
@@ -55,17 +55,22 @@ export class OptionService {
     return this.apiClient.get(`/v1/siteOptions/${siteIndex}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
   }
 
+  async getSiteOptionByKey(params: { siteIndex: string; key: string; token: string; cancelId?: string }): Promise<FoxApiResult> {
+    const { siteIndex, key, token, cancelId } = params;
+    return this.apiClient.get(`/v1/getSiteOption/${siteIndex}?key=${encodeURIComponent(key)}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+  }
+
   async getSiteOptionByName(params: { siteIndex: string; optionName: string; token: string; cancelId?: string }): Promise<FoxApiResult> {
     const { siteIndex, optionName, token, cancelId } = params;
     return this.apiClient.get(`/v1/getSiteOption/${siteIndex}/${optionName}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
   }
 
-  async addSiteOption(params: { token: string; body: string; subMenu: boolean; cancelId?: string }): Promise<FoxApiResult> {
+  async addSiteOption(params: { token: string; body: RequestOptions["body"]; subMenu: boolean; cancelId?: string }): Promise<FoxApiResult> {
     const { token, body, subMenu, cancelId } = params;
     return this.apiClient.post(`/v1/addSiteOption?subMenu=${subMenu}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
   }
 
-  async updateSiteOption(params: { token: string; body: string; cancelId?: string }): Promise<FoxApiResult> {
+  async updateSiteOption(params: { token: string; body: RequestOptions["body"]; cancelId?: string }): Promise<FoxApiResult> {
     const { token, body, cancelId } = params;
     return this.apiClient.patch("/v1/modifySiteOption", { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
   }
@@ -82,17 +87,17 @@ export class OptionService {
     return this.apiClient.get(`/v1/groupOptionByName/${groupID}/${name}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
   }
 
-  async addGroupOption(params: { token: string; body: string; subMenu: boolean; cancelId?: string }): Promise<FoxApiResult> {
+  async addGroupOption(params: { token: string; body: RequestOptions["body"]; subMenu: boolean; cancelId?: string }): Promise<FoxApiResult> {
     const { token, body, subMenu, cancelId } = params;
     return this.apiClient.post(`/v1/addGroupOption?subMenu=${subMenu}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
   }
 
-  async updateGroupOption(params: { token: string; groupID: string; body: string; cancelId?: string }): Promise<FoxApiResult> {
+  async updateGroupOption(params: { token: string; groupID: string; body: RequestOptions["body"]; cancelId?: string }): Promise<FoxApiResult> {
     const { token, groupID, body, cancelId } = params;
     return this.apiClient.patch(`/v1/modifyGroupOption/${groupID}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
   }
 
-  async removeGroupOption(params: { token: string; body: string; cancelId?: string }): Promise<FoxApiResult> {
+  async removeGroupOption(params: { token: string; body: RequestOptions["body"]; cancelId?: string }): Promise<FoxApiResult> {
     const { token, body, cancelId } = params;
     return this.apiClient.delete("/v1/removeGroupOption", { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
   }
@@ -107,25 +112,25 @@ export class OptionService {
     return this.apiClient.get("/v1/option/get/policies", { header: {Authorization: `Bearer ${token}`, From: "Web"}, cancelId: cancelId });
   }
 
-  async addPolicyOption(params: { token: string; body: string; policyCode: string; cancelId?: string }): Promise<FoxApiResult> {
+  async addPolicyOption(params: { token: string; body: RequestOptions["body"]; policyCode: string; cancelId?: string }): Promise<FoxApiResult> {
     const { token, body, policyCode, cancelId } = params;
     return this.apiClient.post(`/v1/policyOption/add/${policyCode}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
   }
 
-  async modifyPolicyOption(params: { token: string; body: string; policyCode: string; cancelId?: string }): Promise<FoxApiResult> {
+  async modifyPolicyOption(params: { token: string; body: RequestOptions["body"]; policyCode: string; cancelId?: string }): Promise<FoxApiResult> {
     const { token, body, policyCode, cancelId } = params;
     const result = await this.apiClient.patch(`/v1/policyOption/modify/${policyCode}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
 
         return handleResult(result);
   }
 
-  async deletePolicyOption(params: { token: string; body: string; policyCode: string; cancelId?: string }): Promise<FoxApiResult> {
+  async deletePolicyOption(params: { token: string; body: RequestOptions["body"]; policyCode: string; cancelId?: string }): Promise<FoxApiResult> {
     const { token, body, policyCode, cancelId } = params;
     const result = await this.apiClient.delete(`/v1/policyOption/delete/${policyCode}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
         return handleResult(result);
   }
 
-  async addOptionItem(params: { token: string; body: string; type: number; cancelId?: string }): Promise<FoxApiResult> {
+  async addOptionItem(params: { token: string; body: RequestOptions["body"]; type: number; cancelId?: string }): Promise<FoxApiResult> {
     const { token, body, type, cancelId } = params;
     let value = "";
         switch (type) {
@@ -150,7 +155,7 @@ export class OptionService {
         return handleResult(result);
   }
 
-  async addOptionInherit(params: { token: string; body: string; type: number; cancelId?: string }): Promise<FoxApiResult> {
+  async addOptionInherit(params: { token: string; body: RequestOptions["body"]; type: number; cancelId?: string }): Promise<FoxApiResult> {
     const { token, body, type, cancelId } = params;
     let value = "";
         switch (type) {
@@ -176,7 +181,7 @@ export class OptionService {
         return handleResult(result);
   }
 
-  async overrideOption(params: { token: string; body: string; type: number; cancelId?: string }): Promise<FoxApiResult> {
+  async overrideOption(params: { token: string; body: RequestOptions["body"]; type: number; cancelId?: string }): Promise<FoxApiResult> {
     const { token, body, type, cancelId } = params;
     let value = "";
         switch (type) {
@@ -201,7 +206,7 @@ export class OptionService {
         return handleResult(result);
   }
 
-  async restoreOption(params: { token: string; body: string; type: number; cancelId?: string }): Promise<FoxApiResult> {
+  async restoreOption(params: { token: string; body: RequestOptions["body"]; type: number; cancelId?: string }): Promise<FoxApiResult> {
     const { token, body, type, cancelId } = params;
     let value = "";
         switch (type) {
@@ -226,7 +231,7 @@ export class OptionService {
         return handleResult(result);
   }
 
-  async selectedOption(params: { token: string; body: string; type: number; cancelId?: string }): Promise<FoxApiResult> {
+  async selectedOption(params: { token: string; body: RequestOptions["body"]; type: number; cancelId?: string }): Promise<FoxApiResult> {
     const { token, body, type, cancelId } = params;
     let value = "";
         switch (type) {
@@ -251,7 +256,7 @@ export class OptionService {
         return handleResult(result);
   }
 
-  async deleteOptionItem(params: { token: string; body: string; type: number; cancelId?: string }): Promise<FoxApiResult> {
+  async deleteOptionItem(params: { token: string; body: RequestOptions["body"]; type: number; cancelId?: string }): Promise<FoxApiResult> {
     const { token, body, type, cancelId } = params;
     let value = "";
         switch (type) {
@@ -275,7 +280,7 @@ export class OptionService {
         return handleResult(result);
   }
 
-  async changeOptionItemOrder(params: { token: string; body: string; type: number; cancelId?: string }): Promise<FoxApiResult> {
+  async changeOptionItemOrder(params: { token: string; body: RequestOptions["body"]; type: number; cancelId?: string }): Promise<FoxApiResult> {
     const { token, body, type, cancelId } = params;
     let value = "";
         switch (type) {

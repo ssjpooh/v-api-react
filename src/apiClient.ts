@@ -3,7 +3,7 @@ export const TIMEOUT_DURATION_MS = 10_000;
 export type RequestOptions = {
   cancelId?: string;
   header?: Record<string, string>;
-  body?: BodyInit | Record<string, unknown> | null;
+  body?: BodyInit | Record<string, unknown> | unknown[] | null;
 };
 
 export type FoxApiResult<T = unknown> = {

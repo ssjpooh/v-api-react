@@ -7,6 +7,7 @@ import { ApiClient } from "./apiClient";
 import {
   CommonService,
   ContractService,
+  DashboardService,
   GroupService,
   MailService,
   NoticeService,
@@ -44,6 +45,7 @@ export class FoxcomApi {
   readonly serverService: ServerService;
   readonly sectorService: SectorService;
   readonly contractService: ContractService;
+  readonly dashboardService: DashboardService;
   readonly statisticsService: StatisticsService;
   readonly mailService: MailService;
   readonly groupService: GroupService;
@@ -60,6 +62,7 @@ export class FoxcomApi {
     this.serverService = new ServerService(this.apiClient);
     this.sectorService = new SectorService(this.apiClient);
     this.contractService = new ContractService(this.apiClient);
+    this.dashboardService = new DashboardService(this.apiClient);
     this.statisticsService = new StatisticsService(this.apiClient);
     this.mailService = new MailService(this.apiClient);
     this.groupService = new GroupService(this.apiClient);

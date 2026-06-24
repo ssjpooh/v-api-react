@@ -48,4 +48,39 @@ export class StatisticsService {
     const result = await this.apiClient.get(`/v1/concurrent/get?range=${range}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
         return handleResult(result, (json) => ConcurrentInfo.fromJson(json));
   }
+
+  async getStatisticsSiteList(params: { token: string; query: Record<string, string | number | boolean>; cancelId?: string }): Promise<FoxApiResult> {
+    const { token, query, cancelId } = params;
+    return this.apiClient.get(buildPath("/v1/statistics/get/site", query), { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+  }
+
+  async getStatisticsGroupList(params: { token: string; query: Record<string, string | number | boolean>; cancelId?: string }): Promise<FoxApiResult> {
+    const { token, query, cancelId } = params;
+    return this.apiClient.get(buildPath("/v1/statistics/get/group", query), { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+  }
+
+  async getStatisticsGroupDetailByQuery(params: { token: string; groupID: string; query: Record<string, string | number | boolean>; cancelId?: string }): Promise<FoxApiResult> {
+    const { token, groupID, query, cancelId } = params;
+    return this.apiClient.get(buildPath(`/v1/statistics/get/groupDetail/${groupID}`, query), { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+  }
+
+  async getStatisticsSiteDetailByQuery(params: { token: string; siteID: string; query: Record<string, string | number | boolean>; cancelId?: string }): Promise<FoxApiResult> {
+    const { token, siteID, query, cancelId } = params;
+    return this.apiClient.get(buildPath(`/v1/statistics/get/siteDetail/${siteID}`, query), { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+  }
+
+  async getStatisticsRoomState(params: { token: string; query: Record<string, string | number | boolean>; cancelId?: string }): Promise<FoxApiResult> {
+    const { token, query, cancelId } = params;
+    return this.apiClient.get(buildPath("/v1/statistics/serverRoomLicense", query), { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+  }
+
+  async getStatisticsAttendeeState(params: { token: string; query: Record<string, string | number | boolean>; cancelId?: string }): Promise<FoxApiResult> {
+    const { token, query, cancelId } = params;
+    return this.apiClient.get(buildPath("/v1/statistics/serverAttendeesLicense", query), { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+  }
+
+  async getStatisticsSiteDailyDetail(params: { token: string; query: Record<string, string | number | boolean>; cancelId?: string }): Promise<FoxApiResult> {
+    const { token, query, cancelId } = params;
+    return this.apiClient.get(buildPath("/v1/statistics/siteDetail", query), { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+  }
 }

@@ -20,6 +20,25 @@ function asStringArray(value: unknown, fallback: string[] = []): string[] {
   return Array.isArray(value) ? value.map((item) => asString(item)) : fallback;
 }
 
+function asNumberOrNull(value: unknown, fallback: number | null = null): number | null {
+  if (value == null) return fallback;
+  const numeric = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(numeric) ? numeric : fallback;
+}
+
+function withAliases<T extends object>(value: T, aliases: Record<string, string>): T {
+  const record = value as AnyRecord;
+  Object.entries(aliases).forEach(([alias, source]) => {
+    record[alias] = record[source];
+  });
+  return value;
+}
+
+function unwrapMain(value: unknown): AnyRecord {
+  const record = asRecord(value);
+  return asRecord(record["Main"] ?? value);
+}
+
 
 export class ConcurrentInfo {
   rooms: number = 0;
@@ -34,7 +53,7 @@ export class ConcurrentInfo {
     const value = new ConcurrentInfo();
     value.rooms = asNumber(json["Rooms"], value.rooms);
     value.attendees = asNumber(json["Attendees"], value.attendees);
-    return value;
+    return withAliases(value, { Rooms: "rooms", Attendees: "attendees" });
   }
 
   static fromJsonList(jsonList: unknown): ConcurrentInfo[] {
@@ -626,7 +645,28 @@ export class NoticeData {
     value.fileList = Array.isArray(json["FileList"]) ? json["FileList"] : value.fileList;
     value.viewNum = asNumber(json["ViewNum"], value.viewNum);
     value.existFile = asBoolean(json["ExistFile"], value.existFile);
-    return value;
+    return withAliases(value, {
+      GroupID: "groupID",
+      SiteIndex: "siteIndex",
+      UserID: "userID",
+      UserIndex: "userIndex",
+      UserName: "userName",
+      Category: "category",
+      Title: "title",
+      NoticeIndex: "noticeIndex",
+      StartDate: "startDate",
+      EndDate: "endDate",
+      Targets: "target",
+      Contents: "contents",
+      MDate: "mDate",
+      CDate: "cDate",
+      IsPinned: "isPinned",
+      IsBanner: "isBanner",
+      IsStopped: "isStopped",
+      FileList: "fileList",
+      ViewNum: "viewNum",
+      ExistFile: "existFile",
+    });
   }
 
   static fromJsonList(jsonList: unknown): NoticeData[] {
@@ -652,7 +692,7 @@ export class NoticeList {
     const value = new NoticeList();
     value.noticeList = NoticeData.fromJsonList(json["NoticeList"]);
     value.pagesData = PagesData.fromJson(json["PageInfo"] ?? {});
-    return value;
+    return withAliases(value, { NoticeList: "noticeList", PageInfo: "pagesData" });
   }
 
   static fromJsonList(jsonList: unknown): NoticeList[] {
@@ -688,7 +728,14 @@ export class NoticeFileData {
     value.fileName = asString(json["FileName"], value.fileName);
     value.files = FileData.fromJsonList(json["Files"]);
     value.fileSize = asNumber(json["FileSize"], value.fileSize);
-    return value;
+    return withAliases(value, {
+      NoticeIndex: "noticeIndex",
+      FileIndex: "fileIndex",
+      FileKey: "fileKey",
+      FileURL: "fileUrl",
+      FileName: "fileName",
+      FileSize: "fileSize",
+    });
   }
 
   static fromJsonList(jsonList: unknown): NoticeFileData[] {
@@ -768,7 +815,19 @@ export class CommonOption {
     value.mDate = asString(json["MDate"], value.mDate);
     value.mapDispNameByLang = json["mapDispNameByLang"] ?? value.mapDispNameByLang;
     value.mapValueByLang = json["mapValueByLang"] ?? value.mapValueByLang;
-    return value;
+    return withAliases(value, {
+      Name: "name",
+      Item: "item",
+      Scope: "scope",
+      ValueType: "valueType",
+      Value: "value",
+      DefaultValue: "defaultValue",
+      DispName: "dispName",
+      ItemOrder: "itemOrder",
+      Notes: "notes",
+      CDate: "cDate",
+      MDate: "mDate",
+    });
   }
 
   static fromJsonList(jsonList: unknown): CommonOption[] {
@@ -799,7 +858,7 @@ export class OptionInfo {
   static fromJson(jsonInput: unknown = {}): OptionInfo {
     const json = asRecord(jsonInput);
     const value = new OptionInfo();
-    value.commonOption = CommonOption.fromJson(json["CommonOption"] ?? {});
+    value.commonOption = CommonOption.fromJson(json["CommonOption"] ?? json);
     value.classOption = asNumber(json["Class"], value.classOption);
     value.sectors = asString(json["Sectors"], value.sectors);
     value.groupID = asString(json["GroupID"], value.groupID);
@@ -808,7 +867,41 @@ export class OptionInfo {
     value.roomCode = asString(json["RoomCode"], value.roomCode);
     value.inherit = asString(json["Inherit"], value.inherit);
     value.selected = asString(json["Selected"], value.selected);
-    return value;
+    const record = value as AnyRecord;
+    Object.assign(record, {
+      name: value.commonOption.name,
+      item: value.commonOption.item,
+      scope: value.commonOption.scope,
+      valueType: value.commonOption.valueType,
+      value: value.commonOption.value,
+      defaultValue: value.commonOption.defaultValue,
+      dispName: value.commonOption.dispName,
+      itemOrder: value.commonOption.itemOrder,
+      notes: value.commonOption.notes,
+      cDate: value.commonOption.cDate,
+      mDate: value.commonOption.mDate,
+      Name: value.commonOption.name,
+      Item: value.commonOption.item,
+      Scope: value.commonOption.scope,
+      ValueType: value.commonOption.valueType,
+      Value: value.commonOption.value,
+      DefaultValue: value.commonOption.defaultValue,
+      DispName: value.commonOption.dispName,
+      ItemOrder: value.commonOption.itemOrder,
+      Notes: value.commonOption.notes,
+      CDate: value.commonOption.cDate,
+      MDate: value.commonOption.mDate,
+    });
+    return withAliases(value, {
+      Class: "classOption",
+      Sectors: "sectors",
+      GroupID: "groupID",
+      Policy: "policy",
+      SiteIndex: "siteIndex",
+      RoomCode: "roomCode",
+      Inherit: "inherit",
+      Selected: "selected",
+    });
   }
 
   static fromJsonList(jsonList: unknown): OptionInfo[] {
@@ -916,7 +1009,7 @@ export class MailConfig {
     value.type = asString(json["Type"], value.type);
     value.sender = asString(json["Sender"], value.sender);
     value.senderName = asString(json["SenderName"], value.senderName);
-    return value;
+    return withAliases(value, { Type: "type", Sender: "sender", SenderName: "senderName" });
   }
 
   static fromJsonList(jsonList: unknown): MailConfig[] {
@@ -972,7 +1065,7 @@ export class OptionItems {
     value.main = OptionInfo.fromJson(json["Main"] ?? {});
     value.array = OptionInfo.fromJsonList(json["Array"]);
     value.map = json["Map"] ?? value.map;
-    return value;
+    return withAliases(value, { Main: "main", Array: "array", Map: "map" });
   }
 
   static fromJsonList(jsonList: unknown): OptionItems[] {
@@ -1095,12 +1188,16 @@ export class BlockListData {
   static fromJson(jsonInput: unknown = {}): BlockListData {
     const json = asRecord(jsonInput);
     const value = new BlockListData();
-    value.globals = OptionInfo.fromJson(json["Globals"] ?? {});
-    value.customs = OptionInfo.fromJson(json["Customs"] ?? {});
-    value.exceptions = OptionInfo.fromJson(json["Exceptions"] ?? {});
-    value.maskText = OptionInfo.fromJson(json["MaskText"] ?? {});
+    value.globals = OptionInfo.fromJson(unwrapMain(json["GlobalBlocks"] ?? json["Globals"]));
+    value.customs = OptionInfo.fromJson(unwrapMain(json["CustomBlocks"] ?? json["Customs"]));
+    value.exceptions = OptionInfo.fromJson(unwrapMain(json["GlobalAllows"] ?? json["Exceptions"]));
+    value.maskText = OptionInfo.fromJson(unwrapMain(json["MaskText"]));
     value.scope = Scope.fromJson(json["Scope"] ?? {});
-    return value;
+    return withAliases(value, {
+      globalBlocks: "globals",
+      customBlocks: "customs",
+      globalAllows: "exceptions",
+    });
   }
 
   static fromJsonList(jsonList: unknown): BlockListData[] {
@@ -1126,10 +1223,10 @@ export class Scope {
   static fromJson(jsonInput: unknown = {}): Scope {
     const json = asRecord(jsonInput);
     const value = new Scope();
-    value.chat = OptionInfo.fromJson(json["Chat"] ?? {});
-    value.nickname = OptionInfo.fromJson(json["Nickname"] ?? {});
-    value.titleAgenda = OptionInfo.fromJson(json["TitleAgenda"] ?? {});
-    value.fileName = OptionInfo.fromJson(json["FileName"] ?? {});
+    value.chat = OptionInfo.fromJson(unwrapMain(json["Chat"]));
+    value.nickname = OptionInfo.fromJson(unwrapMain(json["Nickname"]));
+    value.titleAgenda = OptionInfo.fromJson(unwrapMain(json["TitleAgenda"]));
+    value.fileName = OptionInfo.fromJson(unwrapMain(json["FileName"]));
     return value;
   }
 
@@ -1422,7 +1519,40 @@ export class RoomData {
     value.pageInfoList = Array.isArray(json["PageInfoList"]) ? json["PageInfoList"] : value.pageInfoList;
     value.instanceIndex = asString(json["InstanceIndex"], value.instanceIndex);
     value.optionsInfo = asString(json["OptionsInfo"], value.optionsInfo);
-    return value;
+    return withAliases(value, {
+      GroupID: "groupId",
+      SiteIndex: "siteIndex",
+      UserIndex: "userIndex",
+      UserID: "userId",
+      RoomID: "roomId",
+      RoomCode: "roomCode",
+      Policy: "policy",
+      Title: "title",
+      TimeZone: "timeZone",
+      StartedDate: "startedDate",
+      FinishedDate: "finishedDate",
+      IsLocked: "isLocked",
+      IsPublic: "isPublic",
+      MaxUsers: "maxUsers",
+      PlannedDate: "plannedDate",
+      RoomDuration: "roomDuration",
+      IsDeleted: "isDeleted",
+      ServerSector: "serverSector",
+      ServerIndex: "serverIndex",
+      Password: "password",
+      Agenda: "agenda",
+      AdmissionDate: "admissionDate",
+      EndDate: "endDate",
+      CDate: "cDate",
+      MDate: "mDate",
+      Creator: "creator",
+      AttendeesCount: "attendeesCount",
+      ProfileImageURL: "profileImageURL",
+      IsManager: "isManager",
+      IsSubManager: "isSubManager",
+      InstanceIndex: "instanceIndex",
+      OptionsInfo: "optionsInfo",
+    });
   }
 
   static fromJsonList(jsonList: unknown): RoomData[] {
@@ -1630,7 +1760,35 @@ export class RoomAttendeeData {
     value.pageList = json["pageList"] ?? value.pageList;
     value.pageInfoList = Array.isArray(json["pageInfoList"]) ? json["pageInfoList"] : value.pageInfoList;
     value.state = asString(json["State"], value.state);
-    return value;
+    return withAliases(value, {
+      GroupID: "groupID",
+      SiteIndex: "siteIndex",
+      RoomCode: "roomCode",
+      AttdID: "attdID",
+      IsManager: "isManager",
+      IsSubManager: "isSubManager",
+      UserType: "userType",
+      UserClientOS: "userClientOS",
+      UserClientType: "userClientType",
+      UserClientDetail: "userClientDetail",
+      Email: "email",
+      Name: "name",
+      Rights: "rights",
+      ExitedReason: "exitedReason",
+      AttendedDuration: "attendedDuration",
+      UserIndex: "userIndex",
+      UserID: "userID",
+      InviterID: "inviterID",
+      NickName: "nickName",
+      ServerSector: "serverSector",
+      ServerIndex: "serverIndex",
+      AttendedDate: "attendedDate",
+      ExitedDate: "exitedDate",
+      IPAddr: "iPAddr",
+      CDate: "cDate",
+      MDate: "mDate",
+      State: "state",
+    });
   }
 
   static fromJsonList(jsonList: unknown): RoomAttendeeData[] {
@@ -2000,7 +2158,18 @@ export class SectorData {
     value.notes = asString(json["Notes"], value.notes);
     value.cDate = asString(json["CDate"], value.cDate);
     value.mDate = asString(json["MDate"], value.mDate);
-    return value;
+    (value as AnyRecord).sectorCount = asNumber(json["SectorCount"], (value as AnyRecord).sectorCount ?? 0);
+    return withAliases(value, {
+      SectorName: "sectorName",
+      MasterAddr: "masterAddr",
+      SlaveAddr: "slaveAddr",
+      WebServerURL: "webServerURL",
+      APIServerURL: "apiServerURL",
+      Notes: "notes",
+      CDate: "cDate",
+      MDate: "mDate",
+      SectorCount: "sectorCount",
+    });
   }
 
   static fromJsonList(jsonList: unknown): SectorData[] {
@@ -2130,7 +2299,44 @@ export class ServerData {
     value.notes = asString(json["Notes"], value.notes);
     value.cDate = asString(json["CDate"], value.cDate);
     value.mDate = asString(json["MDate"], value.mDate);
-    return value;
+    return withAliases(value, {
+      Sector: "sector",
+      ServerIndex: "serverIndex",
+      ServerTypes: "serverTypes",
+      Name: "name",
+      IsActive: "isActive",
+      IsAllowed: "isAllowed",
+      PrivateIPAddrs: "privateIPAddrs",
+      PublicIPAddr: "publicIPAddr",
+      PublicSubDomain: "publicSubDomain",
+      PublicDomains: "publicDomains",
+      Version: "version",
+      StartedDate: "startedDate",
+      StoppedDate: "stoppedDate",
+      GOR: "gor",
+      GORTotal: "gorTotal",
+      CPU: "cpu",
+      CPUTotal: "cpuTotal",
+      Mem: "mem",
+      MemFree: "memFree",
+      MemTotal: "memTotal",
+      HDDFree: "hddFree",
+      HDDTotal: "hddTotal",
+      SES: "ses",
+      RTP: "rtp",
+      RTPTotal: "rtpTotal",
+      VID: "vid",
+      VIDTotal: "vidTotal",
+      MaxQueryTime: "maxQueryTime",
+      MaxInvokeTime: "maxInvokeTime",
+      MasterConnTimes: "masterConnTimes",
+      Dumps: "dumps",
+      Rooms: "rooms",
+      Attendees: "attendees",
+      Notes: "notes",
+      CDate: "cDate",
+      MDate: "mDate",
+    });
   }
 
   static fromJsonList(jsonList: unknown): ServerData[] {
@@ -2172,7 +2378,18 @@ export class ServerDomainData {
     value.failedReason = asString(json["FailedReason"], value.failedReason);
     value.cDate = asString(json["CDate"], value.cDate);
     value.mDate = asString(json["MDate"], value.mDate);
-    return value;
+    return withAliases(value, {
+      Sector: "sector",
+      DomainName: "domainName",
+      ProvisionServerIndex: "provisionServerIndex",
+      TargetServerIndex: "targetServerIndex",
+      TargetPublicIPAddr: "targetPublicIPAddr",
+      TargetPrivateIPAddrs: "targetPrivateIPAddrs",
+      FinishedDate: "finishedDate",
+      FailedReason: "failedReason",
+      CDate: "cDate",
+      MDate: "mDate",
+    });
   }
 
   static fromJsonList(jsonList: unknown): ServerDomainData[] {
@@ -2306,7 +2523,7 @@ export class SitesList {
     const value = new SitesList();
     value.siteInfo = SiteData.fromJsonList(json["SiteInfo"]);
     value.pagesData = PagesData.fromJson(json["PageInfo"] ?? {});
-    return value;
+    return withAliases(value, { SiteInfo: "siteInfo", PageInfo: "pagesData" });
   }
 
   static fromJsonList(jsonList: unknown): SitesList[] {
@@ -2376,7 +2593,32 @@ export class SiteData {
     value.accountCount = asNumber(json["AccountCount"], value.accountCount);
     value.pricingModel = asString(json["PricingModel"], value.pricingModel);
     value.limitMaxAttendees = asNumber(json["LimitMaxAttendees"], value.limitMaxAttendees);
-    return value;
+    return withAliases(value, {
+      Sector: "sector",
+      SiteIndex: "siteIndex",
+      SiteID: "siteID",
+      SiteSecret: "siteSecret",
+      UseBranding: "useBranding",
+      Name: "name",
+      Rooms: "rooms",
+      Attendees: "attendees",
+      LimitRooms: "limitRooms",
+      LimitAttendees: "limitAttendees",
+      LimitAccounts: "limitAccounts",
+      GroupID: "groupID",
+      CDate: "cDate",
+      MDate: "mDate",
+      GroupName: "groupName",
+      SiteAdmin: "siteAdmin",
+      BillingManagerName: "billingManagerName",
+      BillingManagerEmail: "billingManagerEmail",
+      BillingManagerPhone: "billingManagerPhone",
+      IsActive: "isActive",
+      LastLoginDate: "lastLoginDate",
+      AccountCount: "accountCount",
+      PricingModel: "pricingModel",
+      LimitMaxAttendees: "limitMaxAttendees",
+    });
   }
 
   static fromJsonList(jsonList: unknown): SiteData[] {
@@ -2400,8 +2642,11 @@ export class SiteCount {
   static fromJson(jsonInput: unknown = {}): SiteCount {
     const json = asRecord(jsonInput);
     const value = new SiteCount();
-    value.rooms = asNumber(json["Rooms"], value.rooms);
-    value.users = asNumber(json["Users"], value.users);
+    value.rooms = asNumber(json["RoomCount"] ?? json["Rooms"], value.rooms);
+    value.users = asNumber(json["UserCount"] ?? json["Users"], value.users);
+    (value as AnyRecord).attendeeCount = asNumber(json["AttendeeCount"], (value as AnyRecord).attendeeCount ?? 0);
+    (value as AnyRecord).roomCount = value.rooms;
+    (value as AnyRecord).userCount = value.users;
     return value;
   }
 
@@ -2427,9 +2672,12 @@ export class SiteAvailableData {
   static fromJson(jsonInput: unknown = {}): SiteAvailableData {
     const json = asRecord(jsonInput);
     const value = new SiteAvailableData();
-    value.userCount = asNumber(json["UserCount"], value.userCount);
-    value.limitAccounts = asNumber(json["LimitAccounts"], value.limitAccounts);
+    value.userCount = asNumber(json["UserCount"] ?? json["used"] ?? json["Used"], value.userCount);
+    value.limitAccounts = asNumber(json["LimitAccounts"] ?? json["total"] ?? json["Total"], value.limitAccounts);
     value.isAvailableCreateUser = asBoolean(json["IsAvailableCreateUser"], value.isAvailableCreateUser);
+    (value as AnyRecord).used = asNumber(json["used"] ?? json["Used"], value.userCount);
+    (value as AnyRecord).total = asNumber(json["total"] ?? json["Total"], value.limitAccounts);
+    (value as AnyRecord).available = asNumber(json["available"] ?? json["Available"], Math.max(0, value.limitAccounts - value.userCount));
     return value;
   }
 
@@ -2468,7 +2716,7 @@ export class TimeZoneData {
     value.utcDstOffset = asNumber(json["UTCDSTOffset"], value.utcDstOffset);
     value.useDST = asNumber(json["UseDST"], value.useDST);
     value.notes = asString(json["Notes"], value.notes);
-    return value;
+    return withAliases(value, { utcDSTOffset: "utcDstOffset" });
   }
 
   static fromJsonList(jsonList: unknown): TimeZoneData[] {
@@ -2494,7 +2742,7 @@ export class UserListData {
     const value = new UserListData();
     value.userList = UserData.fromJsonList(json["UserList"]);
     value.pagesData = PagesData.fromJson(json["PageInfo"] ?? {});
-    return value;
+    return withAliases(value, { UserList: "userList", PageInfo: "pagesData" });
   }
 
   static fromJsonList(jsonList: unknown): UserListData[] {
@@ -2566,12 +2814,12 @@ export class UserData {
     value.monitoringColumn = asString(json["MonitoringColumn"], value.monitoringColumn);
     value.loginServerIndex = asString(json["LoginServerIndex"], value.loginServerIndex);
     value.lastLoginDate = asString(json["LastLoginDate"], value.lastLoginDate);
-    value.lastLogoutDate = asString(json["lastLogoutDate"], value.lastLogoutDate);
-    value.lastIPAddress = asString(json["lastIPAddress"], value.lastIPAddress);
-    value.profileImageKey = asString(json["profileImageKey"], value.profileImageKey);
+    value.lastLogoutDate = asString(json["LastLogoutDate"] ?? json["lastLogoutDate"], value.lastLogoutDate);
+    value.lastIPAddress = asString(json["LastIPAddress"] ?? json["lastIPAddress"], value.lastIPAddress);
+    value.profileImageKey = asString(json["ProfileImageKey"] ?? json["profileImageKey"], value.profileImageKey);
     value.info = asString(json["Info"], value.info);
     value.cDate = asString(json["CDate"], value.cDate);
-    value.mDate = asString(json["MData"], value.mDate);
+    value.mDate = asString(json["MDate"] ?? json["MData"], value.mDate);
     value.profileImageURL = asString(json["ProfileImageURL"], value.profileImageURL);
     value.disableLogin = asBoolean(json["DisableLogin"], value.disableLogin);
     value.isSiteManager = asBoolean(json["IsSiteManager"], value.isSiteManager);
@@ -2586,7 +2834,37 @@ export class UserData {
     value.isEmptyEmail = asBoolean(json["IsEmptyEmail"], value.isEmptyEmail);
     value.isDuplicateId = asBoolean(json["IsDuplicateId"], value.isDuplicateId);
     value.isValid = asBoolean(json["IsValid"], value.isValid);
-    return value;
+    return withAliases(value, {
+      GroupID: "groupID",
+      SiteIndex: "siteIndex",
+      UserIndex: "userIndex",
+      UserID: "userID",
+      Password: "password",
+      IsPasswordApplied: "isPasswordApplied",
+      Email: "email",
+      Name: "name",
+      NickName: "nickName",
+      IsSNS: "isSNS",
+      UserType: "userType",
+      State: "state",
+      MonitoringColumn: "monitoringColumn",
+      LoginServerIndex: "loginServerIndex",
+      LastLoginDate: "lastLoginDate",
+      LastLogoutDate: "lastLogoutDate",
+      LastIPAddress: "lastIPAddress",
+      ProfileImageKey: "profileImageKey",
+      Info: "info",
+      CDate: "cDate",
+      MDate: "mDate",
+      ProfileImageURL: "profileImageURL",
+      DisableLogin: "disableLogin",
+      IsSiteManager: "isSiteManager",
+      IsSiteHolder: "isSiteHolder",
+      IsSystemManager: "isSystemManager",
+      IsSystemHolder: "isSystemHolder",
+      IsManager: "isManager",
+      Row: "row",
+    });
   }
 
   static fromJsonList(jsonList: unknown): UserData[] {
@@ -2596,4 +2874,303 @@ export class UserData {
   toJson(): AnyRecord {
     return { ...this };
   }
+}
+
+export interface ConcurrentInfo {
+  Rooms: number;
+  Attendees: number;
+}
+
+export interface CommonOption {
+  Name: string;
+  Item: string;
+  Scope: number;
+  ValueType: number;
+  Value: string;
+  DefaultValue: string;
+  DispName: string;
+  ItemOrder: number;
+  Notes: string;
+  CDate: string;
+  MDate: string;
+}
+
+export interface OptionInfo extends CommonOption {
+  Class: number;
+  Sectors: string;
+  GroupID: string;
+  Policy: string;
+  SiteIndex: string;
+  RoomCode: string;
+  Inherit: string;
+  Selected: string;
+}
+
+export interface OptionItems {
+  Main: OptionInfo;
+  Array: OptionInfo[];
+  Map: Record<string, any>;
+}
+
+export interface MailConfig {
+  Type: string;
+  Sender: string;
+  SenderName: string;
+}
+
+export interface BlockListData {
+  globalBlocks: OptionInfo;
+  customBlocks: OptionInfo;
+  globalAllows: OptionInfo;
+}
+
+export interface NoticeData {
+  GroupID: string;
+  SiteIndex: string;
+  UserID: string;
+  UserIndex: string;
+  UserName: string;
+  Category: number;
+  Title: string;
+  NoticeIndex: string;
+  StartDate: string;
+  EndDate: string;
+  Targets: string;
+  Contents: any;
+  MDate: string;
+  CDate: string;
+  IsPinned: boolean;
+  IsBanner: boolean;
+  IsStopped: boolean;
+  FileList: Record<string, string>[];
+  ViewNum: number;
+  ExistFile: boolean;
+}
+
+export interface NoticeList {
+  NoticeList: NoticeData[];
+  PageInfo: PagesData;
+}
+
+export interface NoticeFileData {
+  NoticeIndex: string;
+  FileIndex: string;
+  FileKey: string;
+  FileURL: string;
+  FileName: string;
+  FileSize: number;
+}
+
+export interface RoomData {
+  GroupID: string;
+  SiteIndex: string;
+  UserIndex: string;
+  UserID: string;
+  RoomID: string;
+  RoomCode: string;
+  Policy: string;
+  Title: string;
+  TimeZone: string;
+  StartedDate: string;
+  FinishedDate: string;
+  IsLocked: boolean;
+  IsPublic: boolean;
+  MaxUsers: number;
+  PlannedDate: string;
+  RoomDuration: number;
+  IsDeleted: boolean;
+  ServerSector: string;
+  ServerIndex: string;
+  Password: string;
+  Agenda: string;
+  AdmissionDate: string;
+  EndDate: string;
+  CDate: string;
+  MDate: string;
+  Creator: string;
+  AttendeesCount: number;
+  ProfileImageURL: string;
+  IsManager: boolean;
+  IsSubManager: boolean;
+  InstanceIndex: string;
+  OptionsInfo: string;
+}
+
+export interface RoomAttendeeData {
+  GroupID: string;
+  SiteIndex: string;
+  RoomCode: string;
+  AttdID: string;
+  IsManager: boolean;
+  IsSubManager: boolean;
+  UserType: string;
+  UserClientOS: string;
+  UserClientType: string;
+  UserClientDetail: string;
+  Email: string;
+  Name: string;
+  Rights: string;
+  ExitedReason: number;
+  AttendedDuration: number;
+  UserIndex: string;
+  UserID: string;
+  InviterID: string;
+  NickName: string;
+  ServerSector: string;
+  ServerIndex: string;
+  AttendedDate: string;
+  ExitedDate: string;
+  IPAddr: string;
+  CDate: string;
+  MDate: string;
+  State: string;
+}
+
+export interface SectorData {
+  SectorName: string;
+  MasterAddr: string;
+  SlaveAddr: string;
+  WebServerURL: string;
+  APIServerURL: string;
+  Notes: string;
+  CDate: string;
+  MDate: string;
+  SectorCount: number;
+}
+
+export interface ServerData {
+  IsAllowed: boolean;
+  Sector: string;
+  ServerIndex: string;
+  ServerTypes: string;
+  Name: string;
+  IsActive: boolean;
+  PrivateIPAddrs: string;
+  PublicIPAddr: string;
+  PublicDomains: string;
+  PublicSubDomain: string;
+  Version: string;
+  StartedDate: string;
+  StoppedDate: string;
+  GOR: number;
+  GORTotal: number;
+  CPU: number;
+  CPUTotal: number;
+  Mem: number;
+  MemFree: number;
+  MemTotal: number;
+  HDDFree: number;
+  HDDTotal: number;
+  SES: number;
+  RTP: number;
+  RTPTotal: number;
+  VID: number;
+  VIDTotal: number;
+  Dumps: number;
+  Rooms: number;
+  Attendees: number;
+  MaxQueryTime: number;
+  MaxInvokeTime: number;
+  MasterConnTimes: number;
+  CDate: string;
+  MDate: string;
+  Notes: string;
+}
+
+export interface ServerDomainData {
+  Sector: string;
+  DomainName: string;
+  ProvisionServerIndex: string;
+  TargetServerIndex: string;
+  TargetPrivateIPAddrs: string;
+  TargetPublicIPAddr: string;
+  FailedReason: string;
+  FinishedDate: string;
+  CDate: string;
+  MDate: string;
+}
+
+export interface SitesList {
+  SiteInfo: SiteData[];
+  PageInfo: PagesData;
+}
+
+export interface SiteData {
+  Sector: string;
+  SiteIndex: string;
+  SiteID: string;
+  SiteSecret: string;
+  UseBranding: boolean;
+  Name: string;
+  Rooms: number;
+  Attendees: number;
+  LimitRooms: number;
+  LimitAttendees: number;
+  LimitAccounts: number;
+  LimitMaxAttendees: number;
+  GroupID: string;
+  CDate: string;
+  MDate: string;
+  GroupName: string;
+  SiteAdmin: UserData;
+  BillingManagerName: string;
+  BillingManagerEmail: string;
+  BillingManagerPhone: string;
+  IsActive: boolean;
+  LastLoginDate: string;
+  AccountCount: number;
+  PricingModel: string;
+}
+
+export interface SiteCount {
+  userCount: number;
+  roomCount: number;
+  attendeeCount: number;
+}
+
+export interface SiteAvailableData {
+  available: number;
+  total: number;
+  used: number;
+}
+
+export interface TimeZoneData {
+  utcDSTOffset: number;
+}
+
+export interface UserListData {
+  UserList: UserData[];
+  PageInfo: PagesData;
+}
+
+export interface UserData {
+  GroupID: string;
+  SiteIndex: string;
+  UserIndex: string;
+  UserID: string;
+  Password: string;
+  IsPasswordApplied: boolean;
+  Email: string;
+  Name: string;
+  NickName: string;
+  IsSNS: boolean;
+  UserType: string;
+  State: string;
+  MonitoringColumn: string;
+  LoginServerIndex: string;
+  LastLoginDate: string;
+  LastLogoutDate: string;
+  LastIPAddress: string;
+  ProfileImageKey: string;
+  Info: string;
+  CDate: string;
+  MDate: string;
+  ProfileImageURL: string;
+  DisableLogin: boolean;
+  IsSiteManager: boolean;
+  IsSiteHolder: boolean;
+  IsSystemManager: boolean;
+  IsSystemHolder: boolean;
+  IsManager: boolean;
+  Row: number;
 }
