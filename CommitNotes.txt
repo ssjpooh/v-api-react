@@ -1,3 +1,7 @@
+[ 2026-06-25 - ssjpooh ]
+[new] ClassRoomInfo 응답 모델 추가
+[fix] classRoomInfo API가 ClassRoomInfo로 응답을 파싱하도록 연결
+
 [ 2026-06-24 - ssjpooh ]
 [new] DashboardService 추가 및 FoxcomApi 서비스 export 연결
 [new] 그룹, 섹터, 서버 도메인, 통계 관련 API 메서드 추가

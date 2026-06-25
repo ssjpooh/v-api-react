@@ -1565,6 +1565,92 @@ export class RoomData {
 }
 
 
+export class ClassRoomInfo {
+  isJoinAvailable: boolean = false;
+  siteIndex: string = "";
+  siteID: string = "";
+  creatorID: string = "";
+  isWaitingRoom: boolean = false;
+  roomTitle: string = "";
+  roomCode: string = "";
+  attendeeType: string = "";
+  isTID: boolean = false;
+  userID: string = "";
+  attdID: string = "";
+  attdName: string = "";
+  attdPassword: string = "";
+  isAdmin: boolean = false;
+  inviterID: string = "";
+  roomInfo: RoomData | null = null;
+  roomOptionList: OptionInfo[] = [];
+  profileImageURL: string = "";
+  expiredDate: string = "";
+  classRoomData: string | null = null;
+  isAvailableGhostMode: boolean = false;
+
+  constructor(init: Partial<ClassRoomInfo> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): ClassRoomInfo {
+    const json = asRecord(jsonInput);
+    const value = new ClassRoomInfo();
+    value.isJoinAvailable = asBoolean(json["IsJoinAvailable"], value.isJoinAvailable);
+    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
+    value.siteID = asString(json["SiteID"], value.siteID);
+    value.creatorID = asString(json["CreatorID"], value.creatorID);
+    value.isWaitingRoom = asBoolean(json["IsWaitingRoom"], value.isWaitingRoom);
+    value.roomTitle = asString(json["RoomTitle"], value.roomTitle);
+    value.roomCode = asString(json["RoomCode"], value.roomCode);
+    value.attendeeType = asString(json["AttendeeType"], value.attendeeType);
+    value.isTID = asBoolean(json["IsTID"], value.isTID);
+    value.userID = asString(json["UserID"], value.userID);
+    value.attdID = asString(json["AttdID"], value.attdID);
+    value.attdName = asString(json["AttdName"], value.attdName);
+    value.attdPassword = asString(json["AttdPassword"], value.attdPassword);
+    value.isAdmin = asBoolean(json["IsAdmin"], value.isAdmin);
+    value.inviterID = asString(json["InviterID"], value.inviterID);
+    value.roomInfo = json["RoomInfo"] == null ? value.roomInfo : RoomData.fromJson(json["RoomInfo"]);
+    value.roomOptionList = OptionInfo.fromJsonList(json["RoomOptionList"]);
+    value.profileImageURL = asString(json["ProfileImageURL"], value.profileImageURL);
+    value.expiredDate = asString(json["ExpiredDate"], value.expiredDate);
+    value.classRoomData = json["ClassRoomData"] == null ? value.classRoomData : asString(json["ClassRoomData"]);
+    value.isAvailableGhostMode = asBoolean(json["IsAvailableGhostMode"], value.isAvailableGhostMode);
+    return withAliases(value, {
+      IsJoinAvailable: "isJoinAvailable",
+      SiteIndex: "siteIndex",
+      SiteID: "siteID",
+      CreatorID: "creatorID",
+      IsWaitingRoom: "isWaitingRoom",
+      RoomTitle: "roomTitle",
+      RoomCode: "roomCode",
+      AttendeeType: "attendeeType",
+      IsTID: "isTID",
+      UserID: "userID",
+      AttdID: "attdID",
+      AttdName: "attdName",
+      AttdPassword: "attdPassword",
+      IsAdmin: "isAdmin",
+      InviterID: "inviterID",
+      RoomInfo: "roomInfo",
+      RoomOptionList: "roomOptionList",
+      ProfileImageURL: "profileImageURL",
+      ExpiredDate: "expiredDate",
+      ClassRoomData: "classRoomData",
+      IsAvailableGhostMode: "isAvailableGhostMode",
+    });
+  }
+
+  static fromJsonList(jsonList: unknown): ClassRoomInfo[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => ClassRoomInfo.fromJson(asRecord(json))) : [];
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+
 export class RoomPolicyData {
   selectedPolicy: string = "";
   roomPoliciesList: OptionInfo[] = [];
@@ -2994,6 +3080,30 @@ export interface RoomData {
   IsSubManager: boolean;
   InstanceIndex: string;
   OptionsInfo: string;
+}
+
+export interface ClassRoomInfo {
+  IsJoinAvailable: boolean;
+  SiteIndex: string;
+  SiteID: string;
+  CreatorID: string;
+  IsWaitingRoom: boolean;
+  RoomTitle: string;
+  RoomCode: string;
+  AttendeeType: string;
+  IsTID: boolean;
+  UserID: string;
+  AttdID: string;
+  AttdName: string;
+  AttdPassword: string;
+  IsAdmin: boolean;
+  InviterID: string;
+  RoomInfo: RoomData | null;
+  RoomOptionList: OptionInfo[];
+  ProfileImageURL: string;
+  ExpiredDate: string;
+  ClassRoomData: string | null;
+  IsAvailableGhostMode: boolean;
 }
 
 export interface RoomAttendeeData {

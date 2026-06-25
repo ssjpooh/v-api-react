@@ -1,14 +1,15 @@
 import { ApiClient, type FoxApiResult, type RequestOptions, buildPath, toMultipartValue } from "../apiClient";
 import { handleResult } from "../resultUtils";
-import { AddFile, AttachNoteInfo, BaseOptionEnvData, BlockListData, ClientTokenData, CommonOption, ConcurrentInfo, ContractData, ContractListData, ContractLogData, CreateRoomData, DB, FileData, GroupData, GroupOptionEnvData, HistoryRoomData, MailConfig, NoteData, NoticeData, NoticeFileData, NoticeList, OptionInfo, OptionItems, PageData, PageLists, PagesData, PagesLists, PolicyOptionEnvData, ProvisionServerData, RemoveFile, Room, RoomAttendeeData, RoomAttendeeLogData, RoomAttendees, RoomChatData, RoomData, RoomFileData, RoomLogData, RoomPolicyData, ScheduleRoomData, Scope, SectorData, SendMail, SentMailData, ServerData, ServerDomainData, ServerLogData, SiteAvailableData, SiteCount, SiteData, SiteOptionInfoMap, SitesList, TimeZoneData, User, UserData, UserListData } from "../models";
+import { AddFile, AttachNoteInfo, BaseOptionEnvData, BlockListData, ClassRoomInfo, ClientTokenData, CommonOption, ConcurrentInfo, ContractData, ContractListData, ContractLogData, CreateRoomData, DB, FileData, GroupData, GroupOptionEnvData, HistoryRoomData, MailConfig, NoteData, NoticeData, NoticeFileData, NoticeList, OptionInfo, OptionItems, PageData, PageLists, PagesData, PagesLists, PolicyOptionEnvData, ProvisionServerData, RemoveFile, Room, RoomAttendeeData, RoomAttendeeLogData, RoomAttendees, RoomChatData, RoomData, RoomFileData, RoomLogData, RoomPolicyData, ScheduleRoomData, Scope, SectorData, SendMail, SentMailData, ServerData, ServerDomainData, ServerLogData, SiteAvailableData, SiteCount, SiteData, SiteOptionInfoMap, SitesList, TimeZoneData, User, UserData, UserListData } from "../models";
 
 
 export class RoomService {
   constructor(private readonly apiClient: ApiClient) {}
 
-  async classRoomInfo(params: { roomCode: string; attdID: string; token: string; cancelId?: string }): Promise<FoxApiResult> {
+  async classRoomInfo(params: { roomCode: string; attdID: string; token: string; cancelId?: string }): Promise<FoxApiResult<ClassRoomInfo>> {
     const { roomCode, attdID, token, cancelId } = params;
-    return this.apiClient.get(`/v1/classRoomInfo?roomCode=${roomCode}&attdID=${attdID}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+    const result = await this.apiClient.get(`/v1/classRoomInfo?roomCode=${roomCode}&attdID=${attdID}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+        return handleResult(result, (json) => ClassRoomInfo.fromJson(json));
   }
 
   async getRoomScheduledLists(params: { userID: string; token: string; pageNo?: number; keyword?: string; startDate?: string; endDate?: string; orderType?: number; state?: string; pagePerRow?: number; cancelId?: string; onlyInvited?: boolean; onlyPermanent?: boolean }): Promise<FoxApiResult> {
