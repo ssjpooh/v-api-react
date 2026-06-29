@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>v-api-react API Test</title>
+    <link rel="stylesheet" href="/api-test.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="config-panel">
+        <div>
+          <h1>v-api-react API Test</h1>
+          <p>env.json 설정을 기본값으로 사용합니다. 설정값이 바뀌면 기존 토큰을 삭제하고 새 토큰을 다시 발급합니다.</p>
+        </div>
+
+        <div class="config-grid">
+          <label>
+            API URL
+            <input id="apiUrl" autocomplete="off" spellcheck="false" />
+          </label>
+          <label>
+            Token ID
+            <input id="tokenId" autocomplete="off" spellcheck="false" />
+          </label>
+          <label>
+            Site Secret
+            <input id="siteSecret" type="password" autocomplete="off" spellcheck="false" />
+          </label>
+          <button id="issueTokenButton" type="button">토큰 발급</button>
+        </div>
+
+        <div class="token-row">
+          <span id="tokenStatus" class="status">설정 읽는 중</span>
+          <code id="tokenPreview">token: -</code>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <aside class="preset-panel">
+          <div class="case-head">
+            <h2>API 테스트 케이스</h2>
+            <input id="caseSearch" placeholder="route, method, 이름 검색" spellcheck="false" />
+          </div>
+          <div id="caseGroups" class="case-groups"></div>
+        </aside>
+
+        <section class="request-panel">
+          <div class="selected-case">
+            <strong id="selectedCaseName">Health Check</strong>
+            <span id="selectedCaseDescription">GET 요청은 케이스 선택 시 바로 실행됩니다.</span>
+          </div>
+
+          <div class="request-toolbar">
+            <select id="method">
+              <option>GET</option>
+              <option>POST</option>
+              <option>PATCH</option>
+              <option>DELETE</option>
+              <option>MULTIPART_POST</option>
+            </select>
+            <input id="path" spellcheck="false" />
+            <button id="sendButton" type="button">요청</button>
+          </div>
+
+          <label class="body-label">
+            Request Body
+            <textarea id="body" spellcheck="false" placeholder="{ }"></textarea>
+          </label>
+
+          <div class="response-head">
+            <h2>Response</h2>
+            <span id="responseMeta">-</span>
+          </div>
+          <pre id="responseOutput">{}</pre>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="/api-test.js"></script>
+  </body>
+</html>

@@ -10,7 +10,9 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "convert": "node tools/convert-foxcom-api.mjs"
+    "convert": "node tools/convert-foxcom-api.mjs",
+    "dev": "node tools/api-test-server.mjs",
+    "token": "node tools/request-token-from-env.mjs"
   },
   "devDependencies": {
     "typescript": "^5.8.3"
