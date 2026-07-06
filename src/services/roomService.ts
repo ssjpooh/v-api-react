@@ -72,19 +72,22 @@ export class RoomService {
     return this.apiClient.get(`/v1/getRoomOption/${userId}/instanceIndex/${instanceIndex}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
   }
 
-  async getInvitedList(params: { userID: string; roomCode: string; token: string; cancelId?: string }): Promise<FoxApiResult> {
+  async getInvitedList(params: { userID: string; roomCode: string; token: string; cancelId?: string }): Promise<FoxApiResult<RoomAttendees[]>> {
     const { userID, roomCode, token, cancelId } = params;
-    return this.apiClient.get(`/v1/attendee/${userID}/${roomCode}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+    const result = await this.apiClient.get(`/v1/attendee/${userID}/${roomCode}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+        return handleResult(result, (json) => RoomAttendees.fromJsonList(json));
   }
 
-  async getAttendeeLog(params: { instanceIndex: string; token: string; cancelId?: string }): Promise<FoxApiResult> {
+  async getAttendeeLog(params: { instanceIndex: string; token: string; cancelId?: string }): Promise<FoxApiResult<RoomAttendeeLogData[]>> {
     const { instanceIndex, token, cancelId } = params;
-    return this.apiClient.get(`/v1/attendeeLog/${instanceIndex}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+    const result = await this.apiClient.get(`/v1/attendeeLog/${instanceIndex}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+        return handleResult(result, (json) => RoomAttendeeLogData.fromJsonList(json));
   }
 
-  async getAttendeeLogInfo(params: { instanceIndex: string; token: string; attendeeID: string; cancelId?: string }): Promise<FoxApiResult> {
+  async getAttendeeLogInfo(params: { instanceIndex: string; token: string; attendeeID: string; cancelId?: string }): Promise<FoxApiResult<RoomAttendeeLogData>> {
     const { instanceIndex, token, attendeeID, cancelId } = params;
-    return this.apiClient.get(`/v1/attendeeLog/${instanceIndex}/${attendeeID}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+    const result = await this.apiClient.get(`/v1/attendeeLog/${instanceIndex}/${attendeeID}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+        return handleResult(result, (json) => RoomAttendeeLogData.fromJson(json));
   }
 
   async getRoomLogs(params: { startDate: string; endDate: string; token: string; cancelId?: string }): Promise<FoxApiResult> {

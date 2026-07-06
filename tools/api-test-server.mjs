@@ -1,11 +1,13 @@
 import { createServer } from "node:http";
 import { readFile, writeFile } from "node:fs/promises";
 import { extname, join, normalize, resolve } from "node:path";
+import { spawn } from "node:child_process";
 
 const rootDir = resolve(".");
 const publicDir = resolve("public");
 const envPath = join(publicDir, "env.json");
 const defaultPort = Number(process.env.PORT ?? 5173);
+const shouldOpenBrowser = process.env.OPEN_BROWSER !== "false";
 
 const contentTypes = {
   ".css": "text/css; charset=utf-8",
@@ -61,6 +63,7 @@ function withoutTokenFields(config) {
     token_type,
     expires_in,
     token_issued_at,
+    token_site_index,
     ...rest
   } = config;
   return rest;
@@ -84,6 +87,11 @@ function readTokenType(data) {
 function readExpiresIn(data) {
   if (!data || typeof data !== "object") return undefined;
   return data.expires_in ?? data.expiresIn ?? data.expire_date ?? data.ExpiryDate;
+}
+
+function readSiteIndex(data) {
+  if (!data || typeof data !== "object") return "";
+  return data.site_index ?? data.siteIndex ?? data.SiteIndex ?? "";
 }
 
 async function readResponseBody(response) {
@@ -156,6 +164,7 @@ async function handleIssueToken(req, res) {
     token,
     token_type: readTokenType(tokenData),
     expires_in: readExpiresIn(tokenData),
+    token_site_index: readSiteIndex(tokenData),
     token_issued_at: new Date().toISOString(),
   };
   await writeEnv(next);
@@ -166,6 +175,7 @@ async function handleIssueToken(req, res) {
     token,
     token_type: next.token_type,
     expires_in: next.expires_in,
+    token_site_index: next.token_site_index,
     token_issued_at: next.token_issued_at,
   });
 }
@@ -174,7 +184,12 @@ async function handleApiRequest(req, res) {
   const body = await readJsonRequest(req);
   const apiUrl = normalizeBaseUrl(requireText(body.api_url, "api_url"));
   const requestedMethod = String(body.method ?? "GET").toUpperCase();
-  const method = requestedMethod === "MULTIPART_POST" ? "POST" : requestedMethod;
+  const method =
+    requestedMethod === "MULTIPART_POST"
+      ? "POST"
+      : requestedMethod === "MULTIPART_PATCH"
+        ? "PATCH"
+        : requestedMethod;
   const path = requireText(body.path, "path");
   const token = String(body.token ?? "").trim();
   const requestBody = String(body.body ?? "").trim();
@@ -264,6 +279,29 @@ function createApiTestServer() {
   });
 }
 
+function openBrowser(url) {
+  if (!shouldOpenBrowser) return;
+
+  const platform = process.platform;
+  const command =
+    platform === "win32"
+      ? "cmd"
+      : platform === "darwin"
+        ? "open"
+        : "xdg-open";
+  const args =
+    platform === "win32"
+      ? ["/c", "start", "", url]
+      : [url];
+
+  const child = spawn(command, args, {
+    detached: true,
+    stdio: "ignore",
+    windowsHide: true,
+  });
+  child.unref();
+}
+
 function listen(port) {
   const server = createApiTestServer();
 
@@ -278,10 +316,12 @@ function listen(port) {
   server.listen(port, "127.0.0.1", () => {
     const address = server.address();
     const actualPort = typeof address === "object" && address ? address.port : port;
+    const url = `http://127.0.0.1:${actualPort}`;
     console.log("");
-    console.log(`API test page: http://127.0.0.1:${actualPort}`);
+    console.log(`API test page: ${url}`);
     console.log(`Workspace: ${rootDir}`);
     console.log("");
+    openBrowser(url);
   });
 }
 

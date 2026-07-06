@@ -6,9 +6,10 @@ import { AddFile, AttachNoteInfo, BaseOptionEnvData, BlockListData, ClientTokenD
 export class CommonService {
   constructor(private readonly apiClient: ApiClient) {}
 
-  async login(params: { token: string; body?: RequestOptions["body"]; cancelId?: string }): Promise<FoxApiResult<LoginResult>> {
-    const { token, body, cancelId } = params;
-    const result = await this.apiClient.post("/v1/login", { header: {Authorization: `Bearer ${token}`, From: "login"}, body: body, cancelId: cancelId });
+  async login(params: { token: string; siteID?: string; body?: RequestOptions["body"]; cancelId?: string }): Promise<FoxApiResult<LoginResult>> {
+    const { siteID, body, cancelId } = params;
+    const path = buildPath("/v1/login", { siteID });
+    const result = await this.apiClient.post(path, { header: { From: "login" }, body: body, cancelId: cancelId });
         return handleResult(result, (json) => LoginResult.fromJson(json));
   }
 
@@ -22,6 +23,13 @@ export class CommonService {
   async checkTokenByID(params: { userID: string; cancelId?: string }): Promise<FoxApiResult<LoginResult>> {
     const { userID, cancelId } = params;
     const result = await this.apiClient.get(`/v1/checkTokenByID/${userID}`, { cancelId: cancelId });
+        return handleResult(result, (json) => LoginResult.fromJson(json));
+  }
+
+  async checkTokenByInfo(params: { email: string; cancelId?: string }): Promise<FoxApiResult<LoginResult>> {
+    const { email, cancelId } = params;
+    const path = buildPath("/v2/checkTokenByInfo", { email });
+    const result = await this.apiClient.get(path, { cancelId: cancelId });
         return handleResult(result, (json) => LoginResult.fromJson(json));
   }
 

@@ -46,6 +46,11 @@ export class ContractService {
     return this.apiClient.get(`/v1/contract/get/currentContract/${siteIndex}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
   }
 
+  async getContractList(params: { token: string; siteIndex: string; cancelId?: string }): Promise<FoxApiResult> {
+    const { token, siteIndex, cancelId } = params;
+    return this.apiClient.get(`/v1/contract/getList/${siteIndex}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+  }
+
   async patchContractLogByIndex(params: { token: string; index: string; body: RequestOptions["body"]; cancelId?: string }): Promise<FoxApiResult> {
     const { token, index, body, cancelId } = params;
     return this.apiClient.patch(`/v1/contractLogs/patch/index/${index}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });

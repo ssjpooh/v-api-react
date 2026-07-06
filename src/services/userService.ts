@@ -2,40 +2,48 @@ import { ApiClient, type FoxApiResult, type RequestOptions, buildPath } from "..
 import { handleResult } from "../resultUtils";
 import { AddFile, AttachNoteInfo, BaseOptionEnvData, BlockListData, ClientTokenData, CommonOption, ConcurrentInfo, ContractData, ContractListData, ContractLogData, CreateRoomData, DB, FileData, GroupData, GroupOptionEnvData, HistoryRoomData, MailConfig, NoteData, NoticeData, NoticeFileData, NoticeList, OptionInfo, OptionItems, PageData, PageLists, PagesData, PagesLists, PolicyOptionEnvData, ProvisionServerData, RemoveFile, Room, RoomAttendeeData, RoomAttendeeLogData, RoomAttendees, RoomChatData, RoomData, RoomFileData, RoomLogData, RoomPolicyData, ScheduleRoomData, Scope, SectorData, SendMail, SentMailData, ServerData, ServerDomainData, ServerLogData, SiteAvailableData, SiteCount, SiteData, SiteOptionInfoMap, SitesList, TimeZoneData, User, UserData, UserListData } from "../models";
 
+function toUserDataList(json: unknown): UserData[] {
+  return UserListData.fromJson(json).userList;
+}
 
 export class UserService {
   constructor(private readonly apiClient: ApiClient) {}
 
-  async getLoginUserInfo(params: { userID: string; token: string; cancelId?: string }): Promise<FoxApiResult> {
+  async getLoginUserInfo(params: { userID: string; token: string; cancelId?: string }): Promise<FoxApiResult<UserData>> {
     const { userID, token, cancelId } = params;
     const result = await this.apiClient.get(`/v1/user/${userID}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
         return handleResult(result, (json) => UserData.fromJson(json as any));
   }
 
-  async getUserInfoByIndex(params: { userIndex: string; token: string; cancelId?: string }): Promise<FoxApiResult> {
+  async getUserInfoByIndex(params: { userIndex: string; token: string; cancelId?: string }): Promise<FoxApiResult<UserData>> {
     const { userIndex, token, cancelId } = params;
-    return this.apiClient.get(`/v1/user/idx/${userIndex}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+    const result = await this.apiClient.get(`/v1/user/idx/${userIndex}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+        return handleResult(result, (json) => UserData.fromJson(json));
   }
 
-  async searchUserListByKeyword(params: { userID: string; token: string; keyword: string; cancelId?: string }): Promise<FoxApiResult> {
+  async searchUserListByKeyword(params: { userID: string; token: string; keyword: string; cancelId?: string }): Promise<FoxApiResult<UserData[]>> {
     const { userID, token, keyword, cancelId } = params;
-    return this.apiClient.get(`/v1/user/${userID}/searchUserByKeyword?keyword=${keyword}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+    const path = buildPath(`/v1/user/${userID}/searchUserByKeyword`, { keyword });
+        const result = await this.apiClient.get(path, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+        return handleResult(result, toUserDataList);
   }
 
-  async userListInfo(params: { userID: string; token: string; pageNo: number; userTypes?: string[]; userStates?: string[]; searchKeyword?: string; isManager?: string; pagePerRow?: number; query?: Record<string, string | number | boolean>; cancelId?: string }): Promise<FoxApiResult> {
+  async userListInfo(params: { userID: string; token: string; pageNo: number; userTypes?: string[]; userStates?: string[]; searchKeyword?: string; isManager?: string; pagePerRow?: number; query?: Record<string, string | number | boolean>; cancelId?: string }): Promise<FoxApiResult<UserListData>> {
     const { userID, token, pageNo, userTypes = [], userStates = [], searchKeyword = "", isManager, pagePerRow, query, cancelId } = params;
     let userType = userTypes.length === 0 ? "all" : userTypes.join(",");
         let userState = userStates.length === 0 ? "all" : userStates.join(",");
         const path = buildPath(`/v1/user/listInfo/${userID}`, query ?? { userType, userState, keyword: searchKeyword, ismanager: isManager, pageNo, pagePerRow });
-        return this.apiClient.get(path, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+        const result = await this.apiClient.get(path, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+        return handleResult(result, (json) => UserListData.fromJson(json));
   }
 
-  async getAdminSiteUserList(params: { token: string; siteIndex: string; pageNo: number; userTypes?: string[]; userStates?: string[]; searchKeyword?: string; pagePerRow?: number; query?: Record<string, string | number | boolean>; cancelId?: string }): Promise<FoxApiResult> {
+  async getAdminSiteUserList(params: { token: string; siteIndex: string; pageNo: number; userTypes?: string[]; userStates?: string[]; searchKeyword?: string; pagePerRow?: number; query?: Record<string, string | number | boolean>; cancelId?: string }): Promise<FoxApiResult<UserListData>> {
     const { token, siteIndex, pageNo, userTypes = [], userStates = [], searchKeyword = "", pagePerRow, query, cancelId } = params;
     let userType = userTypes.length === 0 ? "all" : userTypes.join(",");
         let userState = userStates.length === 0 ? "all" : userStates.join(",");
         const path = buildPath(`/v1/user/admin/${siteIndex}`, query ?? { userType, userState, pageNo, pagePerRow, keyword: searchKeyword });
-        return this.apiClient.get(path, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+        const result = await this.apiClient.get(path, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+        return handleResult(result, (json) => UserListData.fromJson(json));
   }
 
   async modifyUser(params: { userId?: string; userIndex?: string; token: string; body?: RequestOptions["body"]; cancelId?: string }): Promise<FoxApiResult> {
@@ -75,17 +83,19 @@ export class UserService {
     return this.apiClient.post(`/v1/user/${userID}/oldPasswordCheck`, { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
   }
 
-  async getUserListBySiteIndex(params: { token: string; siteIndex: string; cancelId?: string }): Promise<FoxApiResult> {
+  async getUserListBySiteIndex(params: { token: string; siteIndex: string; cancelId?: string }): Promise<FoxApiResult<UserData[]>> {
     const { token, siteIndex, cancelId } = params;
-    return this.apiClient.get(`/v1/users?siteIndex=${siteIndex}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+    const result = await this.apiClient.get(`/v1/users?siteIndex=${siteIndex}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+        return handleResult(result, toUserDataList);
   }
 
-  async operatorListInfo(params: { userID: string; token: string; userTypes?: string[]; userStates?: string[]; searchKeyword?: string; pageNo?: number; pagePerRow?: number; query?: Record<string, string | number | boolean>; cancelId?: string }): Promise<FoxApiResult> {
+  async operatorListInfo(params: { userID: string; token: string; userTypes?: string[]; userStates?: string[]; searchKeyword?: string; pageNo?: number; pagePerRow?: number; query?: Record<string, string | number | boolean>; cancelId?: string }): Promise<FoxApiResult<UserListData>> {
     const { userID, token, userTypes = [], userStates = [], searchKeyword = "", pageNo, pagePerRow, query, cancelId } = params;
     let userType = userTypes.length === 0 ? "all" : userTypes.join(",");
         let userState = userStates.length === 0 ? "all" : userStates.join(",");
         const path = buildPath(`/v1/user/operatorList/${userID}`, query ?? { userType, userState, keyword: searchKeyword, pageNo, pagePerRow });
-        return this.apiClient.get(path, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+        const result = await this.apiClient.get(path, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+        return handleResult(result, (json) => UserListData.fromJson(json));
   }
 
   async getUserTypes(params: { token: string; siteIndex: string; cancelId?: string }): Promise<FoxApiResult> {
@@ -108,8 +118,33 @@ export class UserService {
     return this.apiClient.get(`/v1/user/get/hostCount/${siteIndex}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
   }
 
-  async getAvailableCreateUser(params: { token: string; siteIndex: string; cancelId?: string }): Promise<FoxApiResult> {
+  async getAvailableCreateUser(params: { token: string; siteIndex: string; cancelId?: string }): Promise<FoxApiResult<SiteAvailableData>> {
     const { token, siteIndex, cancelId } = params;
-    return this.apiClient.get(`/v1/site/getAvailableCreateUser/${siteIndex}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+    const result = await this.apiClient.get(`/v1/site/getAvailableCreateUser/${siteIndex}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+        return handleResult(result, (json) => SiteAvailableData.fromJson(json));
+  }
+
+  async getBlockList(params: { token: string; query?: Record<string, string | number | boolean>; cancelId?: string }): Promise<FoxApiResult<BlockListData>> {
+    const { token, query, cancelId } = params;
+    const path = buildPath("/v1/blockList", query ?? {});
+    const result = await this.apiClient.get(path, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+        return handleResult(result, (json) => BlockListData.fromJson(json));
+  }
+
+  async addBlockUser(params: { token: string; body: RequestOptions["body"]; cancelId?: string }): Promise<FoxApiResult> {
+    const { token, body, cancelId } = params;
+    return this.apiClient.post("/v1/blockUser", { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
+  }
+
+  async removeBlockUser(params: { token: string; userIndex: string; cancelId?: string }): Promise<FoxApiResult> {
+    const { token, userIndex, cancelId } = params;
+    return this.apiClient.delete(`/v1/blockUser/${userIndex}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+  }
+
+  async getUserByEmail(params: { token: string; email: string; cancelId?: string }): Promise<FoxApiResult<UserData>> {
+    const { token, email, cancelId } = params;
+    const path = buildPath("/v2/user", { email });
+    const result = await this.apiClient.get(path, { header: {Authorization: `Bearer ${token}`, From: "web"}, cancelId: cancelId });
+        return handleResult(result, (json) => UserData.fromJson(json));
   }
 }

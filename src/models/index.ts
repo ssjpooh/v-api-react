@@ -39,6 +39,23 @@ function unwrapMain(value: unknown): AnyRecord {
   return asRecord(record["Main"] ?? value);
 }
 
+function pick(json: AnyRecord, ...keys: string[]): unknown {
+  for (const key of keys) {
+    if (json[key] !== undefined) return json[key];
+  }
+  return undefined;
+}
+
+function pickArray(jsonInput: unknown, ...keys: string[]): unknown[] {
+  if (Array.isArray(jsonInput)) return jsonInput;
+  const record = asRecord(jsonInput);
+  const source = record["Main"] ?? jsonInput;
+  if (Array.isArray(source)) return source;
+  const json = asRecord(source);
+  const value = pick(json, ...keys);
+  return Array.isArray(value) ? value : [];
+}
+
 
 export class ConcurrentInfo {
   rooms: number = 0;
@@ -1890,33 +1907,89 @@ export class RoomAttendeeData {
 export class RoomAttendees {
   userID: string = "";
   name: string = "";
+  engName: string = "";
   email: string = "";
   attendeeURL: string = "";
   userType: string = "";
   userIndex: string = "";
   state: string = "";
   isManager: boolean = false;
+  deptCode: string = "";
+  deptName: string = "";
+  deptEngName: string = "";
+  positionCode: string = "";
+  positionName: string = "";
+  positionEngName: string = "";
+  dutyCode: string = "";
+  dutyName: string = "";
+  dutyEngName: string = "";
 
   constructor(init: Partial<RoomAttendees> = {}) {
     Object.assign(this, init);
   }
 
   static fromJson(jsonInput: unknown = {}): RoomAttendees {
-    const json = asRecord(jsonInput);
+    const json = unwrapMain(jsonInput);
     const value = new RoomAttendees();
-    value.userID = asString(json["UserID"], value.userID);
-    value.name = asString(json["Name"], value.name);
-    value.email = asString(json["Email"], value.email);
-    value.attendeeURL = asString(json["AttendeeUrl"], value.attendeeURL);
-    value.userType = asString(json["UserType"], value.userType);
-    value.userIndex = asString(json["UserIndex"], value.userIndex);
-    value.state = asString(json["State"], value.state);
-    value.isManager = asBoolean(json["IsManager"], value.isManager);
-    return value;
+    value.userID = asString(pick(json, "UserID", "userID", "userId", "user_id", "id"), value.userID);
+    value.name = asString(pick(json, "Name", "name"), value.name);
+    value.engName = asString(pick(json, "EngName", "engName", "eng_name"), value.engName);
+    value.email = asString(pick(json, "Email", "email"), value.email);
+    value.attendeeURL = asString(pick(json, "AttendeeURL", "AttendeeUrl", "attendeeURL", "attendeeUrl", "attendee_url"), value.attendeeURL);
+    value.userType = asString(pick(json, "UserType", "userType", "user_type"), value.userType);
+    value.userIndex = asString(pick(json, "UserIndex", "userIndex", "user_index", "Index", "index"), value.userIndex);
+    value.state = asString(pick(json, "State", "state"), value.state);
+    value.isManager = asBoolean(pick(json, "IsManager", "isManager", "is_manager"), value.isManager);
+    value.deptCode = asString(pick(json, "DeptCode", "deptCode", "dept_code"), value.deptCode);
+    value.deptName = asString(pick(json, "DeptName", "deptName", "dept_name"), value.deptName);
+    value.deptEngName = asString(pick(json, "DeptEngName", "deptEngName", "dept_eng_name"), value.deptEngName);
+    value.positionCode = asString(pick(json, "PositionCode", "positionCode", "position_code"), value.positionCode);
+    value.positionName = asString(pick(json, "PositionName", "positionName", "position_name"), value.positionName);
+    value.positionEngName = asString(pick(json, "PositionEngName", "positionEngName", "position_eng_name"), value.positionEngName);
+    value.dutyCode = asString(pick(json, "DutyCode", "dutyCode", "duty_code"), value.dutyCode);
+    value.dutyName = asString(pick(json, "DutyName", "dutyName", "duty_name"), value.dutyName);
+    value.dutyEngName = asString(pick(json, "DutyEngName", "dutyEngName", "duty_eng_name"), value.dutyEngName);
+    return withAliases(value, {
+      UserID: "userID",
+      user_id: "userID",
+      Name: "name",
+      EngName: "engName",
+      eng_name: "engName",
+      Email: "email",
+      AttendeeURL: "attendeeURL",
+      AttendeeUrl: "attendeeURL",
+      attendee_url: "attendeeURL",
+      UserType: "userType",
+      user_type: "userType",
+      UserIndex: "userIndex",
+      user_index: "userIndex",
+      State: "state",
+      IsManager: "isManager",
+      is_manager: "isManager",
+      DeptCode: "deptCode",
+      dept_code: "deptCode",
+      DeptName: "deptName",
+      dept_name: "deptName",
+      DeptEngName: "deptEngName",
+      dept_eng_name: "deptEngName",
+      PositionCode: "positionCode",
+      position_code: "positionCode",
+      PositionName: "positionName",
+      position_name: "positionName",
+      PositionEngName: "positionEngName",
+      position_eng_name: "positionEngName",
+      DutyCode: "dutyCode",
+      duty_code: "dutyCode",
+      DutyName: "dutyName",
+      duty_name: "dutyName",
+      DutyEngName: "dutyEngName",
+      duty_eng_name: "dutyEngName",
+    });
   }
 
   static fromJsonList(jsonList: unknown): RoomAttendees[] {
-    return Array.isArray(jsonList) ? jsonList.map((json) => RoomAttendees.fromJson(asRecord(json))) : [];
+    return pickArray(jsonList, "RoomAttendees", "roomAttendees", "Attendees", "attendees", "AttendeeList", "attendeeList", "List", "list", "Array", "array")
+      .map((json) => RoomAttendees.fromJson(json));
   }
 
   toJson(): AnyRecord {
@@ -1942,6 +2015,7 @@ export class RoomAttendeeLogData {
   clientDetail: string = "";
   email: string = "";
   name: string = "";
+  engName: string = "";
   nickName: string = "";
   rights: string = "";
   noteIDs: string = "";
@@ -1962,55 +2036,164 @@ export class RoomAttendeeLogData {
   serverIndex: string = "";
   instanceIndex: string = "";
   lDate: string = "";
+  deptCode: string = "";
+  deptName: string = "";
+  deptEngName: string = "";
+  positionCode: string = "";
+  positionName: string = "";
+  positionEngName: string = "";
+  dutyCode: string = "";
+  dutyName: string = "";
+  dutyEngName: string = "";
 
   constructor(init: Partial<RoomAttendeeLogData> = {}) {
     Object.assign(this, init);
   }
 
   static fromJson(jsonInput: unknown = {}): RoomAttendeeLogData {
-    const json = asRecord(jsonInput);
+    const json = unwrapMain(jsonInput);
     const value = new RoomAttendeeLogData();
-    value.groupID = asString(json["GroupID"], value.groupID);
-    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
-    value.userIndex = asString(json["UserIndex"], value.userIndex);
-    value.userID = asString(json["UserID"], value.userID);
-    value.roomCode = asString(json["RoomCode"], value.roomCode);
-    value.attdID = asString(json["AttdID"], value.attdID);
-    value.inviterID = asString(json["InviterID"], value.inviterID);
-    value.isManager = asBoolean(json["IsManager"], value.isManager);
-    value.isSubManager = asBoolean(json["IsSubManager"], value.isSubManager);
-    value.userType = asNumber(json["UserType"], value.userType);
-    value.clientVersion = asString(json["ClientVersion"], value.clientVersion);
-    value.clientOS = asString(json["ClientOS"], value.clientOS);
-    value.clientType = asNumber(json["ClientType"], value.clientType);
-    value.clientDetail = asString(json["ClientDetail"], value.clientDetail);
-    value.email = asString(json["Email"], value.email);
-    value.name = asString(json["Name"], value.name);
-    value.nickName = asString(json["NickName"], value.nickName);
-    value.rights = asString(json["Rights"], value.rights);
-    value.noteIDs = asString(json["NoteIDs"], value.noteIDs);
-    value.pageIDs = asString(json["PageIDs"], value.pageIDs);
-    value.notesInfo = asString(json["NotesInfo"], value.notesInfo);
-    value.annotationsInfo = asString(json["AnnotationsInfo"], value.annotationsInfo);
-    value.invitedDate = asString(json["InvitedDate"], value.invitedDate);
-    value.attendedDate = asString(json["AttendedDate"], value.attendedDate);
-    value.attendedDuration = asNumber(json["AttendedDuration"], value.attendedDuration);
-    value.exitedDate = asString(json["ExitedDate"], value.exitedDate);
-    value.exitedReason = asNumber(json["ExitedReason"], value.exitedReason);
-    value.ipAddr = asString(json["IPAddr"], value.ipAddr);
-    value.byIPAddr = asString(json["ByIPAddr"], value.byIPAddr);
-    value.cDate = asString(json["CDate"], value.cDate);
-    value.mDate = asString(json["MDate"], value.mDate);
-    value.index = asString(json["Index"], value.index);
-    value.serverSector = asString(json["ServerSector"], value.serverSector);
-    value.serverIndex = asString(json["ServerIndex"], value.serverIndex);
-    value.instanceIndex = asString(json["InstanceIndex"], value.instanceIndex);
-    value.lDate = asString(json["LDate"], value.lDate);
-    return value;
+    value.groupID = asString(pick(json, "GroupID", "groupID", "groupId", "group_id"), value.groupID);
+    value.siteIndex = asString(pick(json, "SiteIndex", "siteIndex", "site_index"), value.siteIndex);
+    value.userIndex = asString(pick(json, "UserIndex", "userIndex", "user_index"), value.userIndex);
+    value.userID = asString(pick(json, "UserID", "userID", "userId", "user_id"), value.userID);
+    value.roomCode = asString(pick(json, "RoomCode", "roomCode", "room_code"), value.roomCode);
+    value.attdID = asString(pick(json, "AttdID", "attdID", "attdId", "attd_id"), value.attdID);
+    value.inviterID = asString(pick(json, "InviterID", "inviterID", "inviterId", "inviter_id"), value.inviterID);
+    value.isManager = asBoolean(pick(json, "IsManager", "isManager", "is_manager"), value.isManager);
+    value.isSubManager = asBoolean(pick(json, "IsSubManager", "isSubManager", "is_sub_manager"), value.isSubManager);
+    value.userType = asNumber(pick(json, "UserType", "userType", "user_type"), value.userType);
+    value.clientVersion = asString(pick(json, "ClientVersion", "clientVersion", "client_version"), value.clientVersion);
+    value.clientOS = asString(pick(json, "ClientOS", "clientOS", "clientOs", "client_os"), value.clientOS);
+    value.clientType = asNumber(pick(json, "ClientType", "clientType", "client_type"), value.clientType);
+    value.clientDetail = asString(pick(json, "ClientDetail", "clientDetail", "client_detail"), value.clientDetail);
+    value.email = asString(pick(json, "Email", "email"), value.email);
+    value.name = asString(pick(json, "Name", "name"), value.name);
+    value.engName = asString(pick(json, "EngName", "engName", "eng_name"), value.engName);
+    value.nickName = asString(pick(json, "NickName", "nickName", "nickname", "nick_name"), value.nickName);
+    value.rights = asString(pick(json, "Rights", "rights"), value.rights);
+    value.noteIDs = asString(pick(json, "NoteIDs", "NoteIds", "noteIDs", "noteIds", "note_ids"), value.noteIDs);
+    value.pageIDs = asString(pick(json, "PageIDs", "PageIds", "pageIDs", "pageIds", "page_ids"), value.pageIDs);
+    value.notesInfo = asString(pick(json, "NotesInfo", "notesInfo", "notes_info"), value.notesInfo);
+    value.annotationsInfo = asString(pick(json, "AnnotationsInfo", "annotationsInfo", "annotations_info"), value.annotationsInfo);
+    value.invitedDate = asString(pick(json, "InvitedDate", "invitedDate", "invited_date"), value.invitedDate);
+    value.attendedDate = asString(pick(json, "AttendedDate", "attendedDate", "attended_date"), value.attendedDate);
+    value.attendedDuration = asNumber(pick(json, "AttendedDuration", "attendedDuration", "attended_duration"), value.attendedDuration);
+    value.exitedDate = asString(pick(json, "ExitedDate", "exitedDate", "exited_date"), value.exitedDate);
+    value.exitedReason = asNumber(pick(json, "ExitedReason", "exitedReason", "exited_reason"), value.exitedReason);
+    value.ipAddr = asString(pick(json, "IPAddr", "ipAddr", "ip_addr"), value.ipAddr);
+    value.byIPAddr = asString(pick(json, "ByIPAddr", "byIPAddr", "byIpAddr", "by_ip_addr"), value.byIPAddr);
+    value.cDate = asString(pick(json, "CDate", "cDate", "c_date"), value.cDate);
+    value.mDate = asString(pick(json, "MDate", "mDate", "m_date"), value.mDate);
+    value.index = asString(pick(json, "Index", "index"), value.index);
+    value.serverSector = asString(pick(json, "ServerSector", "serverSector", "server_sector"), value.serverSector);
+    value.serverIndex = asString(pick(json, "ServerIndex", "serverIndex", "server_index"), value.serverIndex);
+    value.instanceIndex = asString(pick(json, "InstanceIndex", "instanceIndex", "instance_index"), value.instanceIndex);
+    value.lDate = asString(pick(json, "LDate", "lDate", "l_date"), value.lDate);
+    value.deptCode = asString(pick(json, "DeptCode", "deptCode", "dept_code"), value.deptCode);
+    value.deptName = asString(pick(json, "DeptName", "deptName", "dept_name"), value.deptName);
+    value.deptEngName = asString(pick(json, "DeptEngName", "deptEngName", "dept_eng_name"), value.deptEngName);
+    value.positionCode = asString(pick(json, "PositionCode", "positionCode", "position_code"), value.positionCode);
+    value.positionName = asString(pick(json, "PositionName", "positionName", "position_name"), value.positionName);
+    value.positionEngName = asString(pick(json, "PositionEngName", "positionEngName", "position_eng_name"), value.positionEngName);
+    value.dutyCode = asString(pick(json, "DutyCode", "dutyCode", "duty_code"), value.dutyCode);
+    value.dutyName = asString(pick(json, "DutyName", "dutyName", "duty_name"), value.dutyName);
+    value.dutyEngName = asString(pick(json, "DutyEngName", "dutyEngName", "duty_eng_name"), value.dutyEngName);
+    return withAliases(value, {
+      GroupID: "groupID",
+      group_id: "groupID",
+      SiteIndex: "siteIndex",
+      site_index: "siteIndex",
+      UserIndex: "userIndex",
+      user_index: "userIndex",
+      UserID: "userID",
+      user_id: "userID",
+      RoomCode: "roomCode",
+      room_code: "roomCode",
+      AttdID: "attdID",
+      attd_id: "attdID",
+      InviterID: "inviterID",
+      inviter_id: "inviterID",
+      IsManager: "isManager",
+      is_manager: "isManager",
+      IsSubManager: "isSubManager",
+      is_sub_manager: "isSubManager",
+      UserType: "userType",
+      user_type: "userType",
+      ClientVersion: "clientVersion",
+      client_version: "clientVersion",
+      ClientOS: "clientOS",
+      client_os: "clientOS",
+      ClientType: "clientType",
+      client_type: "clientType",
+      ClientDetail: "clientDetail",
+      client_detail: "clientDetail",
+      Email: "email",
+      Name: "name",
+      EngName: "engName",
+      eng_name: "engName",
+      NickName: "nickName",
+      nick_name: "nickName",
+      Rights: "rights",
+      NoteIDs: "noteIDs",
+      note_ids: "noteIDs",
+      PageIDs: "pageIDs",
+      page_ids: "pageIDs",
+      NotesInfo: "notesInfo",
+      notes_info: "notesInfo",
+      AnnotationsInfo: "annotationsInfo",
+      annotations_info: "annotationsInfo",
+      InvitedDate: "invitedDate",
+      invited_date: "invitedDate",
+      AttendedDate: "attendedDate",
+      attended_date: "attendedDate",
+      AttendedDuration: "attendedDuration",
+      attended_duration: "attendedDuration",
+      ExitedDate: "exitedDate",
+      exited_date: "exitedDate",
+      ExitedReason: "exitedReason",
+      exited_reason: "exitedReason",
+      IPAddr: "ipAddr",
+      ip_addr: "ipAddr",
+      ByIPAddr: "byIPAddr",
+      by_ip_addr: "byIPAddr",
+      CDate: "cDate",
+      c_date: "cDate",
+      MDate: "mDate",
+      m_date: "mDate",
+      Index: "index",
+      ServerSector: "serverSector",
+      server_sector: "serverSector",
+      ServerIndex: "serverIndex",
+      server_index: "serverIndex",
+      InstanceIndex: "instanceIndex",
+      instance_index: "instanceIndex",
+      LDate: "lDate",
+      l_date: "lDate",
+      DeptCode: "deptCode",
+      dept_code: "deptCode",
+      DeptName: "deptName",
+      dept_name: "deptName",
+      DeptEngName: "deptEngName",
+      dept_eng_name: "deptEngName",
+      PositionCode: "positionCode",
+      position_code: "positionCode",
+      PositionName: "positionName",
+      position_name: "positionName",
+      PositionEngName: "positionEngName",
+      position_eng_name: "positionEngName",
+      DutyCode: "dutyCode",
+      duty_code: "dutyCode",
+      DutyName: "dutyName",
+      duty_name: "dutyName",
+      DutyEngName: "dutyEngName",
+      duty_eng_name: "dutyEngName",
+    });
   }
 
   static fromJsonList(jsonList: unknown): RoomAttendeeLogData[] {
-    return Array.isArray(jsonList) ? jsonList.map((json) => RoomAttendeeLogData.fromJson(asRecord(json))) : [];
+    return pickArray(jsonList, "RoomAttendeeLogs", "roomAttendeeLogs", "AttendeeLogs", "attendeeLogs", "LogList", "logList", "List", "list", "Array", "array")
+      .map((json) => RoomAttendeeLogData.fromJson(json));
   }
 
   toJson(): AnyRecord {
@@ -2824,10 +3007,10 @@ export class UserListData {
   }
 
   static fromJson(jsonInput: unknown = {}): UserListData {
-    const json = asRecord(jsonInput);
+    const json = unwrapMain(jsonInput);
     const value = new UserListData();
-    value.userList = UserData.fromJsonList(json["UserList"]);
-    value.pagesData = PagesData.fromJson(json["PageInfo"] ?? {});
+    value.userList = UserData.fromJsonList(pickArray(jsonInput, "UserList", "userList", "users", "Users", "List", "list", "Array", "array"));
+    value.pagesData = PagesData.fromJson(pick(json, "PageInfo", "pageInfo", "pagesData", "pages") ?? {});
     return withAliases(value, { UserList: "userList", PageInfo: "pagesData" });
   }
 
@@ -2850,6 +3033,7 @@ export class UserData {
   isPasswordApplied: boolean = false;
   email: string = "";
   name: string = "";
+  engName: string = "";
   nickName: string = "";
   isSNS: boolean = false;
   userType: string = "";
@@ -2877,79 +3061,147 @@ export class UserData {
   isEmptyEmail: boolean = false;
   isDuplicateId: boolean = false;
   isValid: boolean = false;
+  deptCode: string = "";
+  deptName: string = "";
+  deptEngName: string = "";
+  positionCode: string = "";
+  positionName: string = "";
+  positionEngName: string = "";
+  dutyCode: string = "";
+  dutyName: string = "";
+  dutyEngName: string = "";
 
   constructor(init: Partial<UserData> = {}) {
     Object.assign(this, init);
   }
 
   static fromJson(jsonInput: unknown = {}): UserData {
-    const json = asRecord(jsonInput);
+    const json = unwrapMain(jsonInput);
     const value = new UserData();
-    value.groupID = asString(json["GroupID"], value.groupID);
-    value.siteIndex = asString(json["SiteIndex"], value.siteIndex);
-    value.userIndex = asString(json["UserIndex"], value.userIndex);
-    value.userID = asString(json["UserID"], value.userID);
-    value.password = asString(json["Password"], value.password);
-    value.isPasswordApplied = asBoolean(json["IsPasswordApplied"], value.isPasswordApplied);
-    value.email = asString(json["Email"], value.email);
-    value.name = asString(json["Name"], value.name);
-    value.nickName = asString(json["NickName"], value.nickName);
-    value.isSNS = asBoolean(json["IsSNS"], value.isSNS);
-    value.userType = asString(json["UserType"], value.userType);
-    value.state = asString(json["State"], value.state);
-    value.monitoringColumn = asString(json["MonitoringColumn"], value.monitoringColumn);
-    value.loginServerIndex = asString(json["LoginServerIndex"], value.loginServerIndex);
-    value.lastLoginDate = asString(json["LastLoginDate"], value.lastLoginDate);
-    value.lastLogoutDate = asString(json["LastLogoutDate"] ?? json["lastLogoutDate"], value.lastLogoutDate);
-    value.lastIPAddress = asString(json["LastIPAddress"] ?? json["lastIPAddress"], value.lastIPAddress);
-    value.profileImageKey = asString(json["ProfileImageKey"] ?? json["profileImageKey"], value.profileImageKey);
-    value.info = asString(json["Info"], value.info);
-    value.cDate = asString(json["CDate"], value.cDate);
-    value.mDate = asString(json["MDate"] ?? json["MData"], value.mDate);
-    value.profileImageURL = asString(json["ProfileImageURL"], value.profileImageURL);
-    value.disableLogin = asBoolean(json["DisableLogin"], value.disableLogin);
-    value.isSiteManager = asBoolean(json["IsSiteManager"], value.isSiteManager);
-    value.isSiteHolder = asBoolean(json["IsSiteHolder"], value.isSiteHolder);
-    value.isSystemManager = asBoolean(json["IsSystemManager"], value.isSystemManager);
-    value.isSystemHolder = asBoolean(json["IsSystemHolder"], value.isSystemHolder);
-    value.isManager = asBoolean(json["IsManager"], value.isManager);
-    value.row = asNumber(json["Row"], value.row);
-    value.isEmptyId = asBoolean(json["IsEmptyId"], value.isEmptyId);
-    value.isEmptyName = asBoolean(json["IsEmptyName"], value.isEmptyName);
-    value.isEmailTypeError = asBoolean(json["IsEmailTypeError"], value.isEmailTypeError);
-    value.isEmptyEmail = asBoolean(json["IsEmptyEmail"], value.isEmptyEmail);
-    value.isDuplicateId = asBoolean(json["IsDuplicateId"], value.isDuplicateId);
-    value.isValid = asBoolean(json["IsValid"], value.isValid);
+    value.groupID = asString(pick(json, "GroupID", "groupID", "groupId", "group_id"), value.groupID);
+    value.siteIndex = asString(pick(json, "SiteIndex", "siteIndex", "site_index"), value.siteIndex);
+    value.userIndex = asString(pick(json, "UserIndex", "userIndex", "user_index", "Index", "index"), value.userIndex);
+    value.userID = asString(pick(json, "UserID", "userID", "userId", "user_id", "id"), value.userID);
+    value.password = asString(pick(json, "Password", "password"), value.password);
+    value.isPasswordApplied = asBoolean(pick(json, "IsPasswordApplied", "isPasswordApplied", "is_password_applied"), value.isPasswordApplied);
+    value.email = asString(pick(json, "Email", "email"), value.email);
+    value.name = asString(pick(json, "Name", "name"), value.name);
+    value.engName = asString(pick(json, "EngName", "engName", "eng_name"), value.engName);
+    value.nickName = asString(pick(json, "NickName", "nickName", "nickname", "nick_name"), value.nickName);
+    value.isSNS = asBoolean(pick(json, "IsSNS", "isSNS", "isSns", "is_sns"), value.isSNS);
+    value.userType = asString(pick(json, "UserType", "userType", "user_type"), value.userType);
+    value.state = asString(pick(json, "State", "state"), value.state);
+    value.monitoringColumn = asString(pick(json, "MonitoringColumn", "monitoringColumn", "monitoring_column"), value.monitoringColumn);
+    value.loginServerIndex = asString(pick(json, "LoginServerIndex", "loginServerIndex", "login_server_index"), value.loginServerIndex);
+    value.lastLoginDate = asString(pick(json, "LastLoginDate", "lastLoginDate", "last_login_date"), value.lastLoginDate);
+    value.lastLogoutDate = asString(pick(json, "LastLogoutDate", "lastLogoutDate", "last_logout_date"), value.lastLogoutDate);
+    value.lastIPAddress = asString(pick(json, "LastIPAddress", "lastIPAddress", "lastIpAddress", "last_ip_address"), value.lastIPAddress);
+    value.profileImageKey = asString(pick(json, "ProfileImageKey", "profileImageKey", "profile_image_key"), value.profileImageKey);
+    value.info = asString(pick(json, "Info", "info"), value.info);
+    value.cDate = asString(pick(json, "CDate", "cDate", "c_date", "createdAt", "created_at"), value.cDate);
+    value.mDate = asString(pick(json, "MDate", "MData", "mDate", "m_date", "updatedAt", "updated_at"), value.mDate);
+    value.profileImageURL = asString(pick(json, "ProfileImageURL", "profileImageURL", "profileImageUrl", "profile_image_url"), value.profileImageURL);
+    value.disableLogin = asBoolean(pick(json, "DisableLogin", "disableLogin", "disable_login"), value.disableLogin);
+    value.isSiteManager = asBoolean(pick(json, "IsSiteManager", "isSiteManager", "is_siteManager", "is_site_manager"), value.isSiteManager);
+    value.isSiteHolder = asBoolean(pick(json, "IsSiteHolder", "isSiteHolder", "is_siteHolder", "is_site_holder"), value.isSiteHolder);
+    value.isSystemManager = asBoolean(pick(json, "IsSystemManager", "isSystemManager", "is_systemManager", "is_system_manager"), value.isSystemManager);
+    value.isSystemHolder = asBoolean(pick(json, "IsSystemHolder", "isSystemHolder", "is_systemHolder", "is_system_holder"), value.isSystemHolder);
+    value.isManager = asBoolean(pick(json, "IsManager", "isManager", "is_manager"), value.isManager);
+    value.row = asNumber(pick(json, "Row", "row"), value.row);
+    value.isEmptyId = asBoolean(pick(json, "IsEmptyId", "isEmptyId", "is_empty_id"), value.isEmptyId);
+    value.isEmptyName = asBoolean(pick(json, "IsEmptyName", "isEmptyName", "is_empty_name"), value.isEmptyName);
+    value.isEmailTypeError = asBoolean(pick(json, "IsEmailTypeError", "isEmailTypeError", "is_email_type_error"), value.isEmailTypeError);
+    value.isEmptyEmail = asBoolean(pick(json, "IsEmptyEmail", "isEmptyEmail", "is_empty_email"), value.isEmptyEmail);
+    value.isDuplicateId = asBoolean(pick(json, "IsDuplicateId", "isDuplicateId", "is_duplicate_id"), value.isDuplicateId);
+    value.isValid = asBoolean(pick(json, "IsValid", "isValid", "is_valid"), value.isValid);
+    value.deptCode = asString(pick(json, "DeptCode", "deptCode", "dept_code"), value.deptCode);
+    value.deptName = asString(pick(json, "DeptName", "deptName", "dept_name"), value.deptName);
+    value.deptEngName = asString(pick(json, "DeptEngName", "deptEngName", "dept_eng_name"), value.deptEngName);
+    value.positionCode = asString(pick(json, "PositionCode", "positionCode", "position_code"), value.positionCode);
+    value.positionName = asString(pick(json, "PositionName", "positionName", "position_name"), value.positionName);
+    value.positionEngName = asString(pick(json, "PositionEngName", "positionEngName", "position_eng_name"), value.positionEngName);
+    value.dutyCode = asString(pick(json, "DutyCode", "dutyCode", "duty_code"), value.dutyCode);
+    value.dutyName = asString(pick(json, "DutyName", "dutyName", "duty_name"), value.dutyName);
+    value.dutyEngName = asString(pick(json, "DutyEngName", "dutyEngName", "duty_eng_name"), value.dutyEngName);
     return withAliases(value, {
       GroupID: "groupID",
+      group_id: "groupID",
       SiteIndex: "siteIndex",
+      site_index: "siteIndex",
       UserIndex: "userIndex",
+      user_index: "userIndex",
       UserID: "userID",
+      user_id: "userID",
       Password: "password",
       IsPasswordApplied: "isPasswordApplied",
+      is_password_applied: "isPasswordApplied",
       Email: "email",
       Name: "name",
+      EngName: "engName",
+      eng_name: "engName",
       NickName: "nickName",
+      nick_name: "nickName",
       IsSNS: "isSNS",
+      is_sns: "isSNS",
       UserType: "userType",
+      user_type: "userType",
       State: "state",
       MonitoringColumn: "monitoringColumn",
+      monitoring_column: "monitoringColumn",
       LoginServerIndex: "loginServerIndex",
+      login_server_index: "loginServerIndex",
       LastLoginDate: "lastLoginDate",
+      last_login_date: "lastLoginDate",
       LastLogoutDate: "lastLogoutDate",
+      last_logout_date: "lastLogoutDate",
       LastIPAddress: "lastIPAddress",
+      last_ip_address: "lastIPAddress",
       ProfileImageKey: "profileImageKey",
+      profile_image_key: "profileImageKey",
       Info: "info",
       CDate: "cDate",
+      c_date: "cDate",
       MDate: "mDate",
+      m_date: "mDate",
       ProfileImageURL: "profileImageURL",
+      profile_image_url: "profileImageURL",
       DisableLogin: "disableLogin",
+      disable_login: "disableLogin",
       IsSiteManager: "isSiteManager",
+      is_site_manager: "isSiteManager",
       IsSiteHolder: "isSiteHolder",
+      is_site_holder: "isSiteHolder",
       IsSystemManager: "isSystemManager",
+      is_system_manager: "isSystemManager",
       IsSystemHolder: "isSystemHolder",
+      is_system_holder: "isSystemHolder",
       IsManager: "isManager",
+      is_manager: "isManager",
       Row: "row",
+      IsEmptyId: "isEmptyId",
+      IsEmptyName: "isEmptyName",
+      IsEmailTypeError: "isEmailTypeError",
+      IsEmptyEmail: "isEmptyEmail",
+      IsDuplicateId: "isDuplicateId",
+      IsValid: "isValid",
+      DeptCode: "deptCode",
+      dept_code: "deptCode",
+      DeptName: "deptName",
+      dept_name: "deptName",
+      DeptEngName: "deptEngName",
+      dept_eng_name: "deptEngName",
+      PositionCode: "positionCode",
+      position_code: "positionCode",
+      PositionName: "positionName",
+      position_name: "positionName",
+      PositionEngName: "positionEngName",
+      position_eng_name: "positionEngName",
+      DutyCode: "dutyCode",
+      duty_code: "dutyCode",
+      DutyName: "dutyName",
+      duty_name: "dutyName",
+      DutyEngName: "dutyEngName",
+      duty_eng_name: "dutyEngName",
     });
   }
 
@@ -3262,6 +3514,7 @@ export interface UserData {
   IsPasswordApplied: boolean;
   Email: string;
   Name: string;
+  EngName: string;
   NickName: string;
   IsSNS: boolean;
   UserType: string;
@@ -3283,4 +3536,413 @@ export interface UserData {
   IsSystemHolder: boolean;
   IsManager: boolean;
   Row: number;
+  DeptCode: string;
+  DeptName: string;
+  DeptEngName: string;
+  PositionCode: string;
+  PositionName: string;
+  PositionEngName: string;
+  DutyCode: string;
+  DutyName: string;
+  DutyEngName: string;
+}
+
+export type OrgSyncRequest = {
+  departments?: OrgSyncDepartmentItem[];
+  positions?: OrgSyncPositionItem[];
+  duties?: OrgSyncDutyItem[];
+  members?: OrgSyncMemberItem[];
+};
+
+export type OrgSyncDepartmentItem = {
+  dept_code: string;
+  parent_dept_code?: string;
+  name: string;
+  eng_name?: string;
+  dept_order?: number;
+  description?: string;
+};
+
+export type OrgSyncPositionItem = {
+  position_code: string;
+  name: string;
+  eng_name?: string;
+  position_order?: number;
+};
+
+export type OrgSyncDutyItem = {
+  duty_code: string;
+  name: string;
+  eng_name?: string;
+  duty_order?: number;
+};
+
+export type OrgSyncMemberItem = {
+  user_id: string;
+  name: string;
+  eng_name?: string;
+  email?: string;
+  nickname?: string;
+  dept_code?: string;
+  position_code?: string;
+  position_name?: string;
+  duty_code?: string;
+  duty_name?: string;
+  user_order?: number;
+};
+
+export class OrgSyncFailure {
+  data: unknown = null;
+  reason: string = "";
+
+  constructor(init: Partial<OrgSyncFailure> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): OrgSyncFailure {
+    const json = asRecord(jsonInput);
+    const value = new OrgSyncFailure();
+    value.data = pick(json, "data", "Data") ?? value.data;
+    value.reason = asString(pick(json, "reason", "Reason"), value.reason);
+    return withAliases(value, { Data: "data", Reason: "reason" });
+  }
+
+  static fromJsonList(jsonList: unknown): OrgSyncFailure[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => OrgSyncFailure.fromJson(json)) : [];
+  }
+}
+
+export class OrgSyncEntityResult {
+  totalCount: number = 0;
+  successCount: number = 0;
+  failureCount: number = 0;
+  failures: OrgSyncFailure[] = [];
+
+  constructor(init: Partial<OrgSyncEntityResult> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): OrgSyncEntityResult {
+    const json = asRecord(jsonInput);
+    const value = new OrgSyncEntityResult();
+    value.totalCount = asNumber(pick(json, "total_count", "totalCount", "TotalCount"), value.totalCount);
+    value.successCount = asNumber(pick(json, "success_count", "successCount", "SuccessCount"), value.successCount);
+    value.failureCount = asNumber(pick(json, "failure_count", "failureCount", "FailureCount"), value.failureCount);
+    value.failures = OrgSyncFailure.fromJsonList(pick(json, "failures", "Failures") ?? []);
+    return withAliases(value, {
+      total_count: "totalCount",
+      TotalCount: "totalCount",
+      success_count: "successCount",
+      SuccessCount: "successCount",
+      failure_count: "failureCount",
+      FailureCount: "failureCount",
+      Failures: "failures",
+    });
+  }
+}
+
+export class OrgSyncResponse {
+  departments: OrgSyncEntityResult = new OrgSyncEntityResult();
+  positions: OrgSyncEntityResult = new OrgSyncEntityResult();
+  duties: OrgSyncEntityResult = new OrgSyncEntityResult();
+  users: OrgSyncEntityResult = new OrgSyncEntityResult();
+  departmentUsers: OrgSyncEntityResult = new OrgSyncEntityResult();
+
+  constructor(init: Partial<OrgSyncResponse> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): OrgSyncResponse {
+    const json = unwrapMain(jsonInput);
+    const value = new OrgSyncResponse();
+    value.departments = OrgSyncEntityResult.fromJson(pick(json, "departments", "Departments") ?? {});
+    value.positions = OrgSyncEntityResult.fromJson(pick(json, "positions", "Positions") ?? {});
+    value.duties = OrgSyncEntityResult.fromJson(pick(json, "duties", "Duties") ?? {});
+    value.users = OrgSyncEntityResult.fromJson(pick(json, "users", "Users") ?? {});
+    value.departmentUsers = OrgSyncEntityResult.fromJson(pick(json, "department_users", "departmentUsers", "DepartmentUsers") ?? {});
+    return withAliases(value, {
+      Departments: "departments",
+      Positions: "positions",
+      Duties: "duties",
+      Users: "users",
+      department_users: "departmentUsers",
+      DepartmentUsers: "departmentUsers",
+    });
+  }
+}
+
+export class OrgSyncDepartmentResponse {
+  deptCode: string = "";
+  parentDeptCode: string = "";
+  name: string = "";
+  engName: string = "";
+  deptOrder: number = 0;
+  depth: number = 0;
+  path: string = "";
+  description: string = "";
+
+  constructor(init: Partial<OrgSyncDepartmentResponse> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): OrgSyncDepartmentResponse {
+    const json = asRecord(jsonInput);
+    const value = new OrgSyncDepartmentResponse();
+    value.deptCode = asString(pick(json, "dept_code", "deptCode", "DeptCode"), value.deptCode);
+    value.parentDeptCode = asString(pick(json, "parent_dept_code", "parentDeptCode", "ParentDeptCode"), value.parentDeptCode);
+    value.name = asString(pick(json, "name", "Name"), value.name);
+    value.engName = asString(pick(json, "eng_name", "engName", "EngName"), value.engName);
+    value.deptOrder = asNumber(pick(json, "dept_order", "deptOrder", "DeptOrder"), value.deptOrder);
+    value.depth = asNumber(pick(json, "depth", "Depth"), value.depth);
+    value.path = asString(pick(json, "path", "Path"), value.path);
+    value.description = asString(pick(json, "description", "Description"), value.description);
+    return withAliases(value, {
+      dept_code: "deptCode",
+      DeptCode: "deptCode",
+      parent_dept_code: "parentDeptCode",
+      ParentDeptCode: "parentDeptCode",
+      Name: "name",
+      eng_name: "engName",
+      EngName: "engName",
+      dept_order: "deptOrder",
+      DeptOrder: "deptOrder",
+      Depth: "depth",
+      Path: "path",
+      Description: "description",
+    });
+  }
+
+  static fromJsonList(jsonList: unknown): OrgSyncDepartmentResponse[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => OrgSyncDepartmentResponse.fromJson(json)) : [];
+  }
+}
+
+export class OrgSyncPositionResponse {
+  positionCode: string = "";
+  name: string = "";
+  engName: string = "";
+  positionOrder: number = 0;
+
+  constructor(init: Partial<OrgSyncPositionResponse> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): OrgSyncPositionResponse {
+    const json = asRecord(jsonInput);
+    const value = new OrgSyncPositionResponse();
+    value.positionCode = asString(pick(json, "position_code", "positionCode", "PositionCode"), value.positionCode);
+    value.name = asString(pick(json, "name", "Name"), value.name);
+    value.engName = asString(pick(json, "eng_name", "engName", "EngName"), value.engName);
+    value.positionOrder = asNumber(pick(json, "position_order", "positionOrder", "PositionOrder"), value.positionOrder);
+    return withAliases(value, {
+      position_code: "positionCode",
+      PositionCode: "positionCode",
+      Name: "name",
+      eng_name: "engName",
+      EngName: "engName",
+      position_order: "positionOrder",
+      PositionOrder: "positionOrder",
+    });
+  }
+
+  static fromJsonList(jsonList: unknown): OrgSyncPositionResponse[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => OrgSyncPositionResponse.fromJson(json)) : [];
+  }
+}
+
+export class OrgSyncDutyResponse {
+  dutyCode: string = "";
+  name: string = "";
+  engName: string = "";
+  dutyOrder: number = 0;
+
+  constructor(init: Partial<OrgSyncDutyResponse> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): OrgSyncDutyResponse {
+    const json = asRecord(jsonInput);
+    const value = new OrgSyncDutyResponse();
+    value.dutyCode = asString(pick(json, "duty_code", "dutyCode", "DutyCode"), value.dutyCode);
+    value.name = asString(pick(json, "name", "Name"), value.name);
+    value.engName = asString(pick(json, "eng_name", "engName", "EngName"), value.engName);
+    value.dutyOrder = asNumber(pick(json, "duty_order", "dutyOrder", "DutyOrder"), value.dutyOrder);
+    return withAliases(value, {
+      duty_code: "dutyCode",
+      DutyCode: "dutyCode",
+      Name: "name",
+      eng_name: "engName",
+      EngName: "engName",
+      duty_order: "dutyOrder",
+      DutyOrder: "dutyOrder",
+    });
+  }
+
+  static fromJsonList(jsonList: unknown): OrgSyncDutyResponse[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => OrgSyncDutyResponse.fromJson(json)) : [];
+  }
+}
+
+export class OrgSyncMemberResponse {
+  userID: string = "";
+  name: string = "";
+  engName: string = "";
+  email: string = "";
+  nickName: string = "";
+  deptCode: string = "";
+  deptName: string = "";
+  positionCode: string = "";
+  positionName: string = "";
+  dutyCode: string = "";
+  dutyName: string = "";
+  userOrder: number = 0;
+
+  constructor(init: Partial<OrgSyncMemberResponse> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): OrgSyncMemberResponse {
+    const json = asRecord(jsonInput);
+    const value = new OrgSyncMemberResponse();
+    value.userID = asString(pick(json, "user_id", "userID", "userId", "UserID"), value.userID);
+    value.name = asString(pick(json, "name", "Name"), value.name);
+    value.engName = asString(pick(json, "eng_name", "engName", "EngName"), value.engName);
+    value.email = asString(pick(json, "email", "Email"), value.email);
+    value.nickName = asString(pick(json, "nickname", "nickName", "NickName"), value.nickName);
+    value.deptCode = asString(pick(json, "dept_code", "deptCode", "DeptCode"), value.deptCode);
+    value.deptName = asString(pick(json, "dept_name", "deptName", "DeptName"), value.deptName);
+    value.positionCode = asString(pick(json, "position_code", "positionCode", "PositionCode"), value.positionCode);
+    value.positionName = asString(pick(json, "position_name", "positionName", "PositionName"), value.positionName);
+    value.dutyCode = asString(pick(json, "duty_code", "dutyCode", "DutyCode"), value.dutyCode);
+    value.dutyName = asString(pick(json, "duty_name", "dutyName", "DutyName"), value.dutyName);
+    value.userOrder = asNumber(pick(json, "user_order", "userOrder", "UserOrder"), value.userOrder);
+    return withAliases(value, {
+      user_id: "userID",
+      UserID: "userID",
+      Name: "name",
+      eng_name: "engName",
+      EngName: "engName",
+      Email: "email",
+      NickName: "nickName",
+      DeptCode: "deptCode",
+      dept_code: "deptCode",
+      DeptName: "deptName",
+      dept_name: "deptName",
+      PositionCode: "positionCode",
+      position_code: "positionCode",
+      PositionName: "positionName",
+      position_name: "positionName",
+      DutyCode: "dutyCode",
+      duty_code: "dutyCode",
+      DutyName: "dutyName",
+      duty_name: "dutyName",
+      UserOrder: "userOrder",
+      user_order: "userOrder",
+    });
+  }
+
+  static fromJsonList(jsonList: unknown): OrgSyncMemberResponse[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => OrgSyncMemberResponse.fromJson(json)) : [];
+  }
+}
+
+export class OrgSyncGetResponse {
+  departments: OrgSyncDepartmentResponse[] = [];
+  positions: OrgSyncPositionResponse[] = [];
+  duties: OrgSyncDutyResponse[] = [];
+  members: OrgSyncMemberResponse[] = [];
+
+  constructor(init: Partial<OrgSyncGetResponse> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): OrgSyncGetResponse {
+    const json = unwrapMain(jsonInput);
+    const value = new OrgSyncGetResponse();
+    value.departments = OrgSyncDepartmentResponse.fromJsonList(pick(json, "departments", "Departments") ?? []);
+    value.positions = OrgSyncPositionResponse.fromJsonList(pick(json, "positions", "Positions") ?? []);
+    value.duties = OrgSyncDutyResponse.fromJsonList(pick(json, "duties", "Duties") ?? []);
+    value.members = OrgSyncMemberResponse.fromJsonList(pick(json, "members", "Members") ?? []);
+    return withAliases(value, {
+      Departments: "departments",
+      Positions: "positions",
+      Duties: "duties",
+      Members: "members",
+    });
+  }
+}
+
+export class OrgTreeNode {
+  deptCode: string = "";
+  parentDeptCode: string = "";
+  name: string = "";
+  engName: string = "";
+  deptOrder: number = 0;
+  depth: number = 0;
+  path: string = "";
+  description: string = "";
+  members: OrgSyncMemberResponse[] = [];
+  children: OrgTreeNode[] = [];
+
+  constructor(init: Partial<OrgTreeNode> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): OrgTreeNode {
+    const json = asRecord(jsonInput);
+    const value = new OrgTreeNode();
+    value.deptCode = asString(pick(json, "dept_code", "deptCode", "DeptCode"), value.deptCode);
+    value.parentDeptCode = asString(pick(json, "parent_dept_code", "parentDeptCode", "ParentDeptCode"), value.parentDeptCode);
+    value.name = asString(pick(json, "name", "Name"), value.name);
+    value.engName = asString(pick(json, "eng_name", "engName", "EngName"), value.engName);
+    value.deptOrder = asNumber(pick(json, "dept_order", "deptOrder", "DeptOrder"), value.deptOrder);
+    value.depth = asNumber(pick(json, "depth", "Depth"), value.depth);
+    value.path = asString(pick(json, "path", "Path"), value.path);
+    value.description = asString(pick(json, "description", "Description"), value.description);
+    value.members = OrgSyncMemberResponse.fromJsonList(pick(json, "members", "Members") ?? []);
+    value.children = OrgTreeNode.fromJsonList(pick(json, "children", "Children") ?? []);
+    return withAliases(value, {
+      dept_code: "deptCode",
+      DeptCode: "deptCode",
+      parent_dept_code: "parentDeptCode",
+      ParentDeptCode: "parentDeptCode",
+      Name: "name",
+      eng_name: "engName",
+      EngName: "engName",
+      dept_order: "deptOrder",
+      DeptOrder: "deptOrder",
+      Depth: "depth",
+      Path: "path",
+      Description: "description",
+      Members: "members",
+      Children: "children",
+    });
+  }
+
+  static fromJsonList(jsonList: unknown): OrgTreeNode[] {
+    return Array.isArray(jsonList) ? jsonList.map((json) => OrgTreeNode.fromJson(json)) : [];
+  }
+}
+
+export class OrgTreeResponse {
+  tree: OrgTreeNode[] = [];
+  positions: OrgSyncPositionResponse[] = [];
+  duties: OrgSyncDutyResponse[] = [];
+
+  constructor(init: Partial<OrgTreeResponse> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): OrgTreeResponse {
+    const json = unwrapMain(jsonInput);
+    const value = new OrgTreeResponse();
+    value.tree = OrgTreeNode.fromJsonList(pick(json, "tree", "Tree") ?? []);
+    value.positions = OrgSyncPositionResponse.fromJsonList(pick(json, "positions", "Positions") ?? []);
+    value.duties = OrgSyncDutyResponse.fromJsonList(pick(json, "duties", "Duties") ?? []);
+    return withAliases(value, {
+      Tree: "tree",
+      Positions: "positions",
+      Duties: "duties",
+    });
+  }
 }

@@ -5,6 +5,7 @@ const fields = {
   issueTokenButton: document.querySelector("#issueTokenButton"),
   tokenStatus: document.querySelector("#tokenStatus"),
   tokenPreview: document.querySelector("#tokenPreview"),
+  accountType: document.querySelector("#accountType"),
   caseSearch: document.querySelector("#caseSearch"),
   caseGroups: document.querySelector("#caseGroups"),
   selectedCaseName: document.querySelector("#selectedCaseName"),
@@ -25,7 +26,7 @@ const apiGroups = [
     name: "Common / Auth",
     cases: [
       { name: "OAuth Token", method: "POST", path: "/v1/oauth/token", auth: false, body: "token_id={tokenID}&site_secret={siteSecret}", description: "토큰 발급은 상단 버튼으로도 실행됩니다." },
-      { name: "Login", method: "POST", path: "/v1/login", body: jsonBody({ userID: "{userID}", Password: "" }) },
+      { name: "Login", method: "POST", path: "/v1/login?siteID={siteID}", body: jsonBody({ userID: "{userID}", Password: "" }) },
       { name: "Logout", method: "POST", path: "/v1/logout", body: jsonBody({ UserID: "{userID}", Token: "{token}", SiteIndex: "{siteIndex}" }) },
       { name: "Check Token By ID", method: "GET", path: "/v1/checkTokenByID/{userID}", auth: false },
       { name: "Is Exist Room", method: "GET", path: "/v1/isExistRoom/{roomCode}", auth: false },
@@ -60,6 +61,75 @@ const apiGroups = [
       { name: "My User Types", method: "GET", path: "/v1/getMyUserTypes/{siteIndex}/{userIndex}" },
       { name: "Host Count", method: "GET", path: "/v1/user/get/hostCount/{siteIndex}" },
       { name: "Available Create User", method: "GET", path: "/v1/site/getAvailableCreateUser/{siteIndex}" },
+    ],
+  },
+  {
+    name: "Org Sync",
+    cases: [
+      { name: "Org Sync Status", method: "GET", path: "/v1/org-sync?siteIndex={siteIndex}&mode=all" },
+      { name: "Org Tree", method: "GET", path: "/v1/org-tree?siteIndex={siteIndex}" },
+      {
+        name: "Sync Org",
+        method: "POST",
+        path: "/v1/org-sync?siteIndex={siteIndex}&clear=false",
+        body: jsonBody({
+          departments: [
+            {
+              dept_code: "dept-001",
+              parent_dept_code: "",
+              name: "Department",
+              eng_name: "Department",
+              dept_order: 1,
+              description: "",
+            },
+          ],
+          positions: [
+            {
+              position_code: "position-001",
+              name: "Position",
+              eng_name: "Position",
+              position_order: 1,
+            },
+          ],
+          duties: [
+            {
+              duty_code: "duty-001",
+              name: "Duty",
+              eng_name: "Duty",
+              duty_order: 1,
+            },
+          ],
+          members: [
+            {
+              user_id: "{userID}",
+              name: "User",
+              eng_name: "User",
+              email: "",
+              nickname: "",
+              dept_code: "dept-001",
+              position_code: "position-001",
+              position_name: "Position",
+              duty_code: "duty-001",
+              duty_name: "Duty",
+              user_order: 1,
+            },
+          ],
+        }),
+      },
+      {
+        name: "Patch Org",
+        method: "PATCH",
+        path: "/v1/org-sync?siteIndex={siteIndex}",
+        body: jsonBody({
+          departments: [],
+          positions: [],
+          duties: [],
+          members: [],
+        }),
+      },
+      { name: "Delete Org Sync", method: "DELETE", path: "/v1/org-sync?siteIndex={siteIndex}" },
+      { name: "Sync Org Excel", method: "MULTIPART_POST", path: "/v1/org-sync-excel?siteIndex={siteIndex}&clear=false", body: jsonBody({ file: "select-file-in-real-client" }) },
+      { name: "Patch Org Excel", method: "MULTIPART_PATCH", path: "/v1/org-sync-excel?siteIndex={siteIndex}", body: jsonBody({ file: "select-file-in-real-client" }) },
     ],
   },
   {
@@ -116,6 +186,121 @@ const apiGroups = [
       { name: "Remove Room Files", method: "DELETE", path: "/v1/file/removeFile/{userID}/{roomCode}", body: jsonBody({ files: [] }) },
       { name: "Note Pages", method: "GET", path: "/v1/room/notes/{userID}/{roomCode}" },
       { name: "Note Pages By Note", method: "GET", path: "/v1/room/notes/{userID}/{roomCode}/{noteID}" },
+    ],
+  },
+  {
+    name: "V2 Room",
+    cases: [
+      { name: "V2 Rooms", method: "GET", path: "/v2/rooms?siteIndex={siteIndex}&keyword=&pageNo=0&pagePerRow=50&orderType=0&onlyInvited=false&onlyPermanent=false&fileExist=0&mode=0" },
+      { name: "V2 Site Rooms", method: "GET", path: "/v2/{siteID}/rooms?keyword=&pageNo=0&pagePerRow=50&orderType=0&onlyInvited=false&onlyPermanent=false&fileExist=0&mode=0" },
+      { name: "V2 Room Info", method: "GET", path: "/v2/room?roomCode={roomCode}&siteIndex={siteIndex}" },
+      { name: "V2 Site Room Info", method: "GET", path: "/v2/{siteID}/room?roomCode={roomCode}" },
+      {
+        name: "V2 Create Room",
+        method: "POST",
+        path: "/v2/room?locale=ko",
+        body: jsonBody({
+          SiteIndex: "{siteIndex}",
+          UserID: "{userID}",
+          RoomID: "",
+          RoomCode: "",
+          Policy: "",
+          Title: "Room title",
+          Agenda: "",
+          TimeZone: "Asia/Seoul",
+          IsPublic: false,
+          MaxUsers: 100,
+          PlannedDate: "",
+          RoomDuration: 60,
+          RoomOption: [],
+          Attendees: [],
+        }),
+      },
+      {
+        name: "V2 Patch Room",
+        method: "PATCH",
+        path: "/v2/room?locale=ko",
+        body: jsonBody({
+          RoomCode: "{roomCode}",
+          SiteIndex: "{siteIndex}",
+          Title: "Room title",
+          Agenda: "",
+        }),
+      },
+      { name: "V2 Delete Room", method: "DELETE", path: "/v2/room", body: jsonBody([{ RoomCode: "{roomCode}", SiteIndex: "{siteIndex}" }]) },
+      { name: "V2 Attendees", method: "GET", path: "/v2/attendees?roomCode={roomCode}&pageNo=0&pagePerRow=50" },
+      { name: "V2 Attendee", method: "GET", path: "/v2/attendee?roomCode={roomCode}&attdID={attendeeID}&userID={userID}&siteIndex={siteIndex}" },
+      { name: "V2 Invited Attendee", method: "GET", path: "/v2/attendee/invited?roomCode={roomCode}&attdID={attendeeID}&userID={userID}&siteIndex={siteIndex}" },
+      {
+        name: "V2 Add Attendees",
+        method: "POST",
+        path: "/v2/attendees",
+        body: jsonBody([
+          {
+            RoomCode: "{roomCode}",
+            AttdID: "{attendeeID}",
+            UserID: "{userID}",
+            SiteIndex: "{siteIndex}",
+            Name: "Attendee",
+            Email: "",
+          },
+        ]),
+      },
+      {
+        name: "V2 Patch Attendee",
+        method: "PATCH",
+        path: "/v2/attendees?roomCode={roomCode}&attdID={attendeeID}&userID={userID}&siteIndex={siteIndex}",
+        body: jsonBody([
+          {
+            RoomCode: "{roomCode}",
+            AttdID: "{attendeeID}",
+            UserID: "{userID}",
+            SiteIndex: "{siteIndex}",
+            Name: "Attendee",
+          },
+        ]),
+      },
+      { name: "V2 Delete Attendees", method: "DELETE", path: "/v2/attendees", body: jsonBody([{ RoomCode: "{roomCode}", AttdID: "{attendeeID}", SiteIndex: "{siteIndex}" }]) },
+      { name: "V2 Attendance", method: "GET", path: "/v2/attendance?instanceIdx={instanceIndex}&pageNo=0&pagePerRow=50" },
+      { name: "V2 Attendee Logs", method: "GET", path: "/v2/attendee-logs?instanceIdx={instanceIndex}&pageNo=0&pagePerRow=50" },
+      { name: "V2 Attendee Log", method: "GET", path: "/v2/attendee-log?instanceIdx={instanceIndex}&attdID={attendeeID}&roomCode={roomCode}&siteIndex={siteIndex}&userID={userID}" },
+      { name: "V2 Room Logs", method: "GET", path: "/v2/roomLogs?startDate={startDate}&endDate={endDate}&pageNo=0&pagePerRow=50&keyword=&groupID={groupID}&instanceIndex={instanceIndex}" },
+      { name: "V2 Room Log", method: "GET", path: "/v2/roomLog?groupID={groupID}&instanceIndex={instanceIndex}" },
+    ],
+  },
+  {
+    name: "V2 Account Type",
+    cases: [
+      { name: "accountType List", method: "GET", path: "/v2/accountTypes?accountTypeCode=&keyword=&pageNo=0&pagePerRow=50" },
+      { name: "accountType Info", method: "GET", path: "/v2/accountType?accountTypeCode={accountTypeCode}" },
+    ],
+  },
+  {
+    name: "V2 Workspace",
+    cases: [
+      { name: "workspace List", method: "GET", path: "/v2/workspaces?workspaceCode=&keyword=&pageNo=0&pagePerRow=50" },
+      { name: "workspace Info", method: "GET", path: "/v2/workspace?workspaceCode={workspaceCode}" },
+    ],
+  },
+  {
+    name: "V2 Menu",
+    cases: [
+      { name: "menu List", method: "GET", path: "/v2/menus?menuCode=&workspaceCode={workspaceCode}&parentCode=&keyword=&pageNo=0&pagePerRow=50" },
+      { name: "menu Info", method: "GET", path: "/v2/menu?menuCode={menuCode}" },
+    ],
+  },
+  {
+    name: "V2 Account Type Workspace",
+    cases: [
+      { name: "accountTypeWorkspace List", method: "GET", path: "/v2/accountTypeWorkspaces?accountTypeCode={accountTypeCode}&workspaceCode={workspaceCode}&pageNo=0&pagePerRow=50" },
+      { name: "accountTypeWorkspace Info", method: "GET", path: "/v2/accountTypeWorkspace?accountTypeCode={accountTypeCode}&workspaceCode={workspaceCode}" },
+    ],
+  },
+  {
+    name: "V2 Account Type Workspace Menu",
+    cases: [
+      { name: "accountTypeWorkspaceMenu List", method: "GET", path: "/v2/accountTypeWorkspaceMenus?accountTypeCode={accountTypeCode}&workspaceCode={workspaceCode}&menuCode={menuCode}&pageNo=0&pagePerRow=50" },
+      { name: "accountTypeWorkspaceMenu Info", method: "GET", path: "/v2/accountTypeWorkspaceMenu?accountTypeCode={accountTypeCode}&workspaceCode={workspaceCode}&menuCode={menuCode}" },
     ],
   },
   {
@@ -254,6 +439,7 @@ const apiGroups = [
 ];
 
 let token = "";
+let tokenSiteIndex = "";
 let tokenTimer = 0;
 let saveTimer = 0;
 let initialized = false;
@@ -268,6 +454,7 @@ function todayText(offsetDays = 0) {
 function replacements() {
   const tokenId = fields.tokenId.value.trim() || "ssj";
   return {
+    accountTypeCode: fields.accountType.value.trim() || "default",
     attendeeID: "attendee",
     contractNo: "1",
     domainName: "example.com",
@@ -278,6 +465,7 @@ function replacements() {
     index: "1",
     instanceIndex: "1",
     mailObject: "sendNewPassword",
+    menuCode: "home",
     noteID: "note",
     noticeIndex: "1",
     optionKey: "key",
@@ -287,7 +475,7 @@ function replacements() {
     sectorName: "default",
     serverIndex: "server",
     siteID: tokenId,
-    siteIndex: "00000000-0000-0000-0000-000000000000",
+    siteIndex: tokenSiteIndex || "00000000-0000-0000-0000-000000000000",
     siteSecret: fields.siteSecret.value.trim(),
     startDate: todayText(-7),
     token,
@@ -295,6 +483,7 @@ function replacements() {
     userID: tokenId,
     userIndex: "1",
     userRole: "manager",
+    workspaceCode: "default",
   };
 }
 
@@ -326,6 +515,27 @@ function setToken(nextToken) {
   token = nextToken || "";
   fields.tokenPreview.textContent = token ? `token: ${token}` : "token: -";
   fields.sendButton.disabled = !token && selectedCase?.auth !== false;
+  if (!token) {
+    tokenSiteIndex = "";
+    setAccountTypes([]);
+  }
+}
+
+function setAccountTypes(items) {
+  fields.accountType.innerHTML = "";
+  const emptyOption = document.createElement("option");
+  emptyOption.value = "";
+  emptyOption.textContent = items.length > 0 ? "선택" : "-";
+  fields.accountType.appendChild(emptyOption);
+
+  for (const item of items) {
+    const option = document.createElement("option");
+    option.value = item.value;
+    option.textContent = item.label;
+    fields.accountType.appendChild(option);
+  }
+
+  fields.accountType.disabled = items.length === 0;
 }
 
 function writeResponse(value, meta = "-") {
@@ -348,6 +558,69 @@ async function postJson(url, body) {
   return data;
 }
 
+function unwrapData(value) {
+  if (!value || typeof value !== "object") return value;
+  if ("data" in value) return unwrapData(value.data);
+  if ("Main" in value) return unwrapData(value.Main);
+  return value;
+}
+
+function readAccessToken(value) {
+  const data = unwrapData(value);
+  if (!data || typeof data !== "object") return "";
+  return String(
+    data.access_token ??
+      data.accessToken ??
+      data.AccessToken ??
+      data.token ??
+      data.Token ??
+      "",
+  ).trim();
+}
+
+function readSiteIndex(value) {
+  const data = unwrapData(value);
+  if (!data || typeof data !== "object") return "";
+  return String(data.site_index ?? data.siteIndex ?? data.SiteIndex ?? data.token_site_index ?? "").trim();
+}
+
+function readAccountTypes(value) {
+  const data = unwrapData(value);
+  const duties = data && typeof data === "object" ? (data.duties ?? data.Duties ?? []) : [];
+  if (!Array.isArray(duties)) return [];
+
+  return duties.map((item) => {
+    const dutyCode = item?.duty_code ?? item?.dutyCode ?? item?.DutyCode ?? "";
+    const name = item?.name ?? item?.Name ?? "";
+    return {
+      value: String(dutyCode || name).trim(),
+      label: String(name || dutyCode).trim(),
+    };
+  }).filter((item) => item.value || item.label);
+}
+
+async function loadAccountTypesAfterLogin(config, loginData) {
+  const loginToken = readAccessToken(loginData) || token;
+  const siteIndex = readSiteIndex(loginData) || tokenSiteIndex;
+  if (!loginToken) {
+    setAccountTypes([]);
+    return null;
+  }
+
+  setToken(loginToken);
+
+  const result = await postJson("/api/request", {
+    ...config,
+    auth: true,
+    token: loginToken,
+    method: "GET",
+    path: siteIndex ? `/v1/org-sync?siteIndex=${encodeURIComponent(siteIndex)}&mode=3` : "/v1/org-sync?mode=3",
+    body: "",
+  });
+  setAccountTypes(readAccountTypes(result.data));
+  return result;
+}
+
 async function saveConfigWithoutToken() {
   await postJson("/api/config", readConfig());
 }
@@ -365,6 +638,7 @@ async function issueToken() {
 
   try {
     const result = await postJson("/api/token", config);
+    tokenSiteIndex = String(result.token_site_index ?? "").trim();
     setToken(result.token);
     setStatus(`토큰 발급 완료 (${result.token_type || "token"})`, "success");
     writeResponse(result, `token HTTP ${result.status}`);
@@ -402,6 +676,7 @@ async function loadEnv() {
   fields.apiUrl.value = env.api_url || "";
   fields.tokenId.value = env.token_id || "";
   fields.siteSecret.value = env.site_secret || "";
+  tokenSiteIndex = String(env.token_site_index ?? env.site_index ?? env.siteIndex ?? env.SiteIndex ?? "").trim();
   setToken(env.token || "");
 
   if (env.token) {
@@ -441,7 +716,7 @@ function renderCases() {
       button.type = "button";
       button.className = `case-button ${item === selectedCase ? "active" : ""} ${item.method === "GET" ? "" : "mutating"}`.trim();
       button.innerHTML = `
-        <span class="method-badge ${item.method}">${item.method.replace("_POST", "")}</span>
+        <span class="method-badge ${item.method}">${item.method.replace(/^MULTIPART_/, "")}</span>
         <span>
           <span class="case-name">${item.name}</span>
           <span class="case-path">${item.path}</span>
@@ -491,6 +766,19 @@ async function sendRequest() {
       path: fields.path.value.trim(),
       body: fields.body.value,
     });
+
+    if (selectedCase?.name === "Login" && result.ok) {
+      const accountTypesResult = await loadAccountTypesAfterLogin(config, result.data);
+      writeResponse(
+        {
+          login: result.data,
+          accountTypes: accountTypesResult?.data ?? null,
+        },
+        `${result.status} login${accountTypesResult ? `, ${accountTypesResult.status} org-sync` : ""}`.trim(),
+      );
+      return;
+    }
+
     writeResponse(result.data, `${result.status} ${result.statusText || ""}`.trim());
   } catch (error) {
     writeResponse(error.data || { error: error.message }, "request failed");

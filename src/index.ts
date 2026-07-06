@@ -12,12 +12,15 @@ import {
   MailService,
   NoticeService,
   OptionService,
+  OrgSyncService,
   RoomService,
   SectorService,
   ServerService,
   SiteService,
   StatisticsService,
   UserService,
+  V2MenuAccessService,
+  V2RoomService,
 } from "./services";
 
 export class FoxcomApi {
@@ -42,6 +45,7 @@ export class FoxcomApi {
   readonly siteService: SiteService;
   readonly optionService: OptionService;
   readonly noticeService: NoticeService;
+  readonly orgSyncService: OrgSyncService;
   readonly serverService: ServerService;
   readonly sectorService: SectorService;
   readonly contractService: ContractService;
@@ -49,6 +53,8 @@ export class FoxcomApi {
   readonly statisticsService: StatisticsService;
   readonly mailService: MailService;
   readonly groupService: GroupService;
+  readonly v2MenuAccessService: V2MenuAccessService;
+  readonly v2RoomService: V2RoomService;
 
   private constructor(baseUrl: string) {
     ApiClient.initialize(baseUrl);
@@ -59,6 +65,7 @@ export class FoxcomApi {
     this.siteService = new SiteService(this.apiClient);
     this.optionService = new OptionService(this.apiClient);
     this.noticeService = new NoticeService(this.apiClient);
+    this.orgSyncService = new OrgSyncService(this.apiClient);
     this.serverService = new ServerService(this.apiClient);
     this.sectorService = new SectorService(this.apiClient);
     this.contractService = new ContractService(this.apiClient);
@@ -66,5 +73,7 @@ export class FoxcomApi {
     this.statisticsService = new StatisticsService(this.apiClient);
     this.mailService = new MailService(this.apiClient);
     this.groupService = new GroupService(this.apiClient);
+    this.v2MenuAccessService = new V2MenuAccessService(this.apiClient);
+    this.v2RoomService = new V2RoomService(this.apiClient);
   }
 }

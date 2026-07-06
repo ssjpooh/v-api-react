@@ -1,3 +1,17 @@
+[ 2026-07-06 - ssjpooh ]
+[new] OrgSyncService 추가: 조직 동기화 상태/조직도 조회, 동기화, 부분수정, 삭제, 엑셀 업로드 API
+[new] V2RoomService 추가: v2 룸 목록/조회/생성/수정/삭제, 참석자/초대자 관리, 출석, 참석자/룸 로그 API
+[new] V2MenuAccessService 추가: 계정유형, 워크스페이스, 메뉴 및 매핑 조회 API
+[new] 조직 동기화 응답 모델(OrgSync*, OrgTree*) 추가
+[new] userService에 차단 목록/추가/해제, 이메일로 사용자 조회(v2) API 추가
+[new] contractService에 계약 목록 조회 API 추가
+[new] commonService에 v2 토큰 확인(checkTokenByInfo) API 추가
+[new] API 테스트 페이지에 Org Sync/V2 Room/V2 메뉴 접근 그룹, 계정 유형 선택, MULTIPART 메서드 추가
+[new] AGENTS.md에 v1/v2 API 참고 경로와 테스트 페이지 반영 규칙 추가
+[fix] login API를 Authorization 헤더 대신 siteID 쿼리 방식으로 변경
+[fix] user/room 서비스 응답을 타입 모델(UserData, UserListData, RoomAttendees 등)로 파싱하도록 변경
+[fix] 테스트 프록시 서버에 브라우저 자동 열기, 토큰 site_index 저장, MULTIPART 메서드 변환 추가
+
 [ 2026-06-29 - ssjpooh ]
 [new] HTML API 테스트 페이지와 로컬 프록시 테스트 서버 추가
 [new] 실서버 OAuth 토큰 발급 스크립트와 env 예시 파일 추가

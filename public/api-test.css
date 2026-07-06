@@ -151,6 +151,11 @@ label {
   color: var(--muted);
 }
 
+.account-type-row {
+  max-width: 360px;
+  margin-top: 14px;
+}
+
 .workspace {
   display: grid;
   grid-template-columns: 360px minmax(0, 1fr);
@@ -249,7 +254,8 @@ label {
 }
 
 .method-badge.POST,
-.method-badge.MULTIPART_POST {
+.method-badge.MULTIPART_POST,
+.method-badge.MULTIPART_PATCH {
   background: #fff4e5;
   color: #b54708;
 }

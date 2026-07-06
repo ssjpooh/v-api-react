@@ -34,6 +34,15 @@
           <span id="tokenStatus" class="status">설정 읽는 중</span>
           <code id="tokenPreview">token: -</code>
         </div>
+
+        <div class="account-type-row">
+          <label>
+            계정 유형
+            <select id="accountType" disabled>
+              <option value="">-</option>
+            </select>
+          </label>
+        </div>
       </section>
 
       <section class="workspace">
@@ -58,6 +67,7 @@
               <option>PATCH</option>
               <option>DELETE</option>
               <option>MULTIPART_POST</option>
+              <option>MULTIPART_PATCH</option>
             </select>
             <input id="path" spellcheck="false" />
             <button id="sendButton" type="button">요청</button>

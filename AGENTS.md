@@ -1,5 +1,18 @@
 # Repository Agent Instructions
 
+## API Reference Paths
+
+- API 참고 기준 폴더는 현재 `D:\foxgroup\goproject\vwork_0512`를 사용한다.
+- v1 API를 확인할 때는 다음 경로를 참고한다.
+  - handler: `D:\foxgroup\goproject\vwork_0512\src\server\apiServer`
+  - controller: `D:\foxgroup\goproject\vwork_0512\src\server\api`
+  - model(구조체): `D:\foxgroup\goproject\vwork_0512\src\server\apidata`
+- v2 API를 확인할 때는 다음 경로를 참고한다.
+  - handler: `D:\foxgroup\goproject\vwork_0512\src\server\v2\handler`
+  - controller: `D:\foxgroup\goproject\vwork_0512\src\server\v2\controller`
+  - model: `D:\foxgroup\goproject\vwork_0512\src\server\v2\model`
+- API가 신규로 추가되면 `public/api-test.js` 테스트 페이지에도 해당 API 항목을 추가한다.
+
 ## Commit Rules
 
 - 사용자가 커밋을 요청하면 먼저 이 문서를 읽고 커밋 메시지 작성 규칙을 확인한다.
