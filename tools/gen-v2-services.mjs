@@ -78,8 +78,19 @@ for (const file of files) {
   if (routes.length === 0) { console.log(`skip ${domain} (0 routes)`); continue; }
   const cls = `${toPascal(domain)}Service`;
   fs.writeFileSync(path.join(OUT_DIR, `${toCamel(domain)}Service.ts`), genService(domain, routes), "utf8");
-  generated.push({ domain, cls, file: `${toCamel(domain)}Service`, count: routes.length });
+  generated.push({ domain, cls, file: `${toCamel(domain)}Service`, count: routes.length, routes });
 }
+
+// public/api-test.js v2 그룹 프래그먼트 생성 (섹션 교체용)
+const titleize = (s) => s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+const testFragment = generated.map((g) => {
+  const cases = g.routes.map((r) => {
+    const bodyPart = hasBody(r.method) ? ", body: emptyBody" : "";
+    return `      { name: ${JSON.stringify(r.methodName)}, method: ${JSON.stringify(r.method)}, path: ${JSON.stringify(`/v2${r.path}?siteID={siteID}`)}${bodyPart} },`;
+  }).join("\n");
+  return `  {\n    name: "V2 ${titleize(g.domain)}",\n    cases: [\n${cases}\n    ],\n  },`;
+}).join("\n");
+fs.writeFileSync(path.resolve("tools/v2-test-cases.gen.txt"), testFragment + "\n", "utf8");
 
 // v2/index.ts — 서비스 export + createV2Api 팩토리(facade 의 foxApi.v2 네임스페이스)
 const exports = generated.map((g) => `export { ${g.cls} } from "./${g.file}";`).join("\n");

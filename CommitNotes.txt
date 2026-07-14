@@ -1,4 +1,9 @@
 [ 2026-07-14 - ssjpooh ]
+[new] API 테스트 페이지(public/api-test.js) v2 섹션 전면 갱신 — 서버 v2 34개 도메인/167 케이스로 교체(구 부분 v2 섹션 대체). gen-v2-services.mjs 가 테스트 케이스 프래그먼트도 자동 생성
+[fix] 테스트 페이지 Health Check 경로 오타 수정 (/v1/healtz → /v1/healthz)
+
+
+[ 2026-07-14 - ssjpooh ]
 [fix] roomService.postRoomByAdmin 제거 — 서버 v1 /room/post/byAdmin(미사용 관리자 룸생성) 삭제에 따른 stale 참조 정리
 [fix] commonService.healthCheck 경로 오타 수정 (/v1/healtz → /v1/healthz)
 

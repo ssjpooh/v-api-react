@@ -5,3 +5,4 @@ dist/
 !.env.example
 public/env.json
 api-test-server.*.log
+tools/*.gen.txt
