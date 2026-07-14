@@ -1,4 +1,9 @@
 [ 2026-07-14 - ssjpooh ]
+[fix] roomService.postRoomByAdmin 제거 — 서버 v1 /room/post/byAdmin(미사용 관리자 룸생성) 삭제에 따른 stale 참조 정리
+[fix] commonService.healthCheck 경로 오타 수정 (/v1/healtz → /v1/healthz)
+
+
+[ 2026-07-14 - ssjpooh ]
 [new] 2단계 인증(2FA) 로그인 — commonService 에 login(siteID 쿼리·autoLogin·refresh 쿠키·2FA 분기)/twoFactorVerify API 추가
 [new] 2FA 응답 모델 TwoFactorRequiredResult / TwoFactorCodeMismatchResult / TwoFactorExpiredResult / TwoFactorResendResult + RESULT_2FA_* 상수(701/702/703)
 [new] API 테스트 페이지에 Login(Auto Login) / Auth Refresh / Auth Logout 항목 추가

@@ -149,7 +149,7 @@ export class CommonService {
 
   async healthCheck(params: { cancelId?: string }): Promise<FoxApiResult> {
     const { cancelId } = params;
-    const result = await this.apiClient.get("/v1/healtz", { cancelId: cancelId });
+    const result = await this.apiClient.get("/v1/healthz", { cancelId: cancelId });
         return handleResult(result);
   }
 

@@ -37,11 +37,6 @@ export class RoomService {
     return this.apiClient.post(`/v1/room/${userID}?site=${site}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
   }
 
-  async postRoomByAdmin(params: { siteIndex: string; adminID: string; token: string; body: RequestOptions["body"]; cancelId?: string }): Promise<FoxApiResult> {
-    const { siteIndex, adminID, token, body, cancelId } = params;
-    return this.apiClient.post(`/v1/room/post/byAdmin/${siteIndex}/${adminID}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
-  }
-
   async modifyRoom(params: { userID: string; roomCode: string; token: string; body?: RequestOptions["body"]; cancelId?: string }): Promise<FoxApiResult> {
     const { userID, roomCode, token, body, cancelId } = params;
     return this.apiClient.patch(`/v1/room/${userID}/${roomCode}`, { header: {Authorization: `Bearer ${token}`, From: "web"}, body: body, cancelId: cancelId });
