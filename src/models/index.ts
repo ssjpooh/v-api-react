@@ -166,6 +166,106 @@ export class LoginResult {
   }
 }
 
+export class TwoFactorRequiredResult {
+  requires2FA: true = true;
+  twoFactorToken: string = "";
+  emailMasked: string = "";
+  expiresIn: number = 0;
+  resendAfter: number = 0;
+
+  constructor(init: Partial<TwoFactorRequiredResult> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): TwoFactorRequiredResult {
+    const json = asRecord(jsonInput);
+    const value = new TwoFactorRequiredResult();
+    value.twoFactorToken = asString(json["two_factor_token"] ?? json["twoFactorToken"] ?? json["TwoFactorToken"], value.twoFactorToken);
+    value.emailMasked = asString(json["email_masked"] ?? json["emailMasked"] ?? json["EmailMasked"], value.emailMasked);
+    value.expiresIn = asNumber(json["expires_in"] ?? json["expiresIn"] ?? json["ExpiresIn"], value.expiresIn);
+    value.resendAfter = asNumber(json["resend_after"] ?? json["resendAfter"] ?? json["ResendAfter"], value.resendAfter);
+    return withAliases(value, {
+      two_factor_token: "twoFactorToken",
+      TwoFactorToken: "twoFactorToken",
+      email_masked: "emailMasked",
+      EmailMasked: "emailMasked",
+      expires_in: "expiresIn",
+      ExpiresIn: "expiresIn",
+      resend_after: "resendAfter",
+      ResendAfter: "resendAfter",
+    });
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+export class TwoFactorCodeMismatchResult {
+  codeMismatch: true = true;
+  attemptsLeft: number = 0;
+
+  constructor(init: Partial<TwoFactorCodeMismatchResult> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): TwoFactorCodeMismatchResult {
+    const json = asRecord(jsonInput);
+    const value = new TwoFactorCodeMismatchResult();
+    value.attemptsLeft = asNumber(json["attempts_left"] ?? json["attemptsLeft"] ?? json["AttemptsLeft"], value.attemptsLeft);
+    return withAliases(value, {
+      attempts_left: "attemptsLeft",
+      AttemptsLeft: "attemptsLeft",
+    });
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+export class TwoFactorExpiredResult {
+  expired: true = true;
+
+  constructor(init: Partial<TwoFactorExpiredResult> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(): TwoFactorExpiredResult {
+    return new TwoFactorExpiredResult();
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
+export class TwoFactorResendResult {
+  expiresIn: number = 0;
+  resendAfter: number = 0;
+
+  constructor(init: Partial<TwoFactorResendResult> = {}) {
+    Object.assign(this, init);
+  }
+
+  static fromJson(jsonInput: unknown = {}): TwoFactorResendResult {
+    const json = asRecord(jsonInput);
+    const value = new TwoFactorResendResult();
+    value.expiresIn = asNumber(json["expires_in"] ?? json["expiresIn"] ?? json["ExpiresIn"], value.expiresIn);
+    value.resendAfter = asNumber(json["resend_after"] ?? json["resendAfter"] ?? json["ResendAfter"], value.resendAfter);
+    return withAliases(value, {
+      expires_in: "expiresIn",
+      ExpiresIn: "expiresIn",
+      resend_after: "resendAfter",
+      ResendAfter: "resendAfter",
+    });
+  }
+
+  toJson(): AnyRecord {
+    return { ...this };
+  }
+}
+
 
 export class ContractData {
   groupID: string = "";
