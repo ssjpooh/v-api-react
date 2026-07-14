@@ -12,5 +12,3 @@ export { ServerService } from "./serverService";
 export { SiteService } from "./siteService";
 export { StatisticsService } from "./statisticsService";
 export { UserService } from "./userService";
-export { V2MenuAccessService } from "./v2MenuAccessService";
-export { V2RoomService } from "./v2RoomService";

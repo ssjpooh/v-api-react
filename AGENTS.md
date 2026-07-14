@@ -2,15 +2,15 @@
 
 ## API Reference Paths
 
-- API 참고 기준 폴더는 현재 `D:\foxgroup\goproject\vwork_0512`를 사용한다.
+- API 참고 기준 폴더는 `D:\StudioProjects\react-project\vwork` 를 사용한다. (이 repo 가 live 소스 오브 트루스)
 - v1 API를 확인할 때는 다음 경로를 참고한다.
-  - handler: `D:\foxgroup\goproject\vwork_0512\src\server\apiServer`
-  - controller: `D:\foxgroup\goproject\vwork_0512\src\server\api`
-  - model(구조체): `D:\foxgroup\goproject\vwork_0512\src\server\apidata`
+  - handler: `D:\StudioProjects\react-project\vwork\src\server\apiServer`
+  - controller: `D:\StudioProjects\react-project\vwork\src\server\api`
+  - model(구조체): `D:\StudioProjects\react-project\vwork\src\server\apidata`
 - v2 API를 확인할 때는 다음 경로를 참고한다.
-  - handler: `D:\foxgroup\goproject\vwork_0512\src\server\v2\handler`
-  - controller: `D:\foxgroup\goproject\vwork_0512\src\server\v2\controller`
-  - model: `D:\foxgroup\goproject\vwork_0512\src\server\v2\model`
+  - handler: `D:\StudioProjects\react-project\vwork\src\server\v2\handler`
+  - controller: `D:\StudioProjects\react-project\vwork\src\server\v2\controller`
+  - model: `D:\StudioProjects\react-project\vwork\src\server\v2\model`
 - API가 신규로 추가되면 `public/api-test.js` 테스트 페이지에도 해당 API 항목을 추가한다.
 
 ## Commit Rules

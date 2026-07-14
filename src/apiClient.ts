@@ -4,6 +4,8 @@ export type RequestOptions = {
   cancelId?: string;
   header?: Record<string, string>;
   body?: BodyInit | Record<string, unknown> | unknown[] | null;
+  // 쿠키 전송 정책 — 자동 로그인(refresh 쿠키) 등 크로스 사이트 쿠키가 필요하면 "include"
+  credentials?: RequestCredentials;
 };
 
 export type FoxApiResult<T = unknown> = {
@@ -44,6 +46,10 @@ export class ApiClient {
     return this.request("DELETE", path, options);
   }
 
+  put(path: string, options: RequestOptions = {}): Promise<FoxApiResult> {
+    return this.request("PUT", path, options);
+  }
+
   async multipartPost(path: string, options: RequestOptions = {}): Promise<FoxApiResult> {
     const form = new FormData();
     const body = options.body;
@@ -79,6 +85,7 @@ export class ApiClient {
         headers: options.header,
         body: this.resolveBody(options.body),
         signal: controller.signal,
+        credentials: options.credentials,
       });
       const data = await this.parseResponse(response);
 

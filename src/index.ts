@@ -2,8 +2,10 @@ export * from "./apiClient";
 export * from "./resultUtils";
 export * from "./models";
 export * from "./services";
+export * as v2 from "./services/v2";
 
 import { ApiClient } from "./apiClient";
+import { createV2Api, type V2Api } from "./services/v2";
 import {
   CommonService,
   ContractService,
@@ -19,8 +21,6 @@ import {
   SiteService,
   StatisticsService,
   UserService,
-  V2MenuAccessService,
-  V2RoomService,
 } from "./services";
 
 export class FoxcomApi {
@@ -53,8 +53,8 @@ export class FoxcomApi {
   readonly statisticsService: StatisticsService;
   readonly mailService: MailService;
   readonly groupService: GroupService;
-  readonly v2MenuAccessService: V2MenuAccessService;
-  readonly v2RoomService: V2RoomService;
+  /** v2 API 네임스페이스 — 서버 v2 컨트롤러와 1:1 (foxApi.v2.notices, foxApi.v2.user …) */
+  readonly v2: V2Api;
 
   private constructor(baseUrl: string) {
     ApiClient.initialize(baseUrl);
@@ -73,7 +73,6 @@ export class FoxcomApi {
     this.statisticsService = new StatisticsService(this.apiClient);
     this.mailService = new MailService(this.apiClient);
     this.groupService = new GroupService(this.apiClient);
-    this.v2MenuAccessService = new V2MenuAccessService(this.apiClient);
-    this.v2RoomService = new V2RoomService(this.apiClient);
+    this.v2 = createV2Api(this.apiClient);
   }
 }
