@@ -54,4 +54,10 @@ export class OptionsService {
     const { token, siteId, query, cancelId } = params;
     return this.apiClient.get(v2Path(siteId, "/option", query), { header: authHeader(token), cancelId });
   }
+
+  /** GET /baseOptionItems */
+  async getBaseOptionItems(params: V2BaseParams): Promise<FoxApiResult> {
+    const { token, siteId, query, cancelId } = params;
+    return this.apiClient.get(v2Path(siteId, "/baseOptionItems", query), { header: authHeader(token), cancelId });
+  }
 }

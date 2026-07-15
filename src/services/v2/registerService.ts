@@ -12,4 +12,22 @@ export class RegisterService {
     const { token, siteId, query, body, cancelId } = params;
     return this.apiClient.post(v2Path(siteId, "/register", query), { header: authHeader(token), body, cancelId });
   }
+
+  /** POST /register/emailChallenge */
+  async signupEmailChallenge(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.post(v2Path(siteId, "/register/emailChallenge", query), { header: authHeader(token), body, cancelId });
+  }
+
+  /** POST /register/verifyEmail */
+  async signupVerifyEmail(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.post(v2Path(siteId, "/register/verifyEmail", query), { header: authHeader(token), body, cancelId });
+  }
+
+  /** POST /register/resendEmail */
+  async signupResendEmail(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.post(v2Path(siteId, "/register/resendEmail", query), { header: authHeader(token), body, cancelId });
+  }
 }
