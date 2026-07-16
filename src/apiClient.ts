@@ -4,7 +4,7 @@ export type RequestOptions = {
   cancelId?: string;
   header?: Record<string, string>;
   body?: BodyInit | Record<string, unknown> | unknown[] | null;
-  // 쿠키 전송 정책 — 자동 로그인(refresh 쿠키) 등 크로스 사이트 쿠키가 필요하면 "include"
+  // 쿠키 전송 정책 — 크로스 사이트 쿠키가 필요한 요청에 한해 "include"
   credentials?: RequestCredentials;
 };
 

@@ -32,11 +32,9 @@ function readCode(value: unknown): number {
 export class CommonService {
   constructor(private readonly apiClient: ApiClient) {}
 
-  async login(params: { token: string; siteID?: string; autoLogin?: boolean; body?: RequestOptions["body"]; credentials?: RequestCredentials; cancelId?: string }): Promise<FoxApiResult<LoginResponse>> {
-    const { siteID, autoLogin, body, credentials, cancelId } = params;
-    const path = buildPath("/v1/login", { siteID, autoLogin });
-    // autoLogin=true 응답의 refresh 쿠키(vwork_refresh, HttpOnly)를 받으려면
-    // 크로스 사이트 배포에서는 credentials: "include" 필요 (same-origin 은 기본값으로 충분)
+  async login(params: { token: string; siteID?: string; body?: RequestOptions["body"]; credentials?: RequestCredentials; cancelId?: string }): Promise<FoxApiResult<LoginResponse>> {
+    const { siteID, body, credentials, cancelId } = params;
+    const path = buildPath("/v1/login", { siteID });
     const result = await this.apiClient.post(path, { header: { From: "login" }, body: body, credentials: credentials, cancelId: cancelId });
         return handleResult(result, (json) => {
       const source = unwrapResponse(json);
@@ -81,21 +79,6 @@ export class CommonService {
         ? TwoFactorExpiredResult.fromJson()
         : TwoFactorResendResult.fromJson(source);
     });
-  }
-
-  // 자동 로그인 — refresh 쿠키로 세션 복구 + access token 재발급 (응답 = login 과 동일한 LoginResult)
-  // 브라우저가 HttpOnly 쿠키를 자동 전송하므로 파라미터 불필요. 401 이면 로그인 화면으로 이동
-  async authRefresh(params: { credentials?: RequestCredentials; cancelId?: string } = {}): Promise<FoxApiResult<LoginResult>> {
-    const { credentials, cancelId } = params;
-    const result = await this.apiClient.post("/v1/auth/refresh", { header: { From: "authRefresh" }, credentials: credentials, cancelId: cancelId });
-        return handleResult(result, (json) => LoginResult.fromJson(json));
-  }
-
-  // 자동 로그인 — 현재 기기 refresh 세션 폐기 + 쿠키 삭제 (access token 로그아웃은 기존 logout 별도 호출)
-  async authLogout(params: { credentials?: RequestCredentials; cancelId?: string } = {}): Promise<FoxApiResult> {
-    const { credentials, cancelId } = params;
-    const result = await this.apiClient.post("/v1/auth/logout", { header: { From: "authLogout" }, credentials: credentials, cancelId: cancelId });
-        return handleResult(result);
   }
 
   async logout(params: { token?: string; body?: RequestOptions["body"]; userID?: string; siteIndex?: string; cancelId?: string }): Promise<FoxApiResult> {

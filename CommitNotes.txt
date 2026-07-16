@@ -1,3 +1,8 @@
+[ 2026-07-16 - ssjpooh ]
+[fix] 자동 로그인 refresh 세션 API 제거 — 서버 폐지(POST /v1/auth/refresh·/v1/auth/logout 라우트 삭제) 대응: commonService.authRefresh()/authLogout() 삭제, login() 의 autoLogin 파라미터 제거 (자동 로그인은 웹 앱의 클라이언트 저장(Web Storage) 방식으로 전환)
+[fix] API 테스트 페이지에서 Login(Auto Login)/Auth Refresh/Auth Logout 항목 제거
+
+
 [ 2026-07-14 - ssjpooh ]
 [new] API 테스트 페이지(public/api-test.js) v2 섹션 전면 갱신 — 서버 v2 34개 도메인/167 케이스로 교체(구 부분 v2 섹션 대체). gen-v2-services.mjs 가 테스트 케이스 프래그먼트도 자동 생성
 [fix] 테스트 페이지 Health Check 경로 오타 수정 (/v1/healtz → /v1/healthz)

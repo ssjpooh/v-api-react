@@ -27,9 +27,6 @@ const apiGroups = [
     cases: [
       { name: "OAuth Token", method: "POST", path: "/v1/oauth/token", auth: false, body: "token_id={tokenID}&site_secret={siteSecret}", description: "토큰 발급은 상단 버튼으로도 실행됩니다." },
       { name: "Login", method: "POST", path: "/v1/login?siteID={siteID}", body: jsonBody({ userID: "{userID}", Password: "" }) },
-      { name: "Login (Auto Login)", method: "POST", path: "/v1/login?siteID={siteID}&autoLogin=true", body: jsonBody({ userID: "{userID}", Password: "" }), description: "자동 로그인 — 응답에 refresh 쿠키(vwork_refresh, HttpOnly, Path=/v1/auth) 발급" },
-      { name: "Auth Refresh", method: "POST", path: "/v1/auth/refresh", auth: false, body: emptyBody, description: "refresh 쿠키로 세션 복구 + access token 재발급 (쿠키 없으면 401)" },
-      { name: "Auth Logout", method: "POST", path: "/v1/auth/logout", auth: false, body: emptyBody, description: "현재 기기 refresh 세션 폐기 + 쿠키 삭제" },
       { name: "Logout", method: "POST", path: "/v1/logout", body: jsonBody({ UserID: "{userID}", Token: "{token}", SiteIndex: "{siteIndex}" }) },
       { name: "Check Token By ID", method: "GET", path: "/v1/checkTokenByID/{userID}", auth: false },
       { name: "Is Exist Room", method: "GET", path: "/v1/isExistRoom/{roomCode}", auth: false },
