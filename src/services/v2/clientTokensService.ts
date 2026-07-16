@@ -18,10 +18,4 @@ export class ClientTokensService {
     const { token, siteId, query, cancelId } = params;
     return this.apiClient.get(v2Path(siteId, "/checkTokenInfo", query), { header: authHeader(token), cancelId });
   }
-
-  /** GET /checkTokenByInfo */
-  async checkTokenByInfo(params: V2BaseParams): Promise<FoxApiResult> {
-    const { token, siteId, query, cancelId } = params;
-    return this.apiClient.get(v2Path(siteId, "/checkTokenByInfo", query), { header: authHeader(token), cancelId });
-  }
 }

@@ -246,7 +246,6 @@ const apiGroups = [
     cases: [
       { name: "createClientToken", method: "POST", path: "/v2/client/tokens?siteID={siteID}", body: emptyBody },
       { name: "checkTokenInfo", method: "GET", path: "/v2/checkTokenInfo?siteID={siteID}" },
-      { name: "checkTokenByInfo", method: "GET", path: "/v2/checkTokenByInfo?siteID={siteID}" },
     ],
   },
   {

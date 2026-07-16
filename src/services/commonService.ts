@@ -94,13 +94,6 @@ export class CommonService {
         return handleResult(result, (json) => LoginResult.fromJson(json));
   }
 
-  async checkTokenByInfo(params: { email: string; cancelId?: string }): Promise<FoxApiResult<LoginResult>> {
-    const { email, cancelId } = params;
-    const path = buildPath("/v2/checkTokenByInfo", { email });
-    const result = await this.apiClient.get(path, { cancelId: cancelId });
-        return handleResult(result, (json) => LoginResult.fromJson(json));
-  }
-
   async isExistRoom(params: { roomCode: string; cancelId?: string }): Promise<FoxApiResult> {
     const { roomCode, cancelId } = params;
     const result = await this.apiClient.get(`/v1/isExistRoom/${roomCode}`, { cancelId: cancelId });

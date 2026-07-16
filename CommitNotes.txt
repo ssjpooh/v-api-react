@@ -1,4 +1,8 @@
 [ 2026-07-16 - ssjpooh ]
+[del] checkTokenByInfo 제거 — 서버 GET /v2/checkTokenByInfo(무인증 토큰 발급 라우트) 폐쇄에 따라 commonService.checkTokenByInfo / clientTokensService.checkTokenByInfo 및 API 테스트 페이지 항목 삭제
+
+
+[ 2026-07-16 - ssjpooh ]
 [new] 가입 이메일 인증 상태 코드 상수 export — RESULT_SIGNUP_EMAIL_NOT_VERIFIED(704)/CODE_MISMATCH(705)/CODE_EXPIRED(706)/EMAIL_ALREADY_REGISTERED(707, 서버 신규 — 이미 가입된 이메일이면 emailChallenge/register 가 코드 발송 없이 707 반환) — services/v2/shared.ts 정의 + v2 index export (registerService.ts 는 자동생성이라 미수정)
 
 
