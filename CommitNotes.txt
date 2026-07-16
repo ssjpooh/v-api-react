@@ -1,4 +1,8 @@
 [ 2026-07-16 - ssjpooh ]
+[new] 가입 이메일 인증 상태 코드 상수 export — RESULT_SIGNUP_EMAIL_NOT_VERIFIED(704)/CODE_MISMATCH(705)/CODE_EXPIRED(706)/EMAIL_ALREADY_REGISTERED(707, 서버 신규 — 이미 가입된 이메일이면 emailChallenge/register 가 코드 발송 없이 707 반환) — services/v2/shared.ts 정의 + v2 index export (registerService.ts 는 자동생성이라 미수정)
+
+
+[ 2026-07-16 - ssjpooh ]
 [fix] 자동 로그인 refresh 세션 API 제거 — 서버 폐지(POST /v1/auth/refresh·/v1/auth/logout 라우트 삭제) 대응: commonService.authRefresh()/authLogout() 삭제, login() 의 autoLogin 파라미터 제거 (자동 로그인은 웹 앱의 클라이언트 저장(Web Storage) 방식으로 전환)
 [fix] API 테스트 페이지에서 Login(Auto Login)/Auth Refresh/Auth Logout 항목 제거
 

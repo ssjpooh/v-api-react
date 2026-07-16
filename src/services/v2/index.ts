@@ -34,6 +34,12 @@ import { SiteService } from "./siteService";
 import { UserService } from "./userService";
 import { WorkspacesService } from "./workspacesService";
 
+export {
+  RESULT_SIGNUP_EMAIL_NOT_VERIFIED,
+  RESULT_SIGNUP_CODE_MISMATCH,
+  RESULT_SIGNUP_CODE_EXPIRED,
+  RESULT_SIGNUP_EMAIL_ALREADY_REGISTERED,
+} from "./shared";
 export { AccountTypesService } from "./accountTypesService";
 export { AccountTypeWorkspacesService } from "./accountTypeWorkspacesService";
 export { AccountTypeWorkspaceMenusService } from "./accountTypeWorkspaceMenusService";
