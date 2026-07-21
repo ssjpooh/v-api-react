@@ -3127,6 +3127,8 @@ export class UserListData {
 export class UserData {
   groupID: string = "";
   siteIndex: string = "";
+  siteID: string = "";
+  siteName: string = "";
   userIndex: string = "";
   userID: string = "";
   password: string = "";
@@ -3180,6 +3182,8 @@ export class UserData {
     const value = new UserData();
     value.groupID = asString(pick(json, "GroupID", "groupID", "groupId", "group_id"), value.groupID);
     value.siteIndex = asString(pick(json, "SiteIndex", "siteIndex", "site_index"), value.siteIndex);
+    value.siteID = asString(pick(json, "SiteID", "siteID", "siteId", "site_id"), value.siteID);
+    value.siteName = asString(pick(json, "SiteName", "siteName", "site_name"), value.siteName);
     value.userIndex = asString(pick(json, "UserIndex", "userIndex", "user_index", "Index", "index"), value.userIndex);
     value.userID = asString(pick(json, "UserID", "userID", "userId", "user_id", "id"), value.userID);
     value.password = asString(pick(json, "Password", "password"), value.password);
@@ -3228,6 +3232,10 @@ export class UserData {
       group_id: "groupID",
       SiteIndex: "siteIndex",
       site_index: "siteIndex",
+      SiteID: "siteID",
+      site_id: "siteID",
+      SiteName: "siteName",
+      site_name: "siteName",
       UserIndex: "userIndex",
       user_index: "userIndex",
       UserID: "userID",
