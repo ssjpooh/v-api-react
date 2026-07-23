@@ -3172,6 +3172,7 @@ export class UserData {
   dutyCode: string = "";
   dutyName: string = "";
   dutyEngName: string = "";
+  accountType: string = "";
 
   constructor(init: Partial<UserData> = {}) {
     Object.assign(this, init);
@@ -3227,6 +3228,7 @@ export class UserData {
     value.dutyCode = asString(pick(json, "DutyCode", "dutyCode", "duty_code"), value.dutyCode);
     value.dutyName = asString(pick(json, "DutyName", "dutyName", "duty_name"), value.dutyName);
     value.dutyEngName = asString(pick(json, "DutyEngName", "dutyEngName", "duty_eng_name"), value.dutyEngName);
+    value.accountType = asString(pick(json, "AccountType", "accountType", "account_type"), value.accountType);
     return withAliases(value, {
       GroupID: "groupID",
       group_id: "groupID",
@@ -3310,6 +3312,8 @@ export class UserData {
       duty_name: "dutyName",
       DutyEngName: "dutyEngName",
       duty_eng_name: "dutyEngName",
+      AccountType: "accountType",
+      account_type: "accountType",
     });
   }
 
@@ -3653,6 +3657,7 @@ export interface UserData {
   DutyCode: string;
   DutyName: string;
   DutyEngName: string;
+  AccountType: string;
 }
 
 export type OrgSyncRequest = {

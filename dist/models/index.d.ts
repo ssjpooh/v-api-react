@@ -1087,6 +1087,7 @@ export declare class UserData {
     dutyCode: string;
     dutyName: string;
     dutyEngName: string;
+    accountType: string;
     constructor(init?: Partial<UserData>);
     static fromJson(jsonInput?: unknown): UserData;
     static fromJsonList(jsonList: unknown): UserData[];
@@ -1402,6 +1403,7 @@ export interface UserData {
     DutyCode: string;
     DutyName: string;
     DutyEngName: string;
+    AccountType: string;
 }
 export type OrgSyncRequest = {
     departments?: OrgSyncDepartmentItem[];
