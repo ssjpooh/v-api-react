@@ -13,6 +13,12 @@ export class AccountTypesService {
     return this.apiClient.get(v2Path(siteId, "/accountTypes", query), { header: authHeader(token), cancelId });
   }
 
+  /** GET /accountTypeUserCounts */
+  async listAccountTypeUserCounts(params: V2BaseParams): Promise<FoxApiResult> {
+    const { token, siteId, query, cancelId } = params;
+    return this.apiClient.get(v2Path(siteId, "/accountTypeUserCounts", query), { header: authHeader(token), cancelId });
+  }
+
   /** GET /accountType */
   async getAccountType(params: V2BaseParams): Promise<FoxApiResult> {
     const { token, siteId, query, cancelId } = params;

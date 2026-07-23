@@ -1,4 +1,8 @@
 [ 2026-07-23 - ssjpooh ]
+[new] AccountTypesService에 listAccountTypeUserCounts 추가 — GET /accountTypeUserCounts (계정유형별 소속 사용자 수 조회, siteIndex 쿼리 파라미터). src 변경에 따른 dist 재빌드 동반
+
+
+[ 2026-07-23 - ssjpooh ]
 [new] 빌드 산출물 dist를 저장소에 포함 — git 의존성 설치 시 빌드 스크립트가 필요 없도록 개선 (pnpm allowBuilds 승인 불필요). src 변경 시 pnpm build 후 dist를 함께 커밋한다
 [fix] prepare 스크립트 제거(설치 시 자동 빌드 폐지)와 .gitignore에서 dist 제외 해제, README 설치 안내 갱신
 

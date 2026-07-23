@@ -8,6 +8,8 @@ export declare class AccountTypesService {
     constructor(apiClient: ApiClient);
     /** GET /accountTypes */
     listAccountTypes(params: V2BaseParams): Promise<FoxApiResult>;
+    /** GET /accountTypeUserCounts */
+    listAccountTypeUserCounts(params: V2BaseParams): Promise<FoxApiResult>;
     /** GET /accountType */
     getAccountType(params: V2BaseParams): Promise<FoxApiResult>;
     /** POST /accountType */

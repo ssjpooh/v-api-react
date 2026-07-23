@@ -12,6 +12,11 @@ export class AccountTypesService {
         const { token, siteId, query, cancelId } = params;
         return this.apiClient.get(v2Path(siteId, "/accountTypes", query), { header: authHeader(token), cancelId });
     }
+    /** GET /accountTypeUserCounts */
+    async listAccountTypeUserCounts(params) {
+        const { token, siteId, query, cancelId } = params;
+        return this.apiClient.get(v2Path(siteId, "/accountTypeUserCounts", query), { header: authHeader(token), cancelId });
+    }
     /** GET /accountType */
     async getAccountType(params) {
         const { token, siteId, query, cancelId } = params;
