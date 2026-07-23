@@ -4,7 +4,9 @@ TypeScript client converted from `foxcom_api` for React/browser projects.
 
 ## Install from GitHub
 
-Consumers do not need to clone this repository next to their application. Add the Git repository as a dependency and the package will build `dist` automatically during installation.
+Consumers do not need to clone this repository next to their application. Add the Git repository as a dependency. The prebuilt `dist` output is committed to the repository, so installation requires no build scripts (works under pnpm's build-script allowlist without any `allowBuilds` entry).
+
+> Maintainers: run `pnpm build` and commit the regenerated `dist/` together with any `src/` change — consumers install whatever `dist` is committed.
 
 ```json
 {

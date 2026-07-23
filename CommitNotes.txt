@@ -1,4 +1,9 @@
 [ 2026-07-23 - ssjpooh ]
+[new] 빌드 산출물 dist를 저장소에 포함 — git 의존성 설치 시 빌드 스크립트가 필요 없도록 개선 (pnpm allowBuilds 승인 불필요). src 변경 시 pnpm build 후 dist를 함께 커밋한다
+[fix] prepare 스크립트 제거(설치 시 자동 빌드 폐지)와 .gitignore에서 dist 제외 해제, README 설치 안내 갱신
+
+
+[ 2026-07-23 - ssjpooh ]
 [new] GitHub 패키지 설치 지원 — package.json에 repository(git+https://github.com/ssjpooh/v-api-react.git)·prepare(설치 시 dist 자동 빌드)·exports(패키지 루트 import 및 dist 하위 경로 호환) 추가, README에 GitHub 설치 가이드(브랜치·태그·커밋 SHA 고정 방법) 추가
 
 
