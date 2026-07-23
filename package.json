@@ -2,14 +2,27 @@
   "name": "v-api-react",
   "version": "1.0.0",
   "description": "React-ready TypeScript client converted from foxcom_api.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ssjpooh/v-api-react.git"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "prepare": "pnpm run build",
     "convert": "node tools/convert-foxcom-api.mjs",
     "dev": "node tools/api-test-server.mjs",
     "token": "node tools/request-token-from-env.mjs"

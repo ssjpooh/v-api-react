@@ -1,3 +1,7 @@
+[ 2026-07-23 - ssjpooh ]
+[new] GitHub 패키지 설치 지원 — package.json에 repository(git+https://github.com/ssjpooh/v-api-react.git)·prepare(설치 시 dist 자동 빌드)·exports(패키지 루트 import 및 dist 하위 경로 호환) 추가, README에 GitHub 설치 가이드(브랜치·태그·커밋 SHA 고정 방법) 추가
+
+
 [ 2026-07-16 - ssjpooh ]
 [del] checkTokenByInfo 제거 — 서버 GET /v2/checkTokenByInfo(무인증 토큰 발급 라우트) 폐쇄에 따라 commonService.checkTokenByInfo / clientTokensService.checkTokenByInfo 및 API 테스트 페이지 항목 삭제
 

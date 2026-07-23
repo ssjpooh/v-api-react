@@ -2,6 +2,36 @@
 
 TypeScript client converted from `foxcom_api` for React/browser projects.
 
+## Install from GitHub
+
+Consumers do not need to clone this repository next to their application. Add the Git repository as a dependency and the package will build `dist` automatically during installation.
+
+```json
+{
+  "dependencies": {
+    "v-api-react": "git+https://github.com/ssjpooh/v-api-react.git#main"
+  }
+}
+```
+
+Then install the application dependencies.
+
+```bash
+pnpm install
+```
+
+For reproducible installations, replace `main` with a release tag or commit SHA.
+
+```json
+{
+  "dependencies": {
+    "v-api-react": "git+https://github.com/ssjpooh/v-api-react.git#v1.0.0"
+  }
+}
+```
+
+The repository must be accessible from the developer or CI environment. Private repositories require GitHub authentication configured outside `package.json`.
+
 ```ts
 import { FoxcomApi } from "v-api-react";
 
