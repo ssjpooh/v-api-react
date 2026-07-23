@@ -42,4 +42,16 @@ export class BrandingService {
     const { token, siteId, query, body, cancelId } = params;
     return this.apiClient.post(v2Path(siteId, "/branding-file", query), { header: authHeader(token), body, cancelId });
   }
+
+  /** GET /branding-file/base */
+  async getBaseBrandingFileURL(params: V2BaseParams): Promise<FoxApiResult> {
+    const { token, siteId, query, cancelId } = params;
+    return this.apiClient.get(v2Path(siteId, "/branding-file/base", query), { header: authHeader(token), cancelId });
+  }
+
+  /** POST /branding-file/base */
+  async uploadBaseBrandingFile(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.post(v2Path(siteId, "/branding-file/base", query), { header: authHeader(token), body, cancelId });
+  }
 }

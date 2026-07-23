@@ -12,4 +12,28 @@ export class MailService {
     const { token, siteId, query, body, cancelId } = params;
     return this.apiClient.post(v2Path(siteId, "/sendMails", query), { header: authHeader(token), body, cancelId });
   }
+
+  /** GET /mail/unsubscribe */
+  async unsubscribeMail(params: V2BaseParams): Promise<FoxApiResult> {
+    const { token, siteId, query, cancelId } = params;
+    return this.apiClient.get(v2Path(siteId, "/mail/unsubscribe", query), { header: authHeader(token), cancelId });
+  }
+
+  /** GET /mail/resubscribe */
+  async resubscribeMail(params: V2BaseParams): Promise<FoxApiResult> {
+    const { token, siteId, query, cancelId } = params;
+    return this.apiClient.get(v2Path(siteId, "/mail/resubscribe", query), { header: authHeader(token), cancelId });
+  }
+
+  /** GET /mail/unsubscribes */
+  async listMailUnsubscribes(params: V2BaseParams): Promise<FoxApiResult> {
+    const { token, siteId, query, cancelId } = params;
+    return this.apiClient.get(v2Path(siteId, "/mail/unsubscribes", query), { header: authHeader(token), cancelId });
+  }
+
+  /** DELETE /mail/unsubscribe */
+  async removeMailUnsubscribe(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.delete(v2Path(siteId, "/mail/unsubscribe", query), { header: authHeader(token), body, cancelId });
+  }
 }

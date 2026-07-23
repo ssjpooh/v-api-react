@@ -18,4 +18,8 @@ export declare class BrandingService {
     getBrandingFileURL(params: V2BaseParams): Promise<FoxApiResult>;
     /** POST /branding-file */
     uploadBrandingFile(params: V2BodyParams): Promise<FoxApiResult>;
+    /** GET /branding-file/base */
+    getBaseBrandingFileURL(params: V2BaseParams): Promise<FoxApiResult>;
+    /** POST /branding-file/base */
+    uploadBaseBrandingFile(params: V2BodyParams): Promise<FoxApiResult>;
 }

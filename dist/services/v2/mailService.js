@@ -12,4 +12,24 @@ export class MailService {
         const { token, siteId, query, body, cancelId } = params;
         return this.apiClient.post(v2Path(siteId, "/sendMails", query), { header: authHeader(token), body, cancelId });
     }
+    /** GET /mail/unsubscribe */
+    async unsubscribeMail(params) {
+        const { token, siteId, query, cancelId } = params;
+        return this.apiClient.get(v2Path(siteId, "/mail/unsubscribe", query), { header: authHeader(token), cancelId });
+    }
+    /** GET /mail/resubscribe */
+    async resubscribeMail(params) {
+        const { token, siteId, query, cancelId } = params;
+        return this.apiClient.get(v2Path(siteId, "/mail/resubscribe", query), { header: authHeader(token), cancelId });
+    }
+    /** GET /mail/unsubscribes */
+    async listMailUnsubscribes(params) {
+        const { token, siteId, query, cancelId } = params;
+        return this.apiClient.get(v2Path(siteId, "/mail/unsubscribes", query), { header: authHeader(token), cancelId });
+    }
+    /** DELETE /mail/unsubscribe */
+    async removeMailUnsubscribe(params) {
+        const { token, siteId, query, body, cancelId } = params;
+        return this.apiClient.delete(v2Path(siteId, "/mail/unsubscribe", query), { header: authHeader(token), body, cancelId });
+    }
 }
