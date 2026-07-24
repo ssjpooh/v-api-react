@@ -31,6 +31,7 @@ import { ServerService } from "./serverService";
 import { ServerDomainsService } from "./serverDomainsService";
 import { SiteService } from "./siteService";
 import { UserService } from "./userService";
+import { UserOptionsService } from "./userOptionsService";
 import { WorkspacesService } from "./workspacesService";
 export { RESULT_SIGNUP_EMAIL_NOT_VERIFIED, RESULT_SIGNUP_CODE_MISMATCH, RESULT_SIGNUP_CODE_EXPIRED, RESULT_SIGNUP_EMAIL_ALREADY_REGISTERED, } from "./shared";
 export { AccountTypesService } from "./accountTypesService";
@@ -66,6 +67,7 @@ export { ServerService } from "./serverService";
 export { ServerDomainsService } from "./serverDomainsService";
 export { SiteService } from "./siteService";
 export { UserService } from "./userService";
+export { UserOptionsService } from "./userOptionsService";
 export { WorkspacesService } from "./workspacesService";
 /** foxApi.v2.* 네임스페이스를 구성한다. 서버 v2 컨트롤러와 1:1. 자동 생성. */
 export function createV2Api(apiClient) {
@@ -103,6 +105,7 @@ export function createV2Api(apiClient) {
         serverDomains: new ServerDomainsService(apiClient),
         site: new SiteService(apiClient),
         user: new UserService(apiClient),
+        userOptions: new UserOptionsService(apiClient),
         workspaces: new WorkspacesService(apiClient),
     };
 }
