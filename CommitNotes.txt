@@ -1,5 +1,17 @@
+[ 2026-07-24 - ssjpooh ]
+[new] UserOptionsService 추가 — 사용자 개인 옵션(즐겨찾기·대시보드 위젯·알림 설정 등 UI 설정) v2 API 미러. 서버 apiHandler_user_options.go 대응: GET /myOptions(names 콤마구분 지정 시 해당 옵션만, 미지정 시 전체) / PATCH /myOption(name 단위 전체 교체 upsert, last-write-wins) / DELETE /myOption(name 단건 삭제, 멱등) — foxApi.v2.userOptions. src 변경에 따른 dist 재빌드 동반
+
+
 [ 2026-07-23 - ssjpooh ]
 [new] AccountTypesService에 listAccountTypeUserCounts 추가 — GET /accountTypeUserCounts (계정유형별 소속 사용자 수 조회, siteIndex 쿼리 파라미터). src 변경에 따른 dist 재빌드 동반
+
+
+[ 2026-07-23 - ssjpooh ]
+[new] UserData 모델에 accountType 추가 — vwork 사용자 API 응답 확장(AccountType/account_type) 미러. src 변경에 따른 dist 재빌드 동반
+
+
+[ 2026-07-23 - ssjpooh ]
+[new] v2 branding/mail 서비스 메서드 보강 — 서버 apiHandler_branding.go / apiHandler_mail.go 대응 (gen-v2-services.mjs 재생성 결과와 일치)
 
 
 [ 2026-07-23 - ssjpooh ]
