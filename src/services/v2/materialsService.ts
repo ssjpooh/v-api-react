@@ -43,6 +43,18 @@ export class MaterialsService {
     return this.apiClient.post(v2Path(siteId, "/material-video-url", query), { header: authHeader(token), body, cancelId });
   }
 
+  /** POST /material-upload-url */
+  async issueMaterialUploadURL(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.post(v2Path(siteId, "/material-upload-url", query), { header: authHeader(token), body, cancelId });
+  }
+
+  /** POST /material-commit */
+  async commitMaterialUpload(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.post(v2Path(siteId, "/material-commit", query), { header: authHeader(token), body, cancelId });
+  }
+
   /** PATCH /material */
   async patchMaterial(params: V2BodyParams): Promise<FoxApiResult> {
     const { token, siteId, query, body, cancelId } = params;

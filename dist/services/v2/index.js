@@ -26,6 +26,7 @@ import { RoomService } from "./roomService";
 import { RoomAttendeesService } from "./roomAttendeesService";
 import { RoomAttendeeLogsService } from "./roomAttendeeLogsService";
 import { RoomLogsService } from "./roomLogsService";
+import { SchedulesService } from "./schedulesService";
 import { SectorService } from "./sectorService";
 import { ServerService } from "./serverService";
 import { ServerDomainsService } from "./serverDomainsService";
@@ -62,6 +63,7 @@ export { RoomService } from "./roomService";
 export { RoomAttendeesService } from "./roomAttendeesService";
 export { RoomAttendeeLogsService } from "./roomAttendeeLogsService";
 export { RoomLogsService } from "./roomLogsService";
+export { SchedulesService } from "./schedulesService";
 export { SectorService } from "./sectorService";
 export { ServerService } from "./serverService";
 export { ServerDomainsService } from "./serverDomainsService";
@@ -100,6 +102,7 @@ export function createV2Api(apiClient) {
         roomAttendees: new RoomAttendeesService(apiClient),
         roomAttendeeLogs: new RoomAttendeeLogsService(apiClient),
         roomLogs: new RoomLogsService(apiClient),
+        schedules: new SchedulesService(apiClient),
         sector: new SectorService(apiClient),
         server: new ServerService(apiClient),
         serverDomains: new ServerDomainsService(apiClient),

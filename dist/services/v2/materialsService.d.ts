@@ -18,6 +18,10 @@ export declare class MaterialsService {
     createVideoFileMaterial(params: V2BodyParams): Promise<FoxApiResult>;
     /** POST /material-video-url */
     createVideoURLMaterial(params: V2BodyParams): Promise<FoxApiResult>;
+    /** POST /material-upload-url */
+    issueMaterialUploadURL(params: V2BodyParams): Promise<FoxApiResult>;
+    /** POST /material-commit */
+    commitMaterialUpload(params: V2BodyParams): Promise<FoxApiResult>;
     /** PATCH /material */
     patchMaterial(params: V2BodyParams): Promise<FoxApiResult>;
     /** DELETE /material */

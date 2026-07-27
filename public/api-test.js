@@ -316,6 +316,8 @@ const apiGroups = [
       { name: "createDocMaterial", method: "POST", path: "/v2/material-doc?siteID={siteID}", body: emptyBody },
       { name: "createVideoFileMaterial", method: "POST", path: "/v2/material-video-file?siteID={siteID}", body: emptyBody },
       { name: "createVideoURLMaterial", method: "POST", path: "/v2/material-video-url?siteID={siteID}", body: emptyBody },
+      { name: "issueMaterialUploadURL", method: "POST", path: "/v2/material-upload-url?siteID={siteID}", body: emptyBody },
+      { name: "commitMaterialUpload", method: "POST", path: "/v2/material-commit?siteID={siteID}", body: emptyBody },
       { name: "patchMaterial", method: "PATCH", path: "/v2/material?siteID={siteID}", body: emptyBody },
       { name: "deleteMaterial", method: "DELETE", path: "/v2/material?siteID={siteID}", body: emptyBody },
     ],
@@ -456,6 +458,17 @@ const apiGroups = [
     cases: [
       { name: "listRoomLogs", method: "GET", path: "/v2/roomLogs?siteID={siteID}" },
       { name: "getRoomLog", method: "GET", path: "/v2/roomLog?siteID={siteID}" },
+    ],
+  },
+  {
+    name: "V2 Schedules",
+    cases: [
+      { name: "listMySchedules", method: "GET", path: "/v2/mySchedules?siteID={siteID}" },
+      { name: "listSchedules", method: "GET", path: "/v2/schedules?siteID={siteID}" },
+      { name: "getSchedule", method: "GET", path: "/v2/schedule?siteID={siteID}" },
+      { name: "createSchedule", method: "POST", path: "/v2/schedule?siteID={siteID}", body: emptyBody },
+      { name: "patchSchedule", method: "PATCH", path: "/v2/schedule?siteID={siteID}", body: emptyBody },
+      { name: "deleteSchedule", method: "DELETE", path: "/v2/schedule?siteID={siteID}", body: emptyBody },
     ],
   },
   {

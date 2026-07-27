@@ -1,3 +1,11 @@
+[ 2026-07-27 - ssjpooh ]
+[new] SchedulesService 추가 — 일정(user_schedules) v2 API 미러. 서버 apiHandler_schedules.go 대응: GET /mySchedules(개인+회사+채팅방 통합, fromDate/toDate 필수) / GET /schedules(사이트 범위, scheduleType 기본 company) / GET /schedule(단건, 회사 일정은 Targets 포함) / POST·PATCH·DELETE /schedule — foxApi.v2.schedules. 시각은 UTC YYYYMMDDhhmmss 문자열, 게이트 IM.Schedule.Enable 이 꺼져 있으면 422
+[new] MaterialsService에 issueMaterialUploadURL / commitMaterialUpload 추가 — POST /material-upload-url(업로드 URL 발급), POST /material-commit(업로드 확정)
+[new] API 테스트 페이지(public/api-test.js)에 V2 Schedules 그룹과 V2 Materials 업로드 2건 추가
+[fix] v2 index의 RESULT_SIGNUP_* 재export 복구 — gen-v2-services.mjs 재생성 시 수기 추가분이 지워져 v2.RESULT_SIGNUP_* 공개 export가 사라졌던 문제 되돌림
+[fix] src 변경에 따른 dist 재빌드 동반
+
+
 [ 2026-07-24 - ssjpooh ]
 [new] UserOptionsService 추가 — 사용자 개인 옵션(즐겨찾기·대시보드 위젯·알림 설정 등 UI 설정) v2 API 미러. 서버 apiHandler_user_options.go 대응: GET /myOptions(names 콤마구분 지정 시 해당 옵션만, 미지정 시 전체) / PATCH /myOption(name 단위 전체 교체 upsert, last-write-wins) / DELETE /myOption(name 단건 삭제, 멱등) — foxApi.v2.userOptions. src 변경에 따른 dist 재빌드 동반
 
