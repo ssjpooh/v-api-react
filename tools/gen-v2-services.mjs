@@ -95,9 +95,20 @@ fs.writeFileSync(path.resolve("tools/v2-test-cases.gen.txt"), testFragment + "\n
 // v2/index.ts — 서비스 export + createV2Api 팩토리(facade 의 foxApi.v2 네임스페이스)
 const exports = generated.map((g) => `export { ${g.cls} } from "./${g.file}";`).join("\n");
 const factoryFields = generated.map((g) => `    ${toCamel(g.domain)}: new ${g.cls}(apiClient),`).join("\n");
+// ★ 수기 유지분 — 생성기가 index.ts 를 통째로 덮어쓰므로 여기 없으면 재생성 때마다 사라진다.
+//   (2026.07.27 실제로 v2.RESULT_SIGNUP_* 공개 export 가 지워져 되돌린 이력이 있다.)
+//   서비스 클래스가 아닌 공개 export 를 shared.ts 에 추가하면 이 목록에도 넣을 것.
+const MANUAL_EXPORTS = `export {
+  RESULT_SIGNUP_EMAIL_NOT_VERIFIED,
+  RESULT_SIGNUP_CODE_MISMATCH,
+  RESULT_SIGNUP_CODE_EXPIRED,
+  RESULT_SIGNUP_EMAIL_ALREADY_REGISTERED,
+} from "./shared";`;
+
 const index = `import { ApiClient } from "../../apiClient";
 ${generated.map((g) => `import { ${g.cls} } from "./${g.file}";`).join("\n")}
 
+${MANUAL_EXPORTS}
 ${exports}
 
 /** foxApi.v2.* 네임스페이스를 구성한다. 서버 v2 컨트롤러와 1:1. 자동 생성. */

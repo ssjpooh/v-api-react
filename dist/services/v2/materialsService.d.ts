@@ -22,6 +22,8 @@ export declare class MaterialsService {
     issueMaterialUploadURL(params: V2BodyParams): Promise<FoxApiResult>;
     /** POST /material-commit */
     commitMaterialUpload(params: V2BodyParams): Promise<FoxApiResult>;
+    /** POST /material-upload-cancel */
+    cancelMaterialUpload(params: V2BodyParams): Promise<FoxApiResult>;
     /** PATCH /material */
     patchMaterial(params: V2BodyParams): Promise<FoxApiResult>;
     /** DELETE /material */

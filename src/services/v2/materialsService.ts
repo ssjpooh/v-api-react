@@ -55,6 +55,12 @@ export class MaterialsService {
     return this.apiClient.post(v2Path(siteId, "/material-commit", query), { header: authHeader(token), body, cancelId });
   }
 
+  /** POST /material-upload-cancel */
+  async cancelMaterialUpload(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.post(v2Path(siteId, "/material-upload-cancel", query), { header: authHeader(token), body, cancelId });
+  }
+
   /** PATCH /material */
   async patchMaterial(params: V2BodyParams): Promise<FoxApiResult> {
     const { token, siteId, query, body, cancelId } = params;

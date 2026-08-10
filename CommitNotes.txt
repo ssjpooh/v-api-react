@@ -1,3 +1,18 @@
+[ 2026-08-10 - ssjpooh ]
+[new] vOne 그룹웨어 v2 API 13개 서비스(180 메서드) 미러 추가 — 그동안 서버에만 있고 라이브러리에는 하나도 없던 도메인 전체를 채웠다. foxApi.v2.voneApproval(18) / voneAttendance(11) / voneBoards(16) / voneDrive(20) / voneHome(16) / voneLeave(8) / voneMessages(13) / voneOrg(12) / vonePlatform(6) / voneProjects(20) / voneReports(9) / voneSurveys(10) / voneTasks(21)
+[new] RoomDetailService / RoomNotesService 추가 — 수업 상세를 룸 정보와 자료(노트)로 나눠 받는 신규 API. GET /roomDetail(룸+파생필드, 자료 미포함) / GET /roomNotes(자료 목록 + 노트당 대표 썸네일 1장, scope=all|shared|dist|upload) — foxApi.v2.roomDetail · foxApi.v2.roomNotes
+[new] OrgFederationService(11) / PasswordService(1) 추가 — 그간 미러가 누락돼 있던 서버 도메인 반영
+[fix] gen-v2-services.mjs 가 index.ts 재생성 때마다 수기 export 를 지우던 문제 근본 수정 — MANUAL_EXPORTS 상수로 템플릿에 고정. 종전에는 재생성할 때마다 v2.RESULT_SIGNUP_* 공개 export 가 사라져 수동 복구가 반복됐다(2026-07-27 에도 같은 복구를 했다)
+[fix] API 테스트 페이지(public/api-test.js)의 V2 섹션을 생성 결과와 동기화 — 49 그룹(vone 13 그룹 포함)
+[del] 워크스페이스 폐지에 따른 4개 서비스 제거 — WorkspacesService / MenusService / AccountTypeWorkspacesService / AccountTypeWorkspaceMenusService. 서버 v2 라우트가 이미 삭제된 도메인인데 생성기가 파일을 지우지는 않아 고아로 남아 있었다 (src 4 + dist 8)
+
+- 생성기 재실행 결과 = 49 서비스 / 362 메서드 (node tools/gen-v2-services.mjs — 서버 vwork/src/server/v2/handler 를 읽어 도메인 1:1 생성)
+- 서버 대응 커밋 = vwork e9345bf0 (룸 상세 조회 성능 — 자료 분리 v2 API 2종 신설). vone 은 그 이전 배포분 누락 보정
+- tsc 는 출력 디렉터리를 청소하지 않는다 — 서비스를 지울 때 dist 의 .js/.d.ts 도 함께 지워야 한다 (이번에 8개 수동 제거)
+- tools/v2-test-cases.gen.txt 는 .gitignore 대상이라 커밋에 포함하지 않는다 (public/api-test.js 에 반영된 결과만 커밋)
+- src 변경에 따른 dist 재빌드 동반
+
+
 [ 2026-07-27 - ssjpooh ]
 [new] SchedulesService 추가 — 일정(user_schedules) v2 API 미러. 서버 apiHandler_schedules.go 대응: GET /mySchedules(개인+회사+채팅방 통합, fromDate/toDate 필수) / GET /schedules(사이트 범위, scheduleType 기본 company) / GET /schedule(단건, 회사 일정은 Targets 포함) / POST·PATCH·DELETE /schedule — foxApi.v2.schedules. 시각은 UTC YYYYMMDDhhmmss 문자열, 게이트 IM.Schedule.Enable 이 꺼져 있으면 422
 [new] MaterialsService에 issueMaterialUploadURL / commitMaterialUpload 추가 — POST /material-upload-url(업로드 URL 발급), POST /material-commit(업로드 확정)

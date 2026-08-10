@@ -2,24 +2,24 @@ import { ApiClient, type FoxApiResult, type V2BaseParams, type V2BodyParams, aut
 
 /**
  * v2 user_options — 서버 apiHandler_user_options.go (컨트롤러 apiController_user_options.go) 대응.
- * 사용자 개인 옵션 (즐겨찾기·대시보드 위젯·알림 설정 등 UI 설정) — name 단위 JSON 저장.
+ * 자동 생성: tools/gen-v2-services.mjs
  */
 export class UserOptionsService {
   constructor(private readonly apiClient: ApiClient) {}
 
-  /** GET /myOptions — names(콤마 구분) 지정 시 해당 옵션만, 미지정 시 전체 */
+  /** GET /myOptions */
   async listMyOptions(params: V2BaseParams): Promise<FoxApiResult> {
     const { token, siteId, query, cancelId } = params;
     return this.apiClient.get(v2Path(siteId, "/myOptions", query), { header: authHeader(token), cancelId });
   }
 
-  /** PATCH /myOption — name 단위 전체 교체 (upsert, last-write-wins). body: { Name, Value(임의 JSON) } */
+  /** PATCH /myOption */
   async patchMyOption(params: V2BodyParams): Promise<FoxApiResult> {
     const { token, siteId, query, body, cancelId } = params;
     return this.apiClient.patch(v2Path(siteId, "/myOption", query), { header: authHeader(token), body, cancelId });
   }
 
-  /** DELETE /myOption — name 단건 삭제 (멱등). query: { name } */
+  /** DELETE /myOption */
   async deleteMyOption(params: V2BodyParams): Promise<FoxApiResult> {
     const { token, siteId, query, body, cancelId } = params;
     return this.apiClient.delete(v2Path(siteId, "/myOption", query), { header: authHeader(token), body, cancelId });

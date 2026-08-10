@@ -47,6 +47,11 @@ export class MaterialsService {
         const { token, siteId, query, body, cancelId } = params;
         return this.apiClient.post(v2Path(siteId, "/material-commit", query), { header: authHeader(token), body, cancelId });
     }
+    /** POST /material-upload-cancel */
+    async cancelMaterialUpload(params) {
+        const { token, siteId, query, body, cancelId } = params;
+        return this.apiClient.post(v2Path(siteId, "/material-upload-cancel", query), { header: authHeader(token), body, cancelId });
+    }
     /** PATCH /material */
     async patchMaterial(params) {
         const { token, siteId, query, body, cancelId } = params;
