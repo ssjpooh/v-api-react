@@ -8,8 +8,28 @@ export class CreditsService {
         this.apiClient = apiClient;
     }
     /** GET /credits */
-    async listCredits(params) {
+    async getCreditBalance(params) {
         const { token, siteId, query, cancelId } = params;
         return this.apiClient.get(v2Path(siteId, "/credits", query), { header: authHeader(token), cancelId });
+    }
+    /** GET /creditGrants */
+    async listCreditGrants(params) {
+        const { token, siteId, query, cancelId } = params;
+        return this.apiClient.get(v2Path(siteId, "/creditGrants", query), { header: authHeader(token), cancelId });
+    }
+    /** GET /creditLedger */
+    async listCreditLedger(params) {
+        const { token, siteId, query, cancelId } = params;
+        return this.apiClient.get(v2Path(siteId, "/creditLedger", query), { header: authHeader(token), cancelId });
+    }
+    /** POST /creditGrant */
+    async grantCredit(params) {
+        const { token, siteId, query, body, cancelId } = params;
+        return this.apiClient.post(v2Path(siteId, "/creditGrant", query), { header: authHeader(token), body, cancelId });
+    }
+    /** POST /creditRevoke */
+    async revokeCredit(params) {
+        const { token, siteId, query, body, cancelId } = params;
+        return this.apiClient.post(v2Path(siteId, "/creditRevoke", query), { header: authHeader(token), body, cancelId });
     }
 }

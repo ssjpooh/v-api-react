@@ -18,4 +18,12 @@ export declare class SchedulesService {
     patchSchedule(params: V2BodyParams): Promise<FoxApiResult>;
     /** DELETE /schedule */
     deleteSchedule(params: V2BodyParams): Promise<FoxApiResult>;
+    /** POST /schedule-file */
+    addScheduleFile(params: V2BodyParams): Promise<FoxApiResult>;
+    /** DELETE /schedule-file */
+    deleteScheduleFile(params: V2BodyParams): Promise<FoxApiResult>;
+    /** GET /schedule-invite */
+    getScheduleInvite(params: V2BaseParams): Promise<FoxApiResult>;
+    /** POST /schedule-invite */
+    replyScheduleInvite(params: V2BodyParams): Promise<FoxApiResult>;
 }

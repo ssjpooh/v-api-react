@@ -10,4 +10,6 @@ export declare class RoomLogsService {
     listRoomLogs(params: V2BaseParams): Promise<FoxApiResult>;
     /** GET /roomLog */
     getRoomLog(params: V2BaseParams): Promise<FoxApiResult>;
+    /** GET /roomLogNotes */
+    getRoomLogNotes(params: V2BaseParams): Promise<FoxApiResult>;
 }

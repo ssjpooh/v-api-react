@@ -48,4 +48,12 @@ export declare class VoneTasksService {
     removeVoneTaskLabel(params: V2BodyParams): Promise<FoxApiResult>;
     /** POST /task-read */
     markVoneTaskRead(params: V2BodyParams): Promise<FoxApiResult>;
+    /** POST /task-file */
+    addVoneTaskFile(params: V2BodyParams): Promise<FoxApiResult>;
+    /** DELETE /task-file */
+    deleteVoneTaskFile(params: V2BodyParams): Promise<FoxApiResult>;
+    /** DELETE /task-purge */
+    purgeVoneTask(params: V2BodyParams): Promise<FoxApiResult>;
+    /** POST /task-trash-empty */
+    emptyVoneTaskTrash(params: V2BodyParams): Promise<FoxApiResult>;
 }

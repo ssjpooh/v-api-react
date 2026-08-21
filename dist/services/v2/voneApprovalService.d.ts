@@ -34,6 +34,8 @@ export declare class VoneApprovalService {
     submitApprovalDocument(params: V2BodyParams): Promise<FoxApiResult>;
     /** POST /approval-withdraw */
     withdrawApprovalDocument(params: V2BodyParams): Promise<FoxApiResult>;
+    /** POST /approval-cancel */
+    cancelApprovalDocument(params: V2BodyParams): Promise<FoxApiResult>;
     /** POST /approval-approve */
     approveApprovalDocument(params: V2BodyParams): Promise<FoxApiResult>;
     /** POST /approval-reject */

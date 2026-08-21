@@ -77,6 +77,11 @@ export class VoneApprovalService {
         const { token, siteId, query, body, cancelId } = params;
         return this.apiClient.post(v2Path(siteId, "/approval-withdraw", query), { header: authHeader(token), body, cancelId });
     }
+    /** POST /approval-cancel */
+    async cancelApprovalDocument(params) {
+        const { token, siteId, query, body, cancelId } = params;
+        return this.apiClient.post(v2Path(siteId, "/approval-cancel", query), { header: authHeader(token), body, cancelId });
+    }
     /** POST /approval-approve */
     async approveApprovalDocument(params) {
         const { token, siteId, query, body, cancelId } = params;

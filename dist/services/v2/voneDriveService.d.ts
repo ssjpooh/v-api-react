@@ -46,4 +46,16 @@ export declare class VoneDriveService {
     createDriveShare(params: V2BodyParams): Promise<FoxApiResult>;
     /** DELETE /drive-share */
     deleteDriveShare(params: V2BodyParams): Promise<FoxApiResult>;
+    /** GET /drive-usage */
+    getDriveUsage(params: V2BaseParams): Promise<FoxApiResult>;
+    /** DELETE /drive-file-purge */
+    purgeDriveFile(params: V2BodyParams): Promise<FoxApiResult>;
+    /** DELETE /drive-folder-purge */
+    purgeDriveFolder(params: V2BodyParams): Promise<FoxApiResult>;
+    /** DELETE /drive-trash */
+    emptyDriveTrash(params: V2BodyParams): Promise<FoxApiResult>;
+    /** POST /drive-favorite */
+    addDriveFavorite(params: V2BodyParams): Promise<FoxApiResult>;
+    /** DELETE /drive-favorite */
+    removeDriveFavorite(params: V2BodyParams): Promise<FoxApiResult>;
 }

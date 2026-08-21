@@ -126,4 +126,40 @@ export class VoneDriveService {
     const { token, siteId, query, body, cancelId } = params;
     return this.apiClient.delete(v2Path(siteId, "/drive-share", query), { header: authHeader(token), body, cancelId });
   }
+
+  /** GET /drive-usage */
+  async getDriveUsage(params: V2BaseParams): Promise<FoxApiResult> {
+    const { token, siteId, query, cancelId } = params;
+    return this.apiClient.get(v2Path(siteId, "/drive-usage", query), { header: authHeader(token), cancelId });
+  }
+
+  /** DELETE /drive-file-purge */
+  async purgeDriveFile(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.delete(v2Path(siteId, "/drive-file-purge", query), { header: authHeader(token), body, cancelId });
+  }
+
+  /** DELETE /drive-folder-purge */
+  async purgeDriveFolder(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.delete(v2Path(siteId, "/drive-folder-purge", query), { header: authHeader(token), body, cancelId });
+  }
+
+  /** DELETE /drive-trash */
+  async emptyDriveTrash(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.delete(v2Path(siteId, "/drive-trash", query), { header: authHeader(token), body, cancelId });
+  }
+
+  /** POST /drive-favorite */
+  async addDriveFavorite(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.post(v2Path(siteId, "/drive-favorite", query), { header: authHeader(token), body, cancelId });
+  }
+
+  /** DELETE /drive-favorite */
+  async removeDriveFavorite(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.delete(v2Path(siteId, "/drive-favorite", query), { header: authHeader(token), body, cancelId });
+  }
 }

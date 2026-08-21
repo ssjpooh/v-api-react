@@ -132,4 +132,28 @@ export class VoneTasksService {
     const { token, siteId, query, body, cancelId } = params;
     return this.apiClient.post(v2Path(siteId, "/task-read", query), { header: authHeader(token), body, cancelId });
   }
+
+  /** POST /task-file */
+  async addVoneTaskFile(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.post(v2Path(siteId, "/task-file", query), { header: authHeader(token), body, cancelId });
+  }
+
+  /** DELETE /task-file */
+  async deleteVoneTaskFile(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.delete(v2Path(siteId, "/task-file", query), { header: authHeader(token), body, cancelId });
+  }
+
+  /** DELETE /task-purge */
+  async purgeVoneTask(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.delete(v2Path(siteId, "/task-purge", query), { header: authHeader(token), body, cancelId });
+  }
+
+  /** POST /task-trash-empty */
+  async emptyVoneTaskTrash(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.post(v2Path(siteId, "/task-trash-empty", query), { header: authHeader(token), body, cancelId });
+  }
 }

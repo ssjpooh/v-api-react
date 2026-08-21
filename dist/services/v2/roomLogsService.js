@@ -17,4 +17,9 @@ export class RoomLogsService {
         const { token, siteId, query, cancelId } = params;
         return this.apiClient.get(v2Path(siteId, "/roomLog", query), { header: authHeader(token), cancelId });
     }
+    /** GET /roomLogNotes */
+    async getRoomLogNotes(params) {
+        const { token, siteId, query, cancelId } = params;
+        return this.apiClient.get(v2Path(siteId, "/roomLogNotes", query), { header: authHeader(token), cancelId });
+    }
 }

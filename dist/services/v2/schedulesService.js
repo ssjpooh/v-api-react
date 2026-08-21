@@ -37,4 +37,24 @@ export class SchedulesService {
         const { token, siteId, query, body, cancelId } = params;
         return this.apiClient.delete(v2Path(siteId, "/schedule", query), { header: authHeader(token), body, cancelId });
     }
+    /** POST /schedule-file */
+    async addScheduleFile(params) {
+        const { token, siteId, query, body, cancelId } = params;
+        return this.apiClient.post(v2Path(siteId, "/schedule-file", query), { header: authHeader(token), body, cancelId });
+    }
+    /** DELETE /schedule-file */
+    async deleteScheduleFile(params) {
+        const { token, siteId, query, body, cancelId } = params;
+        return this.apiClient.delete(v2Path(siteId, "/schedule-file", query), { header: authHeader(token), body, cancelId });
+    }
+    /** GET /schedule-invite */
+    async getScheduleInvite(params) {
+        const { token, siteId, query, cancelId } = params;
+        return this.apiClient.get(v2Path(siteId, "/schedule-invite", query), { header: authHeader(token), cancelId });
+    }
+    /** POST /schedule-invite */
+    async replyScheduleInvite(params) {
+        const { token, siteId, query, body, cancelId } = params;
+        return this.apiClient.post(v2Path(siteId, "/schedule-invite", query), { header: authHeader(token), body, cancelId });
+    }
 }

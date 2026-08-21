@@ -1,3 +1,20 @@
+[ 2026-08-21 - ssjpooh ]
+[new] VoneSystemService 추가(31 메서드) — vone 시스템 관리 도메인 전체 미러. foxApi.v2.voneSystem — 현황(system-dashboard) / 사용자 7(system-users·system-user·-state·-retire·-reset-password·-logout-all·-offboard) / 계정유형·역할 6(system-kinds·system-kind·system-roles·system-role) / 조직 7(system-depts·system-dept·system-positions) / 설정 2(system-settings) / 감사 로그 5(audit-logs·audit-retention·audit-export·audit-export-file). ★ 전 라우트가 전역 관리자 전용이고 권한이 없으면 **404**(403 아님 — 서버가 존재를 은닉한다)
+[new] CalendarsService(6) 추가 — 공용 캘린더 폴더. calendars·calendar(GET·POST·PATCH·DELETE)·calendar-subscription
+[new] ScheduleRecurrencesService(5) 추가 — 반복 일정 규칙. schedule-recurrences·schedule-recurrence(GET·POST·PATCH·DELETE)
+[new] VoneResourcesService(4) 추가 — 자원 예약(회의실·차량). resources·resource(POST·PATCH·DELETE). ★ 화상회의 룸과 다른 축이다
+[new] OrgUsersService(2) 추가 — 조직도 명부·검색. orgUsers·orgSearch(키셋 커서·초성 검색·unassignedOnly)
+[new] CreditPacksService(3) 추가 — 크레딧 팩 단건 결제. creditPacks·creditPack/order·creditPack/confirm
+[fix] 기존 서비스 6종에 서버 신규 라우트 반영 — VoneDrive +6(drive-usage·drive-file-purge·drive-folder-purge·drive-trash·drive-favorite POST/DELETE, 총 26) / VoneTasks +4(task-file POST/DELETE·task-purge·task-trash-empty, 총 25) / Schedules +4(schedule-file POST/DELETE·schedule-invite GET/POST, 총 10) / Credits +4(creditGrants·creditLedger·creditGrant·creditRevoke, 총 5) / VoneApproval +1(approval-cancel 휴가 취소 신청, 총 19) / RoomLogs +1(roomLogNotes, 총 3)
+[fix] v2 index 에서 Billing / PendingChanges / Plans 등록 해제 — 서버 v2 라우트가 vwork 커밋 4eb8f207(무료 플랜 크레딧 체계 전환 — 기존 빌링 수량 4축 정리)에서 통째로 사라졌다. 생성기가 서버 핸들러를 읽어 만들므로 자동으로 빠진 것이며, 소비자 사용처는 0건으로 확인(vcadmin-react·v-site·vcxreact·v-one 전수 grep)
+
+- 생성기 재실행 결과 = 52 서비스 / 433 메서드 (node tools/gen-v2-services.mjs — 서버 vwork/src/server/v2/handler 를 읽어 도메인 1:1 생성)
+- 서버 대응 커밋 = vwork 2dfa0b26(시스템 관리 도메인 신설 — v2 29라우트 + DB 4테이블). 그 밖은 2026.08.10~08.20 배포분 누락 보정
+- tsc --noEmit 통과 후 dist 재빌드 동반 (src 변경에 따른 dist 재빌드)
+- ★ **남은 고아 파일 3종** — billingService.ts / pendingChangesService.ts / plansService.ts 는 index 등록이 빠졌을 뿐 파일은 남아 있다. 2026-08-10 의 워크스페이스 4종과 **같은 상황**이며(서버 라우트 없는 죽은 코드), 정리하려면 src 3 + dist 6 을 함께 지워야 한다 — tsc 는 출력 디렉터리를 청소하지 않는다. 이번 커밋에서는 지우지 않았다(별도 결정 대기)
+- ★ PUT·PATCH 별칭 주의 — 서버가 /system-positions·/audit-retention 을 두 메서드로 받는다(PATCH 가 정본, PUT 은 화면 호환). 생성기가 같은 이름의 메서드를 두 번 만들지 않도록 서버 쪽 핸들러 함수를 분리해 뒀다(saveSystemPositions/putSystemPositions·patchAuditRetention/putAuditRetention)
+
+
 [ 2026-08-10 - ssjpooh ]
 [new] vOne 그룹웨어 v2 API 13개 서비스(180 메서드) 미러 추가 — 그동안 서버에만 있고 라이브러리에는 하나도 없던 도메인 전체를 채웠다. foxApi.v2.voneApproval(18) / voneAttendance(11) / voneBoards(16) / voneDrive(20) / voneHome(16) / voneLeave(8) / voneMessages(13) / voneOrg(12) / vonePlatform(6) / voneProjects(20) / voneReports(9) / voneSurveys(10) / voneTasks(21)
 [new] RoomDetailService / RoomNotesService 추가 — 수업 상세를 룸 정보와 자료(노트)로 나눠 받는 신규 API. GET /roomDetail(룸+파생필드, 자료 미포함) / GET /roomNotes(자료 목록 + 노트당 대표 썸네일 1장, scope=all|shared|dist|upload) — foxApi.v2.roomDetail · foxApi.v2.roomNotes

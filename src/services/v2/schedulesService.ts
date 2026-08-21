@@ -42,4 +42,28 @@ export class SchedulesService {
     const { token, siteId, query, body, cancelId } = params;
     return this.apiClient.delete(v2Path(siteId, "/schedule", query), { header: authHeader(token), body, cancelId });
   }
+
+  /** POST /schedule-file */
+  async addScheduleFile(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.post(v2Path(siteId, "/schedule-file", query), { header: authHeader(token), body, cancelId });
+  }
+
+  /** DELETE /schedule-file */
+  async deleteScheduleFile(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.delete(v2Path(siteId, "/schedule-file", query), { header: authHeader(token), body, cancelId });
+  }
+
+  /** GET /schedule-invite */
+  async getScheduleInvite(params: V2BaseParams): Promise<FoxApiResult> {
+    const { token, siteId, query, cancelId } = params;
+    return this.apiClient.get(v2Path(siteId, "/schedule-invite", query), { header: authHeader(token), cancelId });
+  }
+
+  /** POST /schedule-invite */
+  async replyScheduleInvite(params: V2BodyParams): Promise<FoxApiResult> {
+    const { token, siteId, query, body, cancelId } = params;
+    return this.apiClient.post(v2Path(siteId, "/schedule-invite", query), { header: authHeader(token), body, cancelId });
+  }
 }
