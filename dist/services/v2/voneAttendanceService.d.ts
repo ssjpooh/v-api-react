@@ -16,6 +16,8 @@ export declare class VoneAttendanceService {
     checkInAttendance(params: V2BodyParams): Promise<FoxApiResult>;
     /** POST /attendance-check-out */
     checkOutAttendance(params: V2BodyParams): Promise<FoxApiResult>;
+    /** POST /attendance-late-check-out */
+    lateCheckOutAttendance(params: V2BodyParams): Promise<FoxApiResult>;
     /** PATCH /attendance */
     patchAttendance(params: V2BodyParams): Promise<FoxApiResult>;
     /** POST /attendance-close */
@@ -26,6 +28,8 @@ export declare class VoneAttendanceService {
     listCompanyHolidays(params: V2BaseParams): Promise<FoxApiResult>;
     /** POST /company-holiday */
     upsertCompanyHoliday(params: V2BodyParams): Promise<FoxApiResult>;
+    /** POST /company-holiday-sync */
+    syncCompanyHolidays(params: V2BodyParams): Promise<FoxApiResult>;
     /** DELETE /company-holiday */
     deleteCompanyHoliday(params: V2BodyParams): Promise<FoxApiResult>;
 }

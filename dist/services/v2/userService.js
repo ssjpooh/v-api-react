@@ -42,9 +42,4 @@ export class UserService {
         const { token, siteId, query, body, cancelId } = params;
         return this.apiClient.post(v2Path(siteId, "/user/password/verify", query), { header: authHeader(token), body, cancelId });
     }
-    /** PATCH /user/accountType */
-    async assignAccountType(params) {
-        const { token, siteId, query, body, cancelId } = params;
-        return this.apiClient.patch(v2Path(siteId, "/user/accountType", query), { header: authHeader(token), body, cancelId });
-    }
 }

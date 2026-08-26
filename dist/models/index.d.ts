@@ -1062,6 +1062,8 @@ export declare class UserData {
     lastIPAddress: string;
     profileImageKey: string;
     info: string;
+    hireDate: string;
+    retireDate: string;
     cDate: string;
     mDate: string;
     profileImageURL: string;
@@ -1384,6 +1386,8 @@ export interface UserData {
     LastIPAddress: string;
     ProfileImageKey: string;
     Info: string;
+    HireDate: string;
+    RetireDate: string;
     CDate: string;
     MDate: string;
     ProfileImageURL: string;

@@ -32,6 +32,11 @@ export class VoneAttendanceService {
         const { token, siteId, query, body, cancelId } = params;
         return this.apiClient.post(v2Path(siteId, "/attendance-check-out", query), { header: authHeader(token), body, cancelId });
     }
+    /** POST /attendance-late-check-out */
+    async lateCheckOutAttendance(params) {
+        const { token, siteId, query, body, cancelId } = params;
+        return this.apiClient.post(v2Path(siteId, "/attendance-late-check-out", query), { header: authHeader(token), body, cancelId });
+    }
     /** PATCH /attendance */
     async patchAttendance(params) {
         const { token, siteId, query, body, cancelId } = params;
@@ -56,6 +61,11 @@ export class VoneAttendanceService {
     async upsertCompanyHoliday(params) {
         const { token, siteId, query, body, cancelId } = params;
         return this.apiClient.post(v2Path(siteId, "/company-holiday", query), { header: authHeader(token), body, cancelId });
+    }
+    /** POST /company-holiday-sync */
+    async syncCompanyHolidays(params) {
+        const { token, siteId, query, body, cancelId } = params;
+        return this.apiClient.post(v2Path(siteId, "/company-holiday-sync", query), { header: authHeader(token), body, cancelId });
     }
     /** DELETE /company-holiday */
     async deleteCompanyHoliday(params) {

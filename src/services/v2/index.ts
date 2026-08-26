@@ -1,5 +1,4 @@
 import { ApiClient } from "../../apiClient";
-import { AccountTypesService } from "./accountTypesService";
 import { BrandingService } from "./brandingService";
 import { CalendarsService } from "./calendarsService";
 import { ClientTokensService } from "./clientTokensService";
@@ -10,6 +9,7 @@ import { CreditsService } from "./creditsService";
 import { CreditPacksService } from "./creditPacksService";
 import { EdgePackagesService } from "./edgePackagesService";
 import { InvoicesService } from "./invoicesService";
+import { LivePresenceService } from "./livePresenceService";
 import { MailService } from "./mailService";
 import { MaterialsService } from "./materialsService";
 import { NoticesService } from "./noticesService";
@@ -58,7 +58,6 @@ export {
   RESULT_SIGNUP_CODE_EXPIRED,
   RESULT_SIGNUP_EMAIL_ALREADY_REGISTERED,
 } from "./shared";
-export { AccountTypesService } from "./accountTypesService";
 export { BrandingService } from "./brandingService";
 export { CalendarsService } from "./calendarsService";
 export { ClientTokensService } from "./clientTokensService";
@@ -69,6 +68,7 @@ export { CreditsService } from "./creditsService";
 export { CreditPacksService } from "./creditPacksService";
 export { EdgePackagesService } from "./edgePackagesService";
 export { InvoicesService } from "./invoicesService";
+export { LivePresenceService } from "./livePresenceService";
 export { MailService } from "./mailService";
 export { MaterialsService } from "./materialsService";
 export { NoticesService } from "./noticesService";
@@ -114,7 +114,6 @@ export { VoneTasksService } from "./voneTasksService";
 /** foxApi.v2.* 네임스페이스를 구성한다. 서버 v2 컨트롤러와 1:1. 자동 생성. */
 export function createV2Api(apiClient: ApiClient) {
   return {
-    accountTypes: new AccountTypesService(apiClient),
     branding: new BrandingService(apiClient),
     calendars: new CalendarsService(apiClient),
     clientTokens: new ClientTokensService(apiClient),
@@ -125,6 +124,7 @@ export function createV2Api(apiClient: ApiClient) {
     creditPacks: new CreditPacksService(apiClient),
     edgePackages: new EdgePackagesService(apiClient),
     invoices: new InvoicesService(apiClient),
+    livePresence: new LivePresenceService(apiClient),
     mail: new MailService(apiClient),
     materials: new MaterialsService(apiClient),
     notices: new NoticesService(apiClient),

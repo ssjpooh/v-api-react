@@ -13,6 +13,12 @@ export class VonePlatformService {
     return this.apiClient.get(v2Path(siteId, "/vone-menus", query), { header: authHeader(token), cancelId });
   }
 
+  /** GET /roles */
+  async listVoneRoles(params: V2BaseParams): Promise<FoxApiResult> {
+    const { token, siteId, query, cancelId } = params;
+    return this.apiClient.get(v2Path(siteId, "/roles", query), { header: authHeader(token), cancelId });
+  }
+
   /** GET /menu-permissions */
   async listMenuPermissions(params: V2BaseParams): Promise<FoxApiResult> {
     const { token, siteId, query, cancelId } = params;

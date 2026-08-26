@@ -3147,6 +3147,8 @@ export class UserData {
   lastIPAddress: string = "";
   profileImageKey: string = "";
   info: string = "";
+  hireDate: string = "";
+  retireDate: string = "";
   cDate: string = "";
   mDate: string = "";
   profileImageURL: string = "";
@@ -3203,6 +3205,8 @@ export class UserData {
     value.lastIPAddress = asString(pick(json, "LastIPAddress", "lastIPAddress", "lastIpAddress", "last_ip_address"), value.lastIPAddress);
     value.profileImageKey = asString(pick(json, "ProfileImageKey", "profileImageKey", "profile_image_key"), value.profileImageKey);
     value.info = asString(pick(json, "Info", "info"), value.info);
+    value.hireDate = asString(pick(json, "HireDate", "hireDate", "hire_date"), value.hireDate);
+    value.retireDate = asString(pick(json, "RetireDate", "retireDate", "retire_date"), value.retireDate);
     value.cDate = asString(pick(json, "CDate", "cDate", "c_date", "createdAt", "created_at"), value.cDate);
     value.mDate = asString(pick(json, "MDate", "MData", "mDate", "m_date", "updatedAt", "updated_at"), value.mDate);
     value.profileImageURL = asString(pick(json, "ProfileImageURL", "profileImageURL", "profileImageUrl", "profile_image_url"), value.profileImageURL);
@@ -3269,6 +3273,10 @@ export class UserData {
       ProfileImageKey: "profileImageKey",
       profile_image_key: "profileImageKey",
       Info: "info",
+      HireDate: "hireDate",
+      hire_date: "hireDate",
+      RetireDate: "retireDate",
+      retire_date: "retireDate",
       CDate: "cDate",
       c_date: "cDate",
       MDate: "mDate",
@@ -3638,6 +3646,8 @@ export interface UserData {
   LastIPAddress: string;
   ProfileImageKey: string;
   Info: string;
+  HireDate: string;
+  RetireDate: string;
   CDate: string;
   MDate: string;
   ProfileImageURL: string;

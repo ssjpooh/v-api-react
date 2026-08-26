@@ -8,6 +8,8 @@ export declare class VonePlatformService {
     constructor(apiClient: ApiClient);
     /** GET /vone-menus */
     listVoneMenus(params: V2BaseParams): Promise<FoxApiResult>;
+    /** GET /roles */
+    listVoneRoles(params: V2BaseParams): Promise<FoxApiResult>;
     /** GET /menu-permissions */
     listMenuPermissions(params: V2BaseParams): Promise<FoxApiResult>;
     /** POST /menu-permission */

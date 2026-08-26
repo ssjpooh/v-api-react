@@ -20,6 +20,4 @@ export declare class UserService {
     grantManager(params: V2BodyParams): Promise<FoxApiResult>;
     /** POST /user/password/verify */
     passwordVerify(params: V2BodyParams): Promise<FoxApiResult>;
-    /** PATCH /user/accountType */
-    assignAccountType(params: V2BodyParams): Promise<FoxApiResult>;
 }
