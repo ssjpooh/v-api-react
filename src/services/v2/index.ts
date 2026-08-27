@@ -8,6 +8,7 @@ import { ContractLogsService } from "./contractLogsService";
 import { CreditsService } from "./creditsService";
 import { CreditPacksService } from "./creditPacksService";
 import { EdgePackagesService } from "./edgePackagesService";
+import { ImSessionService } from "./imSessionService";
 import { InvoicesService } from "./invoicesService";
 import { LivePresenceService } from "./livePresenceService";
 import { MailService } from "./mailService";
@@ -67,6 +68,7 @@ export { ContractLogsService } from "./contractLogsService";
 export { CreditsService } from "./creditsService";
 export { CreditPacksService } from "./creditPacksService";
 export { EdgePackagesService } from "./edgePackagesService";
+export { ImSessionService } from "./imSessionService";
 export { InvoicesService } from "./invoicesService";
 export { LivePresenceService } from "./livePresenceService";
 export { MailService } from "./mailService";
@@ -123,6 +125,7 @@ export function createV2Api(apiClient: ApiClient) {
     credits: new CreditsService(apiClient),
     creditPacks: new CreditPacksService(apiClient),
     edgePackages: new EdgePackagesService(apiClient),
+    imSession: new ImSessionService(apiClient),
     invoices: new InvoicesService(apiClient),
     livePresence: new LivePresenceService(apiClient),
     mail: new MailService(apiClient),
