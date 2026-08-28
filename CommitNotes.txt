@@ -1,3 +1,11 @@
+[ 2026-08-28 - ssjpooh ]
+[new] VoneHolidayRulesService 추가(4 메서드) — 회사 휴무 반복 규칙(온콜 휴가 「매월 둘째·마지막 금요일」). listCompanyHolidayRules(GET /company-holiday-rules) · createCompanyHolidayRule(POST /company-holiday-rule) · updateCompanyHolidayRule(PATCH /company-holiday-rule) · stopCompanyHolidayRule(POST /company-holiday-rule-stop). 인사 전용 · 중지는 삭제가 아니다(오늘 이후 생성분만 걷는다)
+
+- 생성기 재실행(node tools/gen-v2-services.mjs — 서버 vwork/src/server/v2/handler 대응) + tsc 재빌드(dist 동반).
+- 서버 대응 커밋 = vwork 8a1c4de8 (회사 휴무 반복 규칙 — v2 계층 안에서만 · DB changes(vone)/[2026.08.28] #1 · 재기동 필요). 계약 정본 = vwork/doc/vone-클라이언트-개발가이드.md Rev 3.19 §3.16 「★ 반복 휴무 규칙」.
+- 공휴일 목록(GET /company-holidays)의 rule 생성분은 Source:"rule" + RuleIndex 로 온다 — 그 행의 DELETE /company-holiday 는 422.
+
+
 [ 2026-08-21 - ssjpooh ]
 [new] VoneSystemService 추가(31 메서드) — vone 시스템 관리 도메인 전체 미러. foxApi.v2.voneSystem — 현황(system-dashboard) / 사용자 7(system-users·system-user·-state·-retire·-reset-password·-logout-all·-offboard) / 계정유형·역할 6(system-kinds·system-kind·system-roles·system-role) / 조직 7(system-depts·system-dept·system-positions) / 설정 2(system-settings) / 감사 로그 5(audit-logs·audit-retention·audit-export·audit-export-file). ★ 전 라우트가 전역 관리자 전용이고 권한이 없으면 **404**(403 아님 — 서버가 존재를 은닉한다)
 [new] CalendarsService(6) 추가 — 공용 캘린더 폴더. calendars·calendar(GET·POST·PATCH·DELETE)·calendar-subscription

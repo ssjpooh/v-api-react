@@ -40,6 +40,7 @@ import { VoneApprovalService } from "./voneApprovalService";
 import { VoneAttendanceService } from "./voneAttendanceService";
 import { VoneBoardsService } from "./voneBoardsService";
 import { VoneDriveService } from "./voneDriveService";
+import { VoneHolidayRulesService } from "./voneHolidayRulesService";
 import { VoneHomeService } from "./voneHomeService";
 import { VoneLeaveService } from "./voneLeaveService";
 import { VoneMessagesService } from "./voneMessagesService";
@@ -94,6 +95,7 @@ export { VoneApprovalService } from "./voneApprovalService";
 export { VoneAttendanceService } from "./voneAttendanceService";
 export { VoneBoardsService } from "./voneBoardsService";
 export { VoneDriveService } from "./voneDriveService";
+export { VoneHolidayRulesService } from "./voneHolidayRulesService";
 export { VoneHomeService } from "./voneHomeService";
 export { VoneLeaveService } from "./voneLeaveService";
 export { VoneMessagesService } from "./voneMessagesService";
@@ -150,6 +152,7 @@ export function createV2Api(apiClient) {
         voneAttendance: new VoneAttendanceService(apiClient),
         voneBoards: new VoneBoardsService(apiClient),
         voneDrive: new VoneDriveService(apiClient),
+        voneHolidayRules: new VoneHolidayRulesService(apiClient),
         voneHome: new VoneHomeService(apiClient),
         voneLeave: new VoneLeaveService(apiClient),
         voneMessages: new VoneMessagesService(apiClient),
