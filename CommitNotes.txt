@@ -1,3 +1,10 @@
+[ 2026-08-31 - ssjpooh ]
+[new] VoneBoardsService.listVoneBoardCounts 추가 — 게시판 레일 건수(GET /board-counts · 교차 계산: ByScope·ByCategory·ByProject). 서버 vwork 7a99472b 대응 · 생성기 재실행 + dist 재빌드(tsc 0)
+[chg] VoneBoardsService.listVoneBoards — 게시판 목록에 mine=true 파라미터 반영(scope 와 AND). VoneProjectsService.listProjectPosts — projectIdx 생략 시 참여 프로젝트 전체 · keyword 지원(서버 계약 변경 · 클라 시그니처 무변경)
+
+- 서버 대응 = vwork 7a99472b (게시판 레일 — 참여 프로젝트 전체 글 · boards mine · board-counts). 계약 정본 = vwork/doc/vone-클라이언트-개발가이드.md Rev 3.21 §3.6·§3.8.
+
+
 [ 2026-08-28 - ssjpooh ]
 [new] VoneHolidayRulesService 추가(4 메서드) — 회사 휴무 반복 규칙(온콜 휴가 「매월 둘째·마지막 금요일」). listCompanyHolidayRules(GET /company-holiday-rules) · createCompanyHolidayRule(POST /company-holiday-rule) · updateCompanyHolidayRule(PATCH /company-holiday-rule) · stopCompanyHolidayRule(POST /company-holiday-rule-stop). 인사 전용 · 중지는 삭제가 아니다(오늘 이후 생성분만 걷는다)
 

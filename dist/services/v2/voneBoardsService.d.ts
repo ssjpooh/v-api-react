@@ -22,6 +22,8 @@ export declare class VoneBoardsService {
     readAllVoneBoards(params: V2BodyParams): Promise<FoxApiResult>;
     /** GET /board-unread-count */
     getVoneBoardUnreadCount(params: V2BaseParams): Promise<FoxApiResult>;
+    /** GET /board-counts */
+    listVoneBoardCounts(params: V2BaseParams): Promise<FoxApiResult>;
     /** GET /board-comments */
     listVoneBoardComments(params: V2BaseParams): Promise<FoxApiResult>;
     /** POST /board-comment */

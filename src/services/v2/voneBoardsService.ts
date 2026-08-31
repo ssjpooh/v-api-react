@@ -55,6 +55,12 @@ export class VoneBoardsService {
     return this.apiClient.get(v2Path(siteId, "/board-unread-count", query), { header: authHeader(token), cancelId });
   }
 
+  /** GET /board-counts */
+  async listVoneBoardCounts(params: V2BaseParams): Promise<FoxApiResult> {
+    const { token, siteId, query, cancelId } = params;
+    return this.apiClient.get(v2Path(siteId, "/board-counts", query), { header: authHeader(token), cancelId });
+  }
+
   /** GET /board-comments */
   async listVoneBoardComments(params: V2BaseParams): Promise<FoxApiResult> {
     const { token, siteId, query, cancelId } = params;
