@@ -1,5 +1,6 @@
 import { ApiClient } from "../../apiClient";
 import { BrandingService } from "./brandingService";
+import { WhitelistService } from "./whitelistService";
 import { CalendarsService } from "./calendarsService";
 import { ClientTokensService } from "./clientTokensService";
 import { CommonService } from "./commonService";
@@ -55,6 +56,7 @@ import { VoneSystemService } from "./voneSystemService";
 import { VoneTasksService } from "./voneTasksService";
 export { RESULT_SIGNUP_EMAIL_NOT_VERIFIED, RESULT_SIGNUP_CODE_MISMATCH, RESULT_SIGNUP_CODE_EXPIRED, RESULT_SIGNUP_EMAIL_ALREADY_REGISTERED, } from "./shared";
 export { BrandingService } from "./brandingService";
+export { WhitelistService } from "./whitelistService";
 export { CalendarsService } from "./calendarsService";
 export { ClientTokensService } from "./clientTokensService";
 export { CommonService } from "./commonService";
@@ -111,6 +113,7 @@ export { VoneTasksService } from "./voneTasksService";
 /** foxApi.v2.* 네임스페이스를 구성한다. 서버 v2 컨트롤러와 1:1. 자동 생성. */
 export declare function createV2Api(apiClient: ApiClient): {
     branding: BrandingService;
+    whitelist: WhitelistService;
     calendars: CalendarsService;
     clientTokens: ClientTokensService;
     common: CommonService;

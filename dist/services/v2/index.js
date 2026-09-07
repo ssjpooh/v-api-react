@@ -1,4 +1,5 @@
 import { BrandingService } from "./brandingService";
+import { WhitelistService } from "./whitelistService";
 import { CalendarsService } from "./calendarsService";
 import { ClientTokensService } from "./clientTokensService";
 import { CommonService } from "./commonService";
@@ -54,6 +55,7 @@ import { VoneSystemService } from "./voneSystemService";
 import { VoneTasksService } from "./voneTasksService";
 export { RESULT_SIGNUP_EMAIL_NOT_VERIFIED, RESULT_SIGNUP_CODE_MISMATCH, RESULT_SIGNUP_CODE_EXPIRED, RESULT_SIGNUP_EMAIL_ALREADY_REGISTERED, } from "./shared";
 export { BrandingService } from "./brandingService";
+export { WhitelistService } from "./whitelistService";
 export { CalendarsService } from "./calendarsService";
 export { ClientTokensService } from "./clientTokensService";
 export { CommonService } from "./commonService";
@@ -111,6 +113,7 @@ export { VoneTasksService } from "./voneTasksService";
 export function createV2Api(apiClient) {
     return {
         branding: new BrandingService(apiClient),
+        whitelist: new WhitelistService(apiClient),
         calendars: new CalendarsService(apiClient),
         clientTokens: new ClientTokensService(apiClient),
         common: new CommonService(apiClient),
