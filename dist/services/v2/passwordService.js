@@ -7,7 +7,7 @@ export class PasswordService {
     constructor(apiClient) {
         this.apiClient = apiClient;
     }
-    /** POST /password/reset */
+    /** POST /password/reset — body: { SiteID, UserID, Locale } 또는 { Email[, SiteID], Locale } (2026.09.11 Email 갈래 — v1 sendMailType/sendNewPassword 대체). 대상 유무와 무관하게 200 {Accepted:true} */
     async resetPassword(params) {
         const { token, siteId, query, body, cancelId } = params;
         return this.apiClient.post(v2Path(siteId, "/password/reset", query), { header: authHeader(token), body, cancelId });

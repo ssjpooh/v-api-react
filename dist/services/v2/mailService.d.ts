@@ -6,8 +6,11 @@ import { ApiClient, type FoxApiResult, type V2BaseParams, type V2BodyParams } fr
 export declare class MailService {
     private readonly apiClient;
     constructor(apiClient: ApiClient);
-    /** POST /sendMails */
-    sendMails(params: V2BodyParams): Promise<FoxApiResult>;
+    /**
+     * POST /inquiry — 도입 문의 (무인증 공개 · 2026.09.11). body: { CompanyName, SenderName, SenderEmail(필수), Phone, Type, ExpectedUsers, Message(필수), Locale }.
+     * 수신 주소는 서버 옵션(SendMail.Config.InquiryTo) — 종전 v1 sendMailType/inquiry 의 receiverEmail 은 받지 않는다. 429 = IP 분당 제한 · 503 = 수신 주소 미설정.
+     */
+    sendInquiry(params: V2BodyParams): Promise<FoxApiResult>;
     /** GET /mail/unsubscribe */
     unsubscribeMail(params: V2BaseParams): Promise<FoxApiResult>;
     /** GET /mail/resubscribe */

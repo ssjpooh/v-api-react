@@ -13,6 +13,18 @@ export class VonePlatformService {
     return this.apiClient.get(v2Path(siteId, "/vone-menus", query), { header: authHeader(token), cancelId });
   }
 
+  /** GET /vone-public-settings */
+  async getVonePublicSettings(params: V2BaseParams): Promise<FoxApiResult> {
+    const { token, siteId, query, cancelId } = params;
+    return this.apiClient.get(v2Path(siteId, "/vone-public-settings", query), { header: authHeader(token), cancelId });
+  }
+
+  /** GET /vone-login-settings */
+  async getVoneLoginSettings(params: V2BaseParams): Promise<FoxApiResult> {
+    const { token, siteId, query, cancelId } = params;
+    return this.apiClient.get(v2Path(siteId, "/vone-login-settings", query), { header: authHeader(token), cancelId });
+  }
+
   /** GET /roles */
   async listVoneRoles(params: V2BaseParams): Promise<FoxApiResult> {
     const { token, siteId, query, cancelId } = params;

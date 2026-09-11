@@ -2765,7 +2765,6 @@ export class UserData {
         this.siteName = "";
         this.userIndex = "";
         this.userID = "";
-        this.password = "";
         this.isPasswordApplied = false;
         this.email = "";
         this.name = "";
@@ -2820,7 +2819,6 @@ export class UserData {
         value.siteName = asString(pick(json, "SiteName", "siteName", "site_name"), value.siteName);
         value.userIndex = asString(pick(json, "UserIndex", "userIndex", "user_index", "Index", "index"), value.userIndex);
         value.userID = asString(pick(json, "UserID", "userID", "userId", "user_id", "id"), value.userID);
-        value.password = asString(pick(json, "Password", "password"), value.password);
         value.isPasswordApplied = asBoolean(pick(json, "IsPasswordApplied", "isPasswordApplied", "is_password_applied"), value.isPasswordApplied);
         value.email = asString(pick(json, "Email", "email"), value.email);
         value.name = asString(pick(json, "Name", "name"), value.name);
@@ -2877,7 +2875,6 @@ export class UserData {
             user_index: "userIndex",
             UserID: "userID",
             user_id: "userID",
-            Password: "password",
             IsPasswordApplied: "isPasswordApplied",
             is_password_applied: "isPasswordApplied",
             Email: "email",

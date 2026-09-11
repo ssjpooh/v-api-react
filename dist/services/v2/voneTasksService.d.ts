@@ -30,6 +30,8 @@ export declare class VoneTasksService {
     patchVoneTaskComment(params: V2BodyParams): Promise<FoxApiResult>;
     /** DELETE /task-comment */
     deleteVoneTaskComment(params: V2BodyParams): Promise<FoxApiResult>;
+    /** GET /task-histories — 업무 변경 이력 (2026.09.09 · 서버 API 가이드 Rev 63 · query: taskIdx · pageNo · pagePerRow) */
+    listVoneTaskHistories(params: V2BaseParams): Promise<FoxApiResult>;
     /** POST /task-link */
     createVoneTaskLink(params: V2BodyParams): Promise<FoxApiResult>;
     /** DELETE /task-link */

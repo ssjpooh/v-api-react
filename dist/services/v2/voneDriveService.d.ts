@@ -22,6 +22,8 @@ export declare class VoneDriveService {
     getDriveFile(params: V2BaseParams): Promise<FoxApiResult>;
     /** GET /drive-file-download-url */
     getDriveFileDownloadURL(params: V2BaseParams): Promise<FoxApiResult>;
+    /** GET /drive-file-download */
+    downloadVoneDriveFile(params: V2BaseParams): Promise<FoxApiResult>;
     /** POST /drive-file */
     createDriveFile(params: V2BodyParams): Promise<FoxApiResult>;
     /** PATCH /drive-file */

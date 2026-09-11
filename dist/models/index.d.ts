@@ -1046,7 +1046,6 @@ export declare class UserData {
     siteName: string;
     userIndex: string;
     userID: string;
-    password: string;
     isPasswordApplied: boolean;
     email: string;
     name: string;

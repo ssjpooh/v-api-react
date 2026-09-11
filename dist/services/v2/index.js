@@ -40,6 +40,8 @@ import { UserOptionsService } from "./userOptionsService";
 import { VoneApprovalService } from "./voneApprovalService";
 import { VoneAttendanceService } from "./voneAttendanceService";
 import { VoneBoardsService } from "./voneBoardsService";
+import { VoneBoardChannelsService } from "./voneBoardChannelsService";
+import { VoneBodyMediaService } from "./voneBodyMediaService";
 import { VoneDriveService } from "./voneDriveService";
 import { VoneHolidayRulesService } from "./voneHolidayRulesService";
 import { VoneHomeService } from "./voneHomeService";
@@ -96,6 +98,8 @@ export { UserOptionsService } from "./userOptionsService";
 export { VoneApprovalService } from "./voneApprovalService";
 export { VoneAttendanceService } from "./voneAttendanceService";
 export { VoneBoardsService } from "./voneBoardsService";
+export { VoneBoardChannelsService } from "./voneBoardChannelsService";
+export { VoneBodyMediaService } from "./voneBodyMediaService";
 export { VoneDriveService } from "./voneDriveService";
 export { VoneHolidayRulesService } from "./voneHolidayRulesService";
 export { VoneHomeService } from "./voneHomeService";
@@ -154,6 +158,8 @@ export function createV2Api(apiClient) {
         voneApproval: new VoneApprovalService(apiClient),
         voneAttendance: new VoneAttendanceService(apiClient),
         voneBoards: new VoneBoardsService(apiClient),
+        voneBoardChannels: new VoneBoardChannelsService(apiClient),
+        voneBodyMedia: new VoneBodyMediaService(apiClient),
         voneDrive: new VoneDriveService(apiClient),
         voneHolidayRules: new VoneHolidayRulesService(apiClient),
         voneHome: new VoneHomeService(apiClient),

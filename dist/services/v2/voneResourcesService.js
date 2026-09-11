@@ -12,6 +12,14 @@ export class VoneResourcesService {
         const { token, siteId, query, cancelId } = params;
         return this.apiClient.get(v2Path(siteId, "/resources", query), { header: authHeader(token), cancelId });
     }
+    /**
+     * GET /resource-bookings — 자원 축 예약 조회 (2026.09.10 · 서버 API 가이드 Rev 68).
+     * query: date=YYYYMMDD(사이트 로컬 하루) 또는 from=&to=(UTC) · resourceIdx(선택). 수동 추가 — 생성기 재실행 시 보존할 것.
+     */
+    async listVoneResourceBookings(params) {
+        const { token, siteId, query, cancelId } = params;
+        return this.apiClient.get(v2Path(siteId, "/resource-bookings", query), { header: authHeader(token), cancelId });
+    }
     /** POST /resource */
     async createVoneResource(params) {
         const { token, siteId, query, body, cancelId } = params;

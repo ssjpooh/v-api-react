@@ -8,6 +8,11 @@ export declare class VoneResourcesService {
     constructor(apiClient: ApiClient);
     /** GET /resources */
     listVoneResources(params: V2BaseParams): Promise<FoxApiResult>;
+    /**
+     * GET /resource-bookings — 자원 축 예약 조회 (2026.09.10 · 서버 API 가이드 Rev 68).
+     * query: date=YYYYMMDD(사이트 로컬 하루) 또는 from=&to=(UTC) · resourceIdx(선택). 수동 추가 — 생성기 재실행 시 보존할 것.
+     */
+    listVoneResourceBookings(params: V2BaseParams): Promise<FoxApiResult>;
     /** POST /resource */
     createVoneResource(params: V2BodyParams): Promise<FoxApiResult>;
     /** PATCH /resource */

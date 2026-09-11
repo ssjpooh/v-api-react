@@ -55,6 +55,12 @@ export class VoneDriveService {
     return this.apiClient.get(v2Path(siteId, "/drive-file-download-url", query), { header: authHeader(token), cancelId });
   }
 
+  /** GET /drive-file-download */
+  async downloadVoneDriveFile(params: V2BaseParams): Promise<FoxApiResult> {
+    const { token, siteId, query, cancelId } = params;
+    return this.apiClient.get(v2Path(siteId, "/drive-file-download", query), { header: authHeader(token), cancelId });
+  }
+
   /** POST /drive-file */
   async createDriveFile(params: V2BodyParams): Promise<FoxApiResult> {
     const { token, siteId, query, body, cancelId } = params;

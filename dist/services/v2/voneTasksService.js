@@ -67,6 +67,11 @@ export class VoneTasksService {
         const { token, siteId, query, body, cancelId } = params;
         return this.apiClient.delete(v2Path(siteId, "/task-comment", query), { header: authHeader(token), body, cancelId });
     }
+    /** GET /task-histories — 업무 변경 이력 (2026.09.09 · 서버 API 가이드 Rev 63 · query: taskIdx · pageNo · pagePerRow) */
+    async listVoneTaskHistories(params) {
+        const { token, siteId, query, cancelId } = params;
+        return this.apiClient.get(v2Path(siteId, "/task-histories", query), { header: authHeader(token), cancelId });
+    }
     /** POST /task-link */
     async createVoneTaskLink(params) {
         const { token, siteId, query, body, cancelId } = params;
