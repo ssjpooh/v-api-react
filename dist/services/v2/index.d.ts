@@ -2,6 +2,7 @@ import { ApiClient } from "../../apiClient";
 import { BrandingService } from "./brandingService";
 import { WhitelistService } from "./whitelistService";
 import { CalendarsService } from "./calendarsService";
+import { CalendarSyncService } from "./calendarSyncService";
 import { ClientTokensService } from "./clientTokensService";
 import { CommonService } from "./commonService";
 import { ContractsService } from "./contractsService";
@@ -60,6 +61,7 @@ export { RESULT_SIGNUP_EMAIL_NOT_VERIFIED, RESULT_SIGNUP_CODE_MISMATCH, RESULT_S
 export { BrandingService } from "./brandingService";
 export { WhitelistService } from "./whitelistService";
 export { CalendarsService } from "./calendarsService";
+export { CalendarSyncService } from "./calendarSyncService";
 export { ClientTokensService } from "./clientTokensService";
 export { CommonService } from "./commonService";
 export { ContractsService } from "./contractsService";
@@ -119,6 +121,7 @@ export declare function createV2Api(apiClient: ApiClient): {
     branding: BrandingService;
     whitelist: WhitelistService;
     calendars: CalendarsService;
+    calendarSync: CalendarSyncService;
     clientTokens: ClientTokensService;
     common: CommonService;
     contracts: ContractsService;

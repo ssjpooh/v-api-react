@@ -1,3 +1,11 @@
+[ 2026-10-06 - ssjpooh ]
+[new] PasswordService.completePassword(POST /password/complete) · signupLink(POST /password/signupLink) 추가 — 메일 링크(finfo)만으로 비밀번호 설정 완료 · 만료 가입 링크 재발송 (checkTokenByID → PATCH /v1/user 대체 · 토큰 없음)
+[new] CalendarSyncService 추가(7 메서드) — 외부 캘린더(Google) 동기화: listCalendarProviders · getCalendarOAuthURL · listCalendarAccounts · updateCalendarAccount · deleteCalendarAccount · requestCalendarFullSync · getCalendarSyncStatus (OAuth 콜백은 미러 제외)
+
+- 서버 대응 = vwork 8fdb3875 (Google 캘린더 연동 1단계 · 메일 링크 비밀번호 완료 API). 계약 정본 = vwork/doc/API-변경-2026.10.02-메일링크-비밀번호-설정-checkTokenByID-대체.md · vwork/doc/vone-클라이언트-개발가이드.md 3.62 · 3.72 · 3.73.
+- 수동 작성(생성기 미실행 — 다른 서비스 재생성 방지) + tsc 재빌드(dist 동반). voneBodyImagesService(미추적 · 서버 핸들러 없음)는 제외.
+
+
 [ 2026-08-31 - ssjpooh ]
 [new] VoneBoardsService.listVoneBoardCounts 추가 — 게시판 레일 건수(GET /board-counts · 교차 계산: ByScope·ByCategory·ByProject). 서버 vwork 7a99472b 대응 · 생성기 재실행 + dist 재빌드(tsc 0)
 [chg] VoneBoardsService.listVoneBoards — 게시판 목록에 mine=true 파라미터 반영(scope 와 AND). VoneProjectsService.listProjectPosts — projectIdx 생략 시 참여 프로젝트 전체 · keyword 지원(서버 계약 변경 · 클라 시그니처 무변경)
