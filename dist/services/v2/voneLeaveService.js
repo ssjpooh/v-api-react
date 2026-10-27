@@ -32,6 +32,11 @@ export class VoneLeaveService {
         const { token, siteId, query, body, cancelId } = params;
         return this.apiClient.post(v2Path(siteId, "/leave-adjust", query), { header: authHeader(token), body, cancelId });
     }
+    /** POST /leave-remain-bulk — 연차 잔여 일괄 수정 (인사 · {Date?, Reason, DryRun, Items:[{UserID, RemainMinutes}]} · 줄 오류면 422 + data 줄별 결과) */
+    async bulkSetLeaveRemain(params) {
+        const { token, siteId, query, body, cancelId } = params;
+        return this.apiClient.post(v2Path(siteId, "/leave-remain-bulk", query), { header: authHeader(token), body, cancelId });
+    }
     /** GET /leave-logs */
     async listLeaveLogs(params) {
         const { token, siteId, query, cancelId } = params;

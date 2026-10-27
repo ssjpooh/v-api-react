@@ -16,6 +16,8 @@ export declare class VoneLeaveService {
     grantLeaveBalance(params: V2BodyParams): Promise<FoxApiResult>;
     /** POST /leave-adjust */
     adjustLeaveBalance(params: V2BodyParams): Promise<FoxApiResult>;
+    /** POST /leave-remain-bulk — 연차 잔여 일괄 수정 (인사 · {Date?, Reason, DryRun, Items:[{UserID, RemainMinutes}]} · 줄 오류면 422 + data 줄별 결과) */
+    bulkSetLeaveRemain(params: V2BodyParams): Promise<FoxApiResult>;
     /** GET /leave-logs */
     listLeaveLogs(params: V2BaseParams): Promise<FoxApiResult>;
     /** GET /leave-requests */

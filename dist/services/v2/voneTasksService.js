@@ -117,6 +117,11 @@ export class VoneTasksService {
         const { token, siteId, query, body, cancelId } = params;
         return this.apiClient.post(v2Path(siteId, "/task-read", query), { header: authHeader(token), body, cancelId });
     }
+    /** POST /task-assignee-me — 나를 담당자로 더하기 (볼 수 있으면 · 쿼리 taskIdx 또는 몸 TaskIdx · 응답 = GET /task 한 건) */
+    async addVoneTaskAssigneeMe(params) {
+        const { token, siteId, query, body, cancelId } = params;
+        return this.apiClient.post(v2Path(siteId, "/task-assignee-me", query), { header: authHeader(token), body, cancelId });
+    }
     /** POST /task-file */
     async addVoneTaskFile(params) {
         const { token, siteId, query, body, cancelId } = params;

@@ -1,3 +1,16 @@
+[ 2026-10-27 - ssjpooh ]
+[new] VoneApprovalDelegationService 추가(5 메서드) — 결재 대결: listApprovalDelegations(GET /approval-delegations) · createApprovalDelegation · patchApprovalDelegation · deleteApprovalDelegation(/approval-delegation) · setApprovalStepDelegate(POST /approval-step-delegate)
+[new] VoneLoginTicketService 추가(2 메서드) — 메신저 결재 알림 입장권: checkVoneLoginTicket(POST /vone-login-ticket/check) · redeemVoneLoginTicket(POST /vone-login-ticket · 무인증)
+[new] VoneHolidayRulesService.moveCompanyHolidayRuleOccurrence(POST /company-holiday-rule-occurrence) · resetCompanyHolidayRuleOccurrence(POST /company-holiday-rule-occurrence-reset) — 반복 휴무 회차 옮기기 · 빼기 · 되돌리기
+[new] VoneLeaveService.bulkSetLeaveRemain(POST /leave-remain-bulk) — 연차 잔여 일괄 수정(미리보기 DryRun · 전부 아니면 없음)
+[new] VoneTasksService.addVoneTaskAssigneeMe(POST /task-assignee-me) — 업무 「나도 담당」
+[fix] CalendarSyncService 주석 — Outlook 연동 · 받아 오기(Inbound · SyncInbound · LastInboundDate · InboundState · SkippedRecurrences · ImportedEvents) 계약 반영(시그니처 무변경)
+
+- 서버 대응 = vwork 91a82a4d(Outlook) · e430e49c(입장권) · 6297a890(대결) · 2714eae6(나도 담당) · 6fcac10e(잔여 일괄 · 회차 옮기기). 계약 정본 = vwork/doc/vone-클라이언트-개발가이드.md.
+- 새 서비스 둘은 생성기(tools/gen-v2-services.mjs) 산출 · v2/index.ts 등록 · tsc 재빌드(dist 동반). voneBodyImagesService(미추적 · 서버 핸들러 없음)는 종전대로 제외.
+- ★ 이 서비스들은 Authorization: Bearer 만 싣는다 — v-one 은 2026.09.30 부터 HttpOnly 쿠키 세션이라 이 함수로 부르면 401 이다. v-one 은 같은 창구를 vone/client(voneGet 등 · credentials include)로 부른다.
+
+
 [ 2026-10-06 - ssjpooh ]
 [new] PasswordService.completePassword(POST /password/complete) · signupLink(POST /password/signupLink) 추가 — 메일 링크(finfo)만으로 비밀번호 설정 완료 · 만료 가입 링크 재발송 (checkTokenByID → PATCH /v1/user 대체 · 토큰 없음)
 [new] CalendarSyncService 추가(7 메서드) — 외부 캘린더(Google) 동기화: listCalendarProviders · getCalendarOAuthURL · listCalendarAccounts · updateCalendarAccount · deleteCalendarAccount · requestCalendarFullSync · getCalendarSyncStatus (OAuth 콜백은 미러 제외)

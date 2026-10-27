@@ -50,6 +50,8 @@ export declare class VoneTasksService {
     removeVoneTaskLabel(params: V2BodyParams): Promise<FoxApiResult>;
     /** POST /task-read */
     markVoneTaskRead(params: V2BodyParams): Promise<FoxApiResult>;
+    /** POST /task-assignee-me — 나를 담당자로 더하기 (볼 수 있으면 · 쿼리 taskIdx 또는 몸 TaskIdx · 응답 = GET /task 한 건) */
+    addVoneTaskAssigneeMe(params: V2BodyParams): Promise<FoxApiResult>;
     /** POST /task-file */
     addVoneTaskFile(params: V2BodyParams): Promise<FoxApiResult>;
     /** DELETE /task-file */

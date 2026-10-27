@@ -39,6 +39,7 @@ import { SiteService } from "./siteService";
 import { UserService } from "./userService";
 import { UserOptionsService } from "./userOptionsService";
 import { VoneApprovalService } from "./voneApprovalService";
+import { VoneApprovalDelegationService } from "./voneApprovalDelegationService";
 import { VoneAttendanceService } from "./voneAttendanceService";
 import { VoneBoardsService } from "./voneBoardsService";
 import { VoneBoardChannelsService } from "./voneBoardChannelsService";
@@ -47,6 +48,7 @@ import { VoneDriveService } from "./voneDriveService";
 import { VoneHolidayRulesService } from "./voneHolidayRulesService";
 import { VoneHomeService } from "./voneHomeService";
 import { VoneLeaveService } from "./voneLeaveService";
+import { VoneLoginTicketService } from "./voneLoginTicketService";
 import { VoneMessagesService } from "./voneMessagesService";
 import { VoneOrgService } from "./voneOrgService";
 import { VonePlatformService } from "./vonePlatformService";
@@ -98,6 +100,7 @@ export { SiteService } from "./siteService";
 export { UserService } from "./userService";
 export { UserOptionsService } from "./userOptionsService";
 export { VoneApprovalService } from "./voneApprovalService";
+export { VoneApprovalDelegationService } from "./voneApprovalDelegationService";
 export { VoneAttendanceService } from "./voneAttendanceService";
 export { VoneBoardsService } from "./voneBoardsService";
 export { VoneBoardChannelsService } from "./voneBoardChannelsService";
@@ -106,6 +109,7 @@ export { VoneDriveService } from "./voneDriveService";
 export { VoneHolidayRulesService } from "./voneHolidayRulesService";
 export { VoneHomeService } from "./voneHomeService";
 export { VoneLeaveService } from "./voneLeaveService";
+export { VoneLoginTicketService } from "./voneLoginTicketService";
 export { VoneMessagesService } from "./voneMessagesService";
 export { VoneOrgService } from "./voneOrgService";
 export { VonePlatformService } from "./vonePlatformService";
@@ -159,6 +163,7 @@ export function createV2Api(apiClient) {
         user: new UserService(apiClient),
         userOptions: new UserOptionsService(apiClient),
         voneApproval: new VoneApprovalService(apiClient),
+        voneApprovalDelegation: new VoneApprovalDelegationService(apiClient),
         voneAttendance: new VoneAttendanceService(apiClient),
         voneBoards: new VoneBoardsService(apiClient),
         voneBoardChannels: new VoneBoardChannelsService(apiClient),
@@ -167,6 +172,7 @@ export function createV2Api(apiClient) {
         voneHolidayRules: new VoneHolidayRulesService(apiClient),
         voneHome: new VoneHomeService(apiClient),
         voneLeave: new VoneLeaveService(apiClient),
+        voneLoginTicket: new VoneLoginTicketService(apiClient),
         voneMessages: new VoneMessagesService(apiClient),
         voneOrg: new VoneOrgService(apiClient),
         vonePlatform: new VonePlatformService(apiClient),

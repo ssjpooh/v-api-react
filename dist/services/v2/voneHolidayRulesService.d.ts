@@ -14,4 +14,8 @@ export declare class VoneHolidayRulesService {
     updateCompanyHolidayRule(params: V2BodyParams): Promise<FoxApiResult>;
     /** POST /company-holiday-rule-stop */
     stopCompanyHolidayRule(params: V2BodyParams): Promise<FoxApiResult>;
+    /** POST /company-holiday-rule-occurrence — 회차 하나 옮기기 · 빼기 ({RuleIndex, Date, NewDate("" = 빼기)} · 409 HOLIDAY_EXISTS · 422 NOT_AN_OCCURRENCE · PAST_DATE · RULE_STOPPED) */
+    moveCompanyHolidayRuleOccurrence(params: V2BodyParams): Promise<FoxApiResult>;
+    /** POST /company-holiday-rule-occurrence-reset — 회차 되돌리기 ({RuleIndex, Date} · 예외 없으면 404) */
+    resetCompanyHolidayRuleOccurrence(params: V2BodyParams): Promise<FoxApiResult>;
 }
